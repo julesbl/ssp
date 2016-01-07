@@ -1,0 +1,291 @@
+p, td, li, ul, ol, h1, h2, h3, h4, h5, h6, label, input, option, select{
+	font-family: Arial, Helvetica, sans-serif;
+}
+p, li, label, input, select, .standard{
+	font-size: 0.871em;
+}
+h1{
+	font-size: 1.1em;
+	font-weight: bold;
+}
+h2{
+	font-size: 1.0em;
+	font-weight: bold;
+}
+h3{
+	font-size: 0.9em;
+	font-weight: bold;
+}
+
+img {
+	border: 0;
+	display: block;
+}
+
+a {
+    text-decoration: none;
+    font-weight: bold;
+}
+
+table tr td{
+	vertical-align: top;
+	text-align:left;
+}
+
+label.SFCError {
+	color: red;
+}
+
+input.SFCError {
+	border: solid 1px red;
+}
+
+.SFCError li, ul.SFCError{
+	color: red;
+	list-style-type:none;
+	padding: 0 0 5px 0;
+}
+
+form .SFCError li, form ul.SFCError{
+	color: red;
+	list-style-type:none;
+	padding: 0 0 2px 0;
+	margin:0;
+}
+body{
+	background-repeat: repeat-y;
+    background-position: top center;
+	background-image: url(../images/background.jpg);
+	background-color: #000;
+	margin:0;
+	padding:0;
+}
+#header{
+	width: 100%;
+	height: 70px;
+	margin: 0 0 10px 0;
+	padding:30px 0 0 0;
+	border:0;
+	background-image: url(../images/backgroudWhite40pc.png);
+	vertical-align: bottom;
+	position: relative;
+}
+
+#header h1 {
+	font-size: 35px;
+    color: #000;
+	padding: 0 0 0 20px;
+	margin:0 auto 0 auto;
+	width: 730px;
+}
+
+#header h1 span{
+    color: #fff;
+}
+#header h1 span.bar{
+    color: #ec791c;
+}
+#header p{
+	font-weight: bold;
+	color: #000;
+	margin: 0 auto 0 auto;
+	padding: 0 0 0 10px;
+	width: 740px;
+}
+#header p span{
+	color: #fff;
+}
+
+/* format the language selector */
+
+#header form#languageSelectionform{
+	display: block;
+	width: 850px;
+	margin-top: 30px;
+	margin: -50px auto 0 auto;
+	text-align: right;
+}
+#header form#languageSelectionform option{
+	padding-left: 35px;
+	background-repeat: no-repeat;
+	background-position: left center;
+}
+
+#mainMenu {
+    background-image: url(../images/backgroudBlack80pc.png);
+	padding: 5px;
+	margin: 0 auto 0 auto;
+	width: 740px;
+	clear: both;
+}
+
+#mainMenu ul{
+	list-style: none;
+	margin:0;
+	padding:0;
+    height: 1.3em;
+}
+#mainMenu ul li{
+	list-style: none;
+	margin:0;
+	padding:0 0.4em 0 0.4em;
+	float: left;
+}
+#mainMenu ul li a{
+    font-weight: bold;
+    color: #fff;
+    text-decoration: none;
+    font-size: 1.2em;
+}
+#mainMenu ul li a:hover{
+	color: #ec791c;
+}
+#mainMenu ul li.here a:hover{
+	color: #fff;
+}
+#mainMenu ul li.here{
+	background: #ec791c;
+}
+
+#body{
+	width: 750px;
+	margin: 0 auto 0 auto;
+    border-collapse: collapse;
+}
+
+#menu{
+	width:150px;
+	padding: 5px;
+	background-image: url(../images/backgroudBlack80pc.png);
+}
+#menu ul{
+	list-style: none;
+	margin:0;
+	padding:0;
+}
+#menu ul li{
+	list-style: none;
+	margin:0.1em;
+	padding:0;
+}
+#menu ul li.here{
+	background: #ec791c;
+}
+#menu ul li a{
+	color: #fff;
+}
+#menu ul li a:hover{
+	color: #ec791c;
+}
+#menu ul li.here a:hover{
+	color: #fff;
+}
+
+#content{
+	background-image: url(../images/backgroudWhite80pc.png);
+	padding: 0 5px 5px 5px;
+}
+#content > h1{
+	color: #fff;
+	background-color: #ec791c;
+	margin: 0 -5px 5px -5px;
+	height: 25px;
+	padding: 3px;
+	line-height: 25px;
+}
+#pageHeight{
+    width:0;
+    height: 500px;
+    float: right;
+}
+
+#footerBackground{
+    background-image: url(../images/backgroudBlack80pc.png);
+    margin-top: 10px;
+}
+#footer{
+	width: 750px;
+	margin: 0 auto 0 auto;
+	padding:0;
+	border:0;
+    color: #fff;
+}
+body#smallTemplate #content form{
+	display: block;
+	width: 500px;
+	margin: 0 auto 0 auto;
+}
+body#smallTemplate #content form table{
+	margin: 0 auto 0 auto;
+}
+.alphaFilter {
+	list-style: none;
+	margin:0;
+	padding:0;
+	float:left;
+}
+.alphaFilter li{
+	float: left;
+	display: block;
+	list-style: none;
+	margin:0;
+	padding:0;
+}
+.alphaFilter li a{
+	display: block;
+	padding: 0.1em 0.2em 0.1em 0.2em;
+}
+.alphaFilter li a:hover{
+	background: #C0C0C0;
+}
+.alphaFilter li.here a{
+	background: #A4B0BC;
+	font-weight: bold;
+}
+
+.pageNav {
+	list-style: none;
+	margin:0 0 0 1em;
+	padding:0;
+	float: right;
+}
+.pageNav li{
+	float: left;
+	display: block;
+	list-style: none;
+	margin:0;
+	padding:0;
+}
+.pageNav li a{
+	display: block;
+	padding: 0.1em 0.2em 0.1em 0.2em;
+}
+.pageNav li a:hover{
+	background: #C0C0C0;
+}
+.pageNav li.selected a{
+	background: #A4B0BC;
+}
+
+#userList{
+	width: 100%;
+}
+#userList td, #userList th{
+	border-bottom:  1px solid #808080;
+	margin: 0;
+}
+#userList tr.oddLine {
+	background-image: url("../images/backgroudOrange40pc.png");
+}
+#userList p{
+	padding: 0.2em;
+	margin:0;
+}
+#userList img{
+	padding: 0.2em;
+}
+p.response{
+	color: blue;
+	font-weight: bold;
+}
+

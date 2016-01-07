@@ -1,0 +1,490 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head>
+
+
+  
+  <meta content="text/html; charset=UTF-8" http-equiv="content-type" /><title>Simple Site Protection Relase Notes</title></head><body>
+<h1>Release Notes</h1>
+<h2>Version 2.7</h2>
+<p>General  documentation improvement, improved session handling and configuration, moved templates to includes directory, improved examples and setup. </p>
+<h2>Version 2.6</h2>
+<p>Multi-lingual and internationalisation functionality now added, improved documentation and testing routines.</p>
+<ul>
+  <li>sspadmin/templates/en/logonpage.tpl</li>
+  <ul>
+    <li>Added cookie saved in browser warning to remember me tick box</li>
+  </ul>
+  <li>sspadmin/templates/en/sspgeneraltemplate.tpl</li>
+  <ul>
+    <li>Added english language code to html tag</li>
+    <li>Conditional template fields for language selection</li>
+  </ul>
+  <li>sspadmin/templates/en/sspsmalltemplate.tpl</li>
+  <ul>
+<li>Added english language code to html tag</li><li>Conditional template fields for language selection</li>
+  </ul>
+  <li>sspadmin/templates/fr</li>
+  <ul>
+    <li>French version of all templates</li>
+  </ul>
+  <li>sspadmin/images</li>
+  <ul>
+    <li>Added english and french flags for language selection</li>
+  </ul>
+  <li>sspadmin/styles/styles.css</li>
+  <ul>
+    <li>Styling for language selection</li>
+  </ul>
+  <li>sspadmin/.htaccess</li>
+  <ul>
+    <li>Added to turn off mod rewrite module for this directory</li>
+  </ul>
+  <li>sspadmin/adminusercreation.php</li>
+  <ul>
+    <li>Enabled loading of language files for this part of admin</li>
+  </ul>
+  <li>sspadmin/includeheader.php</li>
+  <ul>
+    <li>Added in paths for translation directory</li>
+  </ul>
+  <li>sspadmin/index.php</li>
+  <ul>
+    <li>Enabled loading of language files for this part of admin</li>
+  </ul>
+  <li>/sspadmin/newpassword.php</li>
+  <ul>
+    <li>Changed error text to enable translation</li>
+  </ul>
+  <li>sspadmin/useradmin.php</li>
+  <ul>
+    <li>Enabled loading of language files for this part of admin</li>
+  </ul>
+  <li>sspadmin/usercreation.php</li>
+  <ul>
+    <li>Enabled loading of language files for this part of admin</li>
+  </ul>
+  <li>sspincludes/.htaccess</li>
+  <ul>
+    <li>Added to prevent access to this directory if in browser viewable area</li>
+  </ul>
+  <li>sspincludes/API_interface.php</li>
+  <ul>
+    <li>Added end of file commenting</li>
+  </ul>
+  <li>sspincludes/SSP_dataCheck.php</li>
+  <ul>
+    <li>Changed to an abstract class</li>
+    <li>Properties declared properly with public/private etc.</li>
+    <li>Translation routines added</li>
+    <li>Improved commenting</li>
+    <li>?&gt; removed from end of file</li>
+  </ul>
+  <li>/sspincludes/SSP_email.php</li>
+  <ul>
+    <li>?&gt; removed from end of file</li>
+  </ul>
+  <li>/sspincludes/SSP_setup.php</li>
+  <ul>
+    <li>Translation routines added</li>
+    <li>Improved commenting</li>
+    <li>?&gt; removed from end of file</li>
+  </ul>
+  <li>/sspincludes/SSP_translate.php</li>
+  <ul>
+    <li>Library to do translation</li>
+    <li>Static and dynamic routines to load up translation files</li>
+    <li>Translation based on english version of string as key</li>
+  </ul>
+  <li>/sspincludes/adminclasses.php</li>
+  <ul>
+    <li>Changed to an abstract class</li>
+    <li>Translation routines added</li>
+    <li>Improved commenting</li>
+    <li>?&gt; removed from end of file</li>
+  </ul>
+  <li>/sspincludes/baseclasses.php</li>
+  <ul>
+    <li>Changed to an abstract classes</li>
+    <li>Translation routines added</li>
+    <li>Improved commenting</li>
+    <li>?&gt; removed from end of file</li>
+    <li>Option to disable token for embedded login form</li>
+    <li>Set up of internationlisation in session object</li>
+  </ul>
+  <li>/sspincludes/config.php</li>
+  <ul>
+    <li>Options for translations added</li>
+    <li>?&gt; removed from end of file</li>
+    <li>Properties and routine added to build database dsn to allow better integration with other systems and more flexible definition</li>
+  </ul>
+  <li>/sspincludes/countries.php</li>
+  <ul>
+    <li>?&gt; removed from end of file</li>
+  </ul>
+  <li>/sspincludes/db_adodb.php</li>
+  <ul>
+    <li>?&gt; removed from end of file</li>
+    <li>Added end of file commenting</li>
+  </ul>
+  <li>/sspincludes/db_pear.php</li>
+  <ul>
+    <li>?&gt; removed from end of file</li>
+    <li>Added end of file commenting</li>
+  </ul>
+  <li>/sspincludes/formclasses.php</li>
+  <ul>
+    <li>Improved commenting</li>
+    <li>Local and global error list errors diffrentiated</li>
+    <li>Translation routines added</li>
+    <li>Methods given proper public/private definintions</li>
+    <li>Can now output form result as an object</li>
+    <li>Much improved file upload method</li>
+    <li>?&gt; removed from end of file</li>
+    <li>Added end of file commenting</li>
+  </ul>
+  <li>/sspincludes/functions.php</li>
+  <ul>
+    <li>Improved commenting</li>
+    <li>SSP_Dump has options to return as string and exit the program afterwards</li>
+    <li>?&gt; removed from end of file</li>
+    <li>Added end of file commenting</li>
+  </ul>
+  <li>/sspincludes/htmlobjects.php</li>
+  <ul>
+    <li>Improved commenting</li>
+    <li>?&gt; removed from end of file</li>
+    <li>Added end of file commenting</li>
+  </ul>
+  <li>/sspincludes/include.php</li>
+  <ul>
+    <li>?&gt; removed from end of file</li>
+    <li>Added end of file commenting</li>
+  </ul>
+  <li>/sspincludes/includeCodeigniter.php</li>
+  <ul>
+    <li>Added template classes for divert routine</li>
+    <li>changed setup top a codeigniter specific setup files</li>
+    <li>?&gt; removed from end of file</li>
+    <li>Added end of file commenting</li>
+  </ul>
+  <li>/sspincludes/listerLib.php</li>
+  <ul>
+    <li>?&gt; removed from end of file</li>
+    <li>Added end of file commenting</li>
+  </ul>
+  <li>/sspincludes/session.php</li>
+  <ul>
+    <li>?&gt; removed from end of file</li>
+    <li>Added end of file commenting</li>
+  </ul>
+  <li>/sspincludes/setup.php</li>
+  <ul>
+    <li>Additional code for setting up the translation routines</li>
+    <li>?&gt; removed from end of file</li>
+    <li>Added end of file commenting</li>
+  </ul>
+  <li>/sspincludes/setupCodeigniter.php</li>
+  <ul>
+    <li>Codeigniter specific setup file</li>
+  </ul>
+  <li>/sspincludes/templateclasses.php</li>
+  <ul>
+    <li>Local overiding of Mutibyte configuration</li>
+    <li>Improved commenting</li>
+    <li>?&gt; removed from end of file</li>
+    <li>Added end of file commenting</li>
+  </ul>
+  <li>/sspincludes/userclasses.php</li>
+  <ul>
+    <li>Translation routines added</li>
+    <li>?&gt; removed from end of file</li>
+    <li>Added end of file commenting</li>
+  </ul>
+  <li>/sspincludes/userlisterLib.php</li>
+  <ul>
+    <li>Translation routines added</li>
+    <li>?&gt; removed from end of file</li>
+    <li>Added end of file commenting</li>
+  </ul>
+  <li>/testscripts</li>
+  <ul>
+    <li>Certain of the scripts modified to support translation testing</li>
+  </ul>
+  <li>/translate</li>
+  <ul>
+    <li>Tanslation language files</li>
+    <li>lang_(lang code).conf.php - language configuration</li>
+    <li>lang_(lang code).php - general translation for form and data check</li>
+    <li>lang_(lang code)_login.php - login and related routines translation</li>
+    <li>lang_(lang code)_admin.php - translation for admin area<br />
+    </li>
+  </ul>
+
+</ul>
+
+<h2>
+Version 2.5.1</h2>
+<p>Bug fix issue<br />
+</p>
+<ul>
+  <li>sspadmin/setup/index.php</li>
+  <ul>
+    <li>Added emergency admin create to the menu</li>
+  </ul>
+  <li>sspadmin/styels/styles.css</li>
+  <ul>
+    <li>Improved admin interface</li>
+  </ul>
+  <li>Small corrections to general and small templates</li>
+  <li>sspadmin/userconfirm.php</li>
+  <ul>
+    <li>Corrected data checking and template bug</li>
+  </ul>
+  <li>sspincludes/SSP_dataCheck.php</li>
+  <ul>
+    <li>added&nbsp; / : ? % ~ [] @ ! $ = ; , &amp; to dom checking</li>
+  </ul>
+  <li>sspincludes/SSP_setup.php</li>
+  <ul>
+    <li>Improved menu highlighting in admin</li>
+  </ul>
+  <li>sspincludes/adminclasses.php</li>
+  <ul>
+    <li>corrections to user join email generation</li>
+  </ul>
+  <li>sspincludes/baseclasses.php</li>
+  <ul>
+    <li>Improved checking of access flags in login check</li>
+  </ul>
+  <li>sspincludes/config.php</li>
+  <ul>
+    <li>Time zone option added</li>
+  </ul>
+  <li>sspincludes/formclasses.php</li>
+  <ul>
+    <li>Option added to suppress automatic generation fo the form</li>
+    <li>Improved file upload routine</li>
+  </ul>
+  <li>sspincludes/functions.php</li>
+  <ul>
+    <li>improved error handling backtrace routine</li>
+  </ul>
+  <li>sspincludes/setup.php</li>
+  <ul>
+    <li>sets default tine zone from config</li>
+  </ul>
+  <li>sspincludes/userclasses.php</li>
+  <ul>
+    <li>improved documentation<br />
+    </li>
+  </ul>
+</ul>
+<h2>Version 2.5</h2>
+
+<p>There have been a few quite large changes in this issue, so I have
+upped the version number to 2.5.</p>
+
+<ul>
+
+  <li>Handles UTF-8 and other character sets properly</li>
+  <li>Improved mail handling</li>
+  <li>Better construction for the user admin section</li>
+  <li>Only supports PHP 5 now<br />
+  </li>
+</ul>
+
+<ul>
+
+  <li>SSP_datacheck.php</li>
+  <ul>
+    <li>text type now handles UTF-8 and international character sets</li>
+  </ul>
+  <li>SSP_email.php</li>
+  <ul>
+    <li>New - sends text emails in specified character encoding</li>
+  </ul>
+  <li>SSP_setup</li>
+  <ul>
+    <li>New - handles setup and configuration of the user admin section</li>
+  </ul>
+  <li>adminclasses.php</li>
+  <ul>
+    <li>Extensive modifications to improve the way the user admin
+section functions</li>
+    <li>Also mods to the login form stuff</li>
+  </ul>
+  <li>baseclasses.php</li>
+  <ul>
+    <li>Maintenance mode added</li>
+    <li>Can force the routines to use SSL</li>
+    <li>Improved one way password encryption, will default to
+CRYPT_SHA512 if available</li>
+  </ul>
+  <li>config.change.php</li>
+  <ul>
+    <li>Site maintenance mode options</li>
+    <li>Encoding for site and db connection<br />
+    </li>
+    <li>IP v6 address checking accuracy</li>
+    <li>User admin search fields modified for better search options</li>
+    <li>Overrides dependant on server eg. test server<br />
+    </li>
+  </ul>
+  <li>db_adodb.php</li>
+  <ul>
+    <li>Improved commenting</li>
+    <li>Setting of connection encoding</li>
+    <li>Various improvements to routines and functionality</li>
+  </ul>
+  <li>formclasses.php</li>
+  <ul>
+    <li>ID of an element can now be different from field name</li>
+    <li>valid results can now be added to select and radio buttons to
+allow verification of data added by javascript</li>
+    <li>Class added for select elements</li>
+    <li>Character set handling improved</li>
+    <li>Function to check if an element exists</li>
+    <li>Improved template handling</li>
+    <li>Better radio element numbering</li>
+  </ul>
+  <li>functions.php</li>
+  <ul>
+    <li>Imroved functions for IPv6</li>
+    <li>SSL path functions</li>
+    <li>Multi email</li>
+    <li>Charset for text mail</li>
+    <li>Error handler for error catching</li>
+    <li>Improved SQL error handler</li>
+  </ul>
+  <li>htmlobjects.php</li>
+  <ul>
+    <li>general bug fixes and php5 conversion</li>
+  </ul>
+  <li>listerLib.php</li>
+  <ul>
+    <li>php5 conversion</li>
+    <li>bug fixing</li>
+  </ul>
+  <li>templateclasses</li>
+  <ul>
+    <li>php5 conversion</li>
+    <li>Multibyte strings now supported</li>
+  </ul>
+  <li>userclasses.php</li>
+  <ul>
+    <li>php5 conversion</li>
+    <li>improved template handling</li>
+  </ul>
+  <li>userlisterLib.php</li>
+  <ul>
+    <li>php5 conversion</li>
+    <li>improved functionality and structure</li>
+  </ul>
+  <li>sspadmin</li>
+  <ul>
+    <li>Much improved system structure for admin section</li>
+    <li>Includeheader has improved server selection<br />
+    </li>
+  </ul>
+</ul>
+
+<h2>Version 2.2</h2>
+
+<ul>
+
+  <li>SSP_datacheck.php<br />
+  </li>
+  <ul>
+    <li>Added ! and ? to text type</li>
+  </ul>
+  <li>adminclasses.php</li>
+  <ul>
+    <li>Options for more content on user finishe page</li>
+    <li>Fixed user join up type selection and improved options</li>
+  </ul>
+  <li>baseclasses.php</li>
+  <ul>
+    <li>Option to not update rolling cookie for ajaxy apps.</li>
+    <li>Added remember me funtionality to login</li>
+    <li>When set up as no divert to login page on sessin failure
+returns 'false' so that the ajax routines know it has failed.</li>
+    <li>Added a minimum length check for the password filed of the
+login form.</li>
+  </ul>
+  <li>db_adodb</li>
+  <ul>
+    <li>Added record count method</li>
+    <li>Improved getl method to order the returned records</li>
+  </ul>
+  <li>db_pear.php</li>
+  <ul>
+    <li>changed class name</li>
+    <li>added record count</li>
+  </ul>
+  <li>formclasses.php</li>
+  <ul>
+    <li>added debugging facilities</li>
+    <li>fixed setParam method</li>
+    <li>improved the file uploading routines</li>
+    <li>some other bug fixes</li>
+  </ul>
+  <li>listerLib.php</li>
+  <ul>
+    <li>general bug fixes</li>
+    <li>first and last records for the current page returned as
+properties</li>
+  </ul>
+  <li>templateclasses.php</li>
+  <ul>
+    <li>added another app path</li>
+    <li>data can now be supplied as objects</li>
+    <li>{:nl2br:tagname} added</li>
+    <li>template can now be supplied as an array.</li>
+  </ul>
+  <li>userclasses.tpl</li>
+  <ul>
+    <li>general bug fixes</li>
+  </ul>
+  <li>General</li>
+  <ul>
+    <li>lots of small bugs fixed</li>
+    <li>several template aexamples added</li>
+    <li>examples for SSP_Protect ajax stuff added<br />
+    </li>
+  </ul>
+</ul>
+
+<h2>Version 2.1</h2>
+
+<ul>
+
+  <li>Added .change.php files for all configuration and class overide
+files to help prevent overwriting user configurations.</li>
+  <li>Adodb cacheing options added, but explicity disabled for the
+session vars.</li>
+  <li>Option to suppress login screen display on session failure.</li>
+  <li>Current login killed if session failes on a public page.</li>
+  <li>Improved session kill routine.</li>
+  <li>Form error messages now all configurable in vars so can be
+translated.</li>
+  <li>Whole system can now have quotes round db field names and will
+work with postGreSql etc. (not tested)</li>
+  <li>New data checking classes, can be modified and extended, used in
+form data checking and get and post parameter checking.</li>
+  <li>General improvement in commenting.</li>
+  <li>Form class improved for error display, template generation,
+select options, tab index is no longer automatically generated, other
+small bug fixes and improvements.</li>
+  <li>Admin has been cleaned up and checked with new styling.</li>
+  <li>Adodb updated to latest version.</li>
+  <li>Started doing formal documentation and examples.<br />
+  </li>
+</ul>
+
+<h2>Version 2.0</h2>
+
+<p>Such a major change to version 1.0 that it is not worth documenting
+it.<br />
+</p>
+
+</body></html>

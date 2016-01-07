@@ -1,0 +1,57 @@
+<!-- usercreation.tpl - template for initial user creation form -->
+<h1>Informations login initiales</h1>
+{errorList}
+<form method="{formMethod}" action="{formAction}">
+	<table>
+		<tr>
+			<td>{emailDesc}</td><td>{email}</td>
+		</tr>
+		{:if:name}
+		<tr>
+			<td>{nameDesc}</td><td>{name}</td>
+		</tr>
+		{:endif:name}
+		{:if:password}
+		<tr>
+			<td>{passwordDesc}</td><td>{password}</td>
+		</tr>
+		<tr>
+			<td>{password2Desc}</td><td>{password2}</td>
+		</tr>
+		{:endif:password}
+		{:if:ip}
+		<tr>
+			<td>{ipDesc}</td><td>{ip}</td>
+		</tr>
+		{:endif:ip}
+		{:if:signUpLevel}
+		<tr>
+			<td>{signUpLevelDesc}</td><td>{signUpLevel}</td>
+		</tr>
+		{:endif:signUpLevel}
+		{:if:UserAccess}
+		<tr>
+			<td>{UserAccessDesc}</td><td>{UserAccess}</td>
+		</tr>
+		<tr>
+			<td>{UserDisabledDesc}</td><td>{UserDisabled}</td>
+		</tr>
+		<tr>
+			<td>{UserPendingDesc}</td><td>{UserPending}</td>
+		</tr>
+		<tr>
+			<td>{UserAdminPendingDesc}</td><td>{UserAdminPending}</td>
+		</tr>
+		<tr>
+			<td>{CreationFinishedDesc}</td><td>{CreationFinished}</td>
+		</tr>
+		<tr>
+			<td>{UserWaitingDesc}</td><td>{UserWaiting}</td>
+		</tr>
+		{:endif:UserAccess}
+		<tr>
+			<td></td><td>{submit}</td>
+		</tr>
+	</table>
+	{formHidden}
+</form>

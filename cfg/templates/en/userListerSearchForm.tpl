@@ -1,0 +1,53 @@
+<!-- userListerSearchForm.tpl - change lister search parameters -->
+<h1>Search Users</h1>
+{errorList}
+<form method="{formMethod}" action="{formAction}">
+<table>
+<tr>
+	<td>{filterOrDesc}</td>
+	<td>{filterOr}</td>
+</tr>
+{searchFields}
+<tr>
+	<td>{addField}</td>
+	<td></td>
+</tr>
+<tr>
+	<td>{limitDesc}</td>
+	<td>{limit}</td>
+</tr>
+<tr>
+	<td>{userAccessDesc}</td>
+	<td>{userAccess}</td>
+</tr>
+<tr>
+	<td>{filterOnFlagsDesc}</td>
+	<td>{filterOnFlags}</td>
+</tr>
+<tr>
+	<td>{userDisabledDesc}</td>
+	<td>{userDisabled}</td>
+</tr>
+<tr>
+	<td>{userPendingDesc}</td>
+	<td>{userPending}</td>
+</tr>
+<tr>
+	<td>{userAdminPendingDesc}</td>
+	<td>{userAdminPending}</td>
+</tr>
+<tr>
+	<td>{creationFinishedDesc}</td>
+	<td>{creationFinished}</td>
+</tr>
+<tr>
+	<td>{userWaitingDesc}</td>
+	<td>{userWaiting}</td>
+</tr>
+<tr>
+	<td>{submit}</td>
+	<td>{newSearch}</td>
+</tr>
+</table>
+{formHidden}
+</form>

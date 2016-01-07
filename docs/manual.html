@@ -1,0 +1,270 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" /><title>Simple Site Protection - Documentation</title></head><body>
+<h1>Simple Site Protection (SSP) </h1>
+<h1>Installation and Functional Documentation</h1>
+<p>Author: Julian Blundell</p>
+<p><a href="http://www.w34u.com/">www.w34u.com</a> </p>
+<p>Revision 2.0</p>
+<p> Copyright (c) 2005 Julian Blundell.<br />This file is part of Simple Site Protection (SSP).<br /><br />SSP is free software; you can redistribute it and/or modify<br />it under the terms of the COMMON DEVELOPMENT AND DISTRIBUTION<br />LICENSE (CDDL) Version 1.0 as published by the Open Source Initiative.<br /><br />SSP is distributed in the hope that it will be useful,<br />but WITHOUT ANY WARRANTY; without even the implied warranty of<br />MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.&nbsp; See the<br />COMMON DEVELOPMENT AND DISTRIBUTION LICENSE (CDDL) for more details.<br /><br />You should have received a copy of the COMMON DEVELOPMENT AND DISTRIBUTION<br />LICENSE (CDDL) along with SSP; if not, view at<br />http://www.opensource.org; http://www.opensource.org/licenses/cddl1.php</p>
+<h2>Index</h2>
+<dl>
+  <dt><a href="#introduction">Introduction</a></dt>
+  <dd>About the project and its goals.</dd>
+  <dt><a href="#require">Requirements</a></dt>
+  <dd>System requirements to run this package. </dd>
+  <dt><a href="#overview">Overview</a></dt>
+  <dd>What is in the routines, where things are stored and what can be modified.</dd>
+  <dt><a href="#config">Configuration</a></dt>
+  <dd>How to set up the config and include files.</dd>
+  <dt><a href="#programming">Programming</a></dt>
+  <dd>How to use the routines in your code and change the templating.</dd>
+  <dt>Applications</dt>
+  <dd>Built in user management applications.</dd>
+  <dt>Problem Solving</dt>
+  <dd>If you have problems doing the install or using the program the answers are here. </dd>
+  <dt><a href="#security">Internet Security</a></dt>
+  <dd>What is involved, why and how it is addressed in SSP.</dd>
+  <dt>Future</dt>
+  <dd>Improvements for the future.</dd></dl>
+<h2><a name="introduction" id="introduction" />Introduction</h2>
+<p>The objective of these routines and packages is to provide good site
+security for php dynamic web sites which is easily configurable by any
+competent programmer.</p>
+<p>While coding membership sites and other applications needing
+password protection I tried a number libraries and found that they
+either did not provide very good protection, were complicated to set
+up, badly documented or all three.</p>
+<p>I have been coding this project with the following objectives:-</p>
+<ul>
+  <li>Easy to configure.</li>
+  <li>Covers the most usual login setups.</li>
+  <li>Variable levels of security depending on need.</li>
+  <li>Capable of using SSL either just for the login or for the whole site.</li>
+  <li> Good basic user admin.</li>
+  <li>Easy to include into the dynamic pages of the site.</li>
+  <li> High level of security without having to try too hard.</li>
+  <li>Good documentation to help with all the jargon and concepts.</li>
+</ul>
+<h2><a name="require" id="require" />Requirements</h2>
+<p>The routines are designed to work with the following system components:-</p>
+<ul>
+  <li>PHP v5.0 or greater.</li><li>Any database supported by ADODB.</li>
+  <li>Any web server.</li>
+  <li>Shared hosting or better. </li>
+</ul>
+<h2><a name="overview" id="overview" />Overview</h2>
+<p>SSP consists of a set of libraries to implement the session
+handling, logon, user routines etc. and a set of applications to
+generate logon screens, user admin etc. Certain libraries and routines
+are designed to be modified to get the required user functionality and
+to match the site look and feel, others should not be touched to allow
+easy bug fixes and upgrades.</p>
+<h3>Libraries &amp; Config</h3>
+<p>All libraries and configuration files are stored in the includes
+directory, this should be, if possible, placed outside the viewable
+area of the web site (see <a href="#config">Configuration</a>). </p>
+<dl>
+  <dt style="font-weight: bold;">API_interface.php</dt><dd>API interface to allow two SSP systems to log into each other, currently not functioning.</dd>
+  <dt style="font-weight: bold;">SSP_dataCheck.php</dt>
+  <dd>Data checking, white lists the supplied characters.</dd>
+  <dt style="font-weight: bold;">SSP_email.php</dt>
+  <dd>Basic emailer system, text only with standard templates etc.</dd>
+  <dt style="font-weight: bold;">SSP_setup.php</dt>
+  <dd>Sets up templates and general functionality for the admin system.</dd>
+  <dt style="font-weight: bold;">SSP_translate.php</dt>
+  <dd>Translation routines<br />
+  </dd>
+  <dt><strong>adminclasses.php</strong></dt>
+
+  <dd>Routines used to do basic user admin functions. Should not be altered.</dd>
+  <dt><strong>baseclasses.php</strong></dt>
+  <dd>Routines used to protect the pages and other security functions. Should not be altered.</dd>
+  <dt><strong>config.php</strong></dt>
+  <dd>Application configuration. Change to configure the system to meet your needs.</dd><dt style="font-weight: bold;">config.min.php</dt>
+  <dd>Minimum needed to run the forms and templates.<br />
+  </dd>
+
+  <dt><strong>countries.php</strong></dt>
+  <dd>An array of country codes with the full name. Useful for sites needing country entries.</dd><dt style="font-weight: bold;">db_adodb.php</dt>
+  <dd>Database routines using adodb database abstraction</dd>
+  <dt style="font-weight: bold;">db_pear.php</dt>
+  <dd>Database routines using pear database abstraction, probably not working.<br />
+  </dd>
+
+  <dt><strong>formclasses.php</strong></dt>
+  <dd>Very powerful form classes.<br />
+</dd>
+  <dt><strong>functions.php</strong></dt>
+  <dd>Global functions used in the application. Do not alter.</dd>
+  <dt><strong>include.php</strong></dt>
+  <dd>File needed to be included at the top of all pages using this library (see <a href="#programming">Programming</a>).</dd><dt style="font-weight: bold;">includeCodeigniter.php</dt>
+  <dd>Include file used for codeigniter integration.</dd>
+  <dt style="font-weight: bold;">listerLib.php</dt>
+  <dd>Generates lists of data with page navigator etc.</dd>
+
+  <dt><strong>session.php</strong></dt>
+  <dd>PHP session handling routines. Do not alter.</dd><dt style="font-weight: bold;">setup.php</dt>
+  <dd>Sets up the database, config, translation and general php configurations.<br />
+  </dd>
+
+  <dt><strong>templateclasses.php</strong></dt>
+  <dd>Set
+of routines to do basic templating functions, used in logon pages and
+user handling applications. Feel free to use this simple fast routines
+for other apps.</dd>
+  <dt><strong>userclasses.php</strong></dt>
+  <dd>You will probably always alter the functions in this class to alter the data stored about users etc.</dd>
+  <dt><strong>userlisterLib.php</strong></dt>
+  <dd>Functions used by the user listing and admin routines. Do not alter. </dd>
+</dl>
+<h3>sspadmin directory<br />
+</h3>
+<p>This is the administration application.</p>
+<h4>Directories</h4>
+
+<p>images - images used in the app<br />
+setup - programs used to setup SSP on first start<br />
+styles - style sheets<br />
+templates - english and french templates<br />
+<br />
+All applications are stored in the admin directory, this should be viewable by a browser.</p>
+<dl>
+  <dt><strong>adminusercreation.php</strong></dt>
+  <dd>Admin only user creation, can create any user level.</dd><dt><strong>includeheader.php</strong></dt>
+  <dd>Include
+file used by all applications to include the include file from the
+includes directory, also detects the server for switching between
+testing etc.</dd><dt style="font-weight: bold;">index.php</dt>
+  <dd>Main list of users with filtering etc.<br />
+  </dd>
+<dt><strong>logoff.php</strong></dt>
+  <dd>Calls log off functions and displays logoff screen, uses sspsmalltemplate.tpl.</dd>
+  <dt><strong>logon.php</strong></dt>
+  <dd>Displayed
+if a protected page is accessed by someone without a good enough access
+level. Can be liked to directly to simply display the logon screen.</dd>
+  <dt><strong>newpassword.php</strong></dt>
+  <dd>Allows user who have lost their passwords to enter a new one by following a link from an email.</dd>
+  <dt><strong>passwordrecover.php</strong></dt>
+  <dd>Prompts a user needing to recover their password for an email and set up for newpassword.php.</dd><dt style="font-weight: bold;">remoteLogin.php</dt>
+  <dd>Remote login routine<br />
+  </dd>
+
+  <dt><strong>useradmin.php</strong></dt>
+  <dd>Allows
+a user to administer their own persoanl information, admin to change a
+users permissions, and other users to see basic information on a user
+and to email them through the system.</dd>
+  <dt><strong>userconfirm.php</strong></dt>
+  <dd>Checks a new joining member is at the email address supplied during joining.</dd>
+  <dt><strong>usercreation.php</strong></dt>
+  <dd>Allow users to join the site, modify this to gain the functionality needed for credit card payments etc.</dd>
+  <dt><strong>userlister.php</strong></dt>
+  <dd>list
+all members on the system, can search and do bulk emails for admin etc.
+Generally used as an admin tool, but can be used for other purposes.</dd>
+</dl>
+<h3>Database Tables</h3>
+<dl>
+  <dt><strong>SSP_Session</strong></dt>
+  <dd>Stores PHP session data and variables.</dd>
+  <dt><strong>SSP_Token</strong></dt>
+  <dd>Form time out tokens.</dd>
+  <dt><strong>SSP_UserLogon</strong></dt>
+  <dd>Basic information for user logon; email, user name, password etc.</dd>
+  <dt><strong>SSP_UserMisc</strong></dt>
+  <dd>Additional user information.</dd>
+  <dt><strong>SSP_UserResponse</strong></dt>
+  <dd>Time out tokens when waiting for a user response to, say, recover password request.</dd>
+</dl>
+<h2><a name="config" id="config" />Configuration</h2>
+<p>Configuration of the package is as follows (see the relevent sections for more detail):-</p>
+<ol>
+  <li>Choose where to put the include and admin directories.</li>
+  <li>Create an empty database or check the table names do not conflict on an exisiting database.</li>
+  <li>Set up the paths in includes/include.php, includes/config.php and admin/includeheader.php.</li>
+  <li>Set up the database config in includes/config.php and whether you are going to use ssl etc.</li>
+  <li>Upload the includes and admin directories to their chosen locations.</li>
+  <li>Point a browser at admin/dbsetup.php to create the database, on succesful operation delete this file. </li>
+  <li>Modify
+testing.php to so that it loads include.php at the top, put it in the
+main body of your site and point to it with a browser.</li>
+  <li>Hopefully
+you should get a logon page which you will be able to logon with either
+username: admin or email: admin@admin.com with the password admin, the
+test page will then be displayed.</li>
+  <li> Once the system is
+working you can add fields to SSP_UserMisc to store the data you want
+on the users and then modify the functions in userclasses.php to change
+the join up and user admin screens.</li>
+  <li>If you need to add increased functionality for the joining script modify usercreation.php.</li>
+  <li>To change the look of the applications to match your site modify the .tpl files.</li>
+</ol>
+<h3>Location of includes &amp; admin Directories</h3>
+<p>The includes and admin directories can be re-named if they clash with something else.</p>
+<p>The includes should, if possible, be located outside the area
+viewable by a browser eg. if you need to put your files in a directory
+called public or public_html or some such to be viewable by a browser
+the includes directory should not be under this directory but at the
+same level, this helps stop hackers compromising your system.</p>
+<p>Directory admin should be in a browser viewable location since it
+has applications which execute when a browser is pointed at them.</p>
+<h3>Database tables</h3>
+<p>All the database tables are pre-pended by SSP_ to prevent clashes if
+you are using a single database for all your database operations, it
+would be better to create a seperate database for this application if
+your hosting allows you.</p>
+<p>You can rename the tables simply by modifying their names in the
+config.php before your run dbsetup.php, or after by renaming the tables
+in the database using your admin tools or the database command line.</p>
+<p>To configure the type of database being used change the $dsn string
+in config.php, see the documentation for the PEAR -&gt; DATABASE -&gt;
+DB package at <a href="http://pear.php.net/" target="_blank">http://pear.php.net/</a></p>
+<h3>Setting Paths</h3>
+<p>Getting the paths right for the includes and admin directories is
+very important, you must not use relative paths, e.g. ../../includes/,
+since this could cause problems depending on where the page you are
+protecting is located, use absolute paths from the top level of the
+server ie. they should start with something like /usr/local/http/ etc.
+or, in the case of the path to the admin directory, should start with
+the url e.g. www.mysite.com/admin .</p>
+<p>Finding the absolute path for your domain can be tricky, most
+hosting companies do not tell you. The best way I have found is to
+create a simple PHP script that includes another one which does not
+exist and you will usually get an error message similar to this:</p>
+<p> <b>Warning</b>: main(test2): failed to open stream: No such file or directory in <b>/usr/local/home/httpd/vhtdocs/w34u.com/public/SSP/admin/test.php</b> on line <b>39</b><br />
+  <br />
+  <b>Warning</b>: main(): Failed opening 'test2' for inclusion (include_path='.:/opt/php-4.3/lib/php') in <b>/usr/local/home/httpd/vhtdocs/w34u.com/public/SSP/admin/test.php</b> on line <b>39</b> </p>
+<p>Now I know that my browsable area is in the public directory so if I
+put my includes directory at the same level, thus making it invisible
+to browsers, its path will be:</p>
+<p><b>/usr/local/home/httpd/vhtdocs/w34u.com/includes/</b></p>
+<p>So I can set $SSP_IncludePath in includes/include.php to this and the path for path for admin/includehearder.php will be:</p>
+<p><strong>/usr/local/home/httpd/vhtdocs/w34u.com/public/SSP/includes/include.php</strong></p>
+<p>The path for the admin directory in includes/config.php would be www.w34u.com/SSP/admin/ .</p>
+<h3>Setting up config.php</h3>
+<p>The config.php file in includes has already been mentioned several
+times now, this section covers what the various sections configure.</p>
+<p>The file defines a class called SSP_Configuration, this is
+instanciated as a global object called SSP_Config which is used by all
+the routines to run the system. Also in the file is all the PHP system
+session variables that can be modified by the user so the whole system
+can be configured from this one location. </p>
+<h4>PHP error handling</h4>
+<p>Once you have your application running without any bugs comment out these two lines.</p>
+<h4>Database Configuration</h4>
+<p>Set up the PEAR DB dsn used to connect to the database, see the PEAR DB documentation at <a href="http://pear.php.net">pear.php.net</a>, sets up the names of the tables used by SSP.</p>
+<h4>General SSP Configuration</h4>
+<p>Defines where the admin directory is located, the names of the
+various applications, url for the home page for the site and location
+of a temporary directory for general file handling.</p>
+<p>The constructor creates full paths from this information. If $useSSL is true the paths start with https:// else http://, see <a href="#security">Internet Security</a> for more detail.</p>
+<p>A problem with the complete paths sometimes is that
+$_SERVER['SERVER_NAME'] returns the domain name with no "www." at the
+beginning, if the site has been entered with the "www." on the
+beginning, it can cause the session to be re-started anew on logon and
+cause a continuity failure. If $adminDir starts with "www." this will
+always be added to the history for what page has been logged onto and
+any scripts that generate their own paths for refering to themselves.</p></body></html>

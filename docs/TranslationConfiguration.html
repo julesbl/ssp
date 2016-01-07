@@ -1,0 +1,43 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html><head>
+
+  
+  <meta content="text/html; charset=ISO-8859-1" http-equiv="content-type"><title>Translation configuration</title></head><body>
+<h1>SSP Translation configuration</h1>
+
+<p>To configure the translation routines for just changing various
+texts or adding another language, currently just french.</p>
+
+<ol>
+
+  <li>Change the name of the name of the translate.change directory to
+translate.</li>
+  <li>In config.php set the $lang property to your default language and
+set $translate to true.</li>
+</ol>
+
+<p>Adding a language</p>
+
+<ol>
+
+  <li>Make copies of the following files in the translate directory
+with the english code replaced with the new language code, see language
+codes explained <a href="http://www.w3.org/TR/html401/struct/dirlang.html" target="_blank">here</a> and list of codes <a href="http://msdn.microsoft.com/en-us/library/ms533052%28vs.85%29.aspx" target="_blank">here</a>.<br>
+</li>
+  <ol>
+    <li>lang_(lang code).conf.php - configure menu entry, language code and reading direction.</li>
+    <li>lang_(lang code).php - Translations for SSP_datacheck and form error messages.</li>
+    <li>lang_(lang code)_login.php - Translation for login and allied routines error messages.</li>
+    <li>lang_(lang code)_admin.php - Translation for admin area of site, menu entries, error mesages etc.</li>
+
+  </ol>
+  <li>Make a new directory named as the correct language code in templates, copy all the templates from the en directory into it and translate them.</li>
+  <li>Once the translation routines are enabled the new language will
+show in the selection menu and will be picked up by the autodetection
+routines.<br>
+  </li>
+
+
+</ol>
+
+</body></html>
