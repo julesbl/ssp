@@ -3,7 +3,6 @@
 *   Site by w34u
 *   http://www.w34u.com
 *   info@w34u.com
-*   +44 (0)1273 201344
 *   +44 (0)7833 512221
 *
 *   Project:	Simple Site Protection
@@ -25,7 +24,7 @@
 *   The MIT License (MIT) for more details.
 *
 *   You should have received a copy of the The MIT License (MIT)
- *  along with SSP; if not, view at
+*   along with SSP; if not, view at
 *   http://www.opensource.org; https://opensource.org/licenses/MIT
 *
 *   Revision:	a
@@ -360,7 +359,7 @@ abstract class ConfigurationBase
 	 * Use SSL for random cookie
 	 * @var bool
 	 */
-	public $randomCookieSSL = false;
+	public $randomCookieSSL = true;
 	/**
 	 * User levels for logins
 	 * users "public" and "admin" must always exist for the
@@ -685,9 +684,17 @@ abstract class ConfigurationBase
 	 * @var string 
 	 */
 	private static $sessionName = null;
+	
+	private static $checkProperties = [
+		'dsn', 'noReplyEmail', 'url', 'cookieDomain', 'siteRoot', 'sessVarName', 'randomCookie', 'loginRememberMeCookie', 'magicUser', 'errorAdmins', 'magicToken'
+	];
 
 	// constructor for configuration class
-	function __construct() {
+	public function __construct() {
+		
+		$this->checkProperties();
+		
+		$this->generateDSN();
 
 	   // build paths to scripts
 		$this->pathSite = "http://". $this->url. "/";
@@ -715,7 +722,7 @@ abstract class ConfigurationBase
 
 		// configure debug
 		if($this->checkDebugIp){
-			if(SSP_paddIp($this->debugIP) == SSP_paddIp($_SERVER['REMOTE_ADDR'])){
+			if(SSP_paddIp($this->debugIP) === SSP_paddIp($_SERVER['REMOTE_ADDR'])){
 				$debug = true;
 			}
 			else{
@@ -735,25 +742,30 @@ abstract class ConfigurationBase
 	 * Check all required properties have been configured
 	 */
 	private function checkProperties(){
-		
+		$paramOk = true;
+		foreach(self::$checkProperties as $property){
+			if(is_null($this->$property)){
+				$paramOk = false;
+				trigger_error('Property '. $property. ' of the confiration object has not been assigned a value', E_USER_ERROR);
+			}
+		}
+		if(!$paramOk){
+			exit();
+		}
 	}
 	
 	/**
 	 * Get the dsn for the database
 	 * Useful for generating the DSN when the database options come from an
 	 * esternal system or have special characters within them.
-	 * @return string
 	 */
-	public function getDSN($getFromParts = false){
-		if($this->dsn != "" and !$getFromParts){
-			return $this->dsn;
-		}
-		else{
+	private function generateDSN(){
+		if(trim($this->dsn) === ""){
 			$dsn = $this->dsnDatabaseDriver. '://'. $this->dsnUser. ':'. $this->dsnPassword. '@'. $this->dsnHostName. '/'. $this->dsnDatabaseName;
 			if(count($this->dsnOptions)){
 				$dsn .= '?'. implode('&', $this->dsnOptions);
 			}
-			return $dsn;
+			$this->dsn = $dsn;
 		}
 	}
 	
@@ -763,7 +775,8 @@ abstract class ConfigurationBase
 	 */
 	public static function getConfiguration(){
 		if(self::$cfg === null){
-			self::$cfg = new SSP_Configuration();
+			$className = __CLASS__;
+			self::$cfg = new $className();
 		}
 		return self::$cfg;
 	}
