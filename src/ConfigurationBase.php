@@ -119,7 +119,7 @@ abstract class ConfigurationBase
 	/** 
 	 * used for form tokens, prevents bashing etc.
 	 * @var string  */
-	var $tokenTable = "SSP_Token";
+	public $tokenTable = "SSP_Token";
 	/** 
 	 * Miscellaneous user data
 	 * @var string  */
@@ -684,9 +684,14 @@ abstract class ConfigurationBase
 	 * @var string 
 	 */
 	private static $sessionName = null;
-	
+	/**
+	 * Properties that are checked on object creation to be non null
+	 * @var string
+	 */
 	private static $checkProperties = [
-		'dsn', 'noReplyEmail', 'url', 'cookieDomain', 'siteRoot', 'sessVarName', 'randomCookie', 'loginRememberMeCookie', 'magicUser', 'errorAdmins', 'magicToken'
+		'dsn', 'noReplyEmail', 'url', 'cookieDomain', 'siteRoot', 'sessVarName',
+		'randomCookie', 'loginRememberMeCookie', 'magicUser', 'errorAdmins',
+		'magicToken'
 	];
 
 	// constructor for configuration class
@@ -746,7 +751,7 @@ abstract class ConfigurationBase
 		foreach(self::$checkProperties as $property){
 			if(is_null($this->$property)){
 				$paramOk = false;
-				trigger_error('Property '. $property. ' of the confiration object has not been assigned a value', E_USER_ERROR);
+				trigger_error('Property '. $property. ' of the configuration object has not been assigned a value, see '. implode(', ', self::$checkProperties). ' on line 691 of ConfigurationBase', E_USER_ERROR);
 			}
 		}
 		if(!$paramOk){
@@ -775,7 +780,7 @@ abstract class ConfigurationBase
 	 */
 	public static function getConfiguration(){
 		if(self::$cfg === null){
-			$className = __CLASS__;
+			$className = get_called_class();
 			self::$cfg = new $className();
 		}
 		return self::$cfg;

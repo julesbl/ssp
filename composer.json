@@ -1,0 +1,20 @@
+{
+    "name": "w34u/ssp",
+    "description": "Secure login system for php frameworks, applications and sites",
+    "require": {
+        "adodb/adodb-php": "^5.20"
+    },
+	"autoload": {
+		"psr-4": {
+			"w34u\\ssp\\": "src/"
+		}
+	},
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Julian Blundell",
+            "email": "j.blundell@w34u.com"
+        }
+    ],
+    "minimum-stability": "stable"
+}
