@@ -2,12 +2,14 @@
     "name": "w34u/ssp",
     "description": "Secure login system for php frameworks, applications and sites",
     "require": {
-        "adodb/adodb-php": "^5.20"
+        "adodb/adodb-php": "^5.20",
+		"php": "^5.5 || ^7.0"
     },
 	"autoload": {
 		"psr-4": {
 			"w34u\\ssp\\": "src/"
-		}
+		},
+		"files": ["src/functions.php"]
 	},
     "license": "MIT",
     "authors": [

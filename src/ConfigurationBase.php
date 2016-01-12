@@ -212,7 +212,7 @@ abstract class ConfigurationBase
 	 * Path to the templates directory
 	 * @var string
 	 */
-	public $templateDir = "sspincludes/templates/";
+	public $templateDir = "../cfg/templates/";
 	/**
 	 * name of logon script in admin
 	 * @var string
@@ -359,7 +359,7 @@ abstract class ConfigurationBase
 	 * Use SSL for random cookie
 	 * @var bool
 	 */
-	public $randomCookieSSL = true;
+	public $randomCookieSSL = false;
 	/**
 	 * User levels for logins
 	 * users "public" and "admin" must always exist for the
@@ -430,7 +430,7 @@ abstract class ConfigurationBase
 	 * allow remote auto login
 	 * @var bool
 	 */
-	public $autoLoginEnable = false;
+	public $autoLoginEnable = true;
 	/**
 	 * table for remote login setup
 	 * @var string
@@ -690,7 +690,7 @@ abstract class ConfigurationBase
 	 */
 	private static $checkProperties = [
 		'dsn', 'noReplyEmail', 'url', 'cookieDomain', 'siteRoot', 'sessVarName',
-		'randomCookie', 'loginRememberMeCookie', 'magicUser', 'errorAdmins',
+		'randomCookie', 'loginRememberMeCookie', 'magicUser', 'encryptionString', 'errorAdmins',
 		'magicToken'
 	];
 
@@ -741,6 +741,79 @@ abstract class ConfigurationBase
 		$this->accessFaultDebug = $this->accessFaultDebug and $debug;
 		$this->divertDebug = $this->divertDebug and $debug;
 		$this->displaySqlFaults = $this->displaySqlFaults and $debug;
+		
+		date_default_timezone_set($this->siteTimezoneIdentifier);
+		
+		Protect::setTemplatePath(__DIR__. $this->templateDir);
+		
+		// set template path for template routines
+		define("SFC_FUNCTOKENMAKE", "SSP_Token"); // specify function for form token creation
+		define("SFC_FUNCTOKENCHECK", "SSP_TokenCheck"); // function to veryify token
+		define("SFC_FORMSUBMITVARTYPE", "hex"); // data type for form token
+
+		// Translation configuration
+		if($this->translate){
+			require($SSP_IncludePath. 'SSP_translate.php');
+			require($SSP_TranslatePath. 'lang_en.conf.php');
+			require($SSP_TranslatePath. 'lang_fr.conf.php');
+			// add other language files here
+
+			// basic language setup
+			// start debug mode
+			//SSP_translate::debug();
+			// configure language translation object
+			$SSP_lang = new SSP_translate($SSP_Config->lang, $SSP_TranslatePath);
+
+			SSP_checkData::addTranslation($SSP_lang);
+			SFC_Form::addTranslation($SSP_lang);
+			SSP_Protect::addTranslation($SSP_lang);
+		}
+
+		// set up pages not to be included in the history
+		ProtectBase::addNoHistoryPage($this->logonScript);
+		ProtectBase::addNoHistoryPage($this->logoffScript);
+		ProtectBase::addNoHistoryPage($this->passwordRecover);
+		ProtectBase::addNoHistoryPage($this->userConfirm);
+		ProtectBase::addNoHistoryPage($this->newPassword);
+		ProtectBase::addNoHistoryPage($this->userConfirm);
+
+		/**
+		* Set up PHP initialisation parameters
+		*
+		* These can be ignored and set up in the php.ini if you have access
+		*
+		* if you need to change the parameters from the default,
+		* simply uncomment the line and change the required paramater.
+		*/
+
+		// specifies the name of the session which is used as cookie name. It should only contain alphanumeric characters.
+		 ini_set("session.name", $this->sessVarName);
+
+		// defines the name of the handler which is used for storing and retrieving data associated with a session.
+		// files - uses inbuilt php routines, only good for unix systems with small numbers of users
+		// user - database using abstraction layer.
+		ini_set("session.save_handler","user");
+
+		// specifies the number of seconds after which a session will be seen as 'garbage' and cleaned up. Will also clean up any other temporary tables.
+		ini_set("session.gc_maxlifetime", $this->sessMaxLifetime); // 1440 = 24 minutes
+
+		// defines the argument which is passed to the save handler. If you choose the default files handler, this is the path where the files are created. Put in directory your system can access, but not a user with a browser.
+		ini_set("session.save_path","/usr/local/tmp");
+
+		// specifies the probability that the gc (garbage collection) routine is started on each request in percentage. You might want to lower this for busy sites.
+		ini_set("session.gc_probability","10");
+
+		// defines the name of the handler which is used to serialize/deserialize data. Currently, a PHP internal format (name php) and WDDX is supported (name wddx). WDDX is only available, if PHP is compiled with WDDX support. Defaults to php.
+		// ini_set("session.serialize_handler","php");
+
+		// the lifetime of the cookie in seconds which is sent to the browser. The value 0 means "until the browser is closed."
+		// ini_set("session.cookie_lifetime","0");
+
+		// specifies path to set in session_cookie.
+		 ini_set("session.cookie_path", $this->cookiePath);
+
+		// specifies the domain to set in session_cookie.
+		ini_set("session.cookie_domain", $this->cookieDomain);
 	}
 	
 	/**
@@ -751,7 +824,9 @@ abstract class ConfigurationBase
 		foreach(self::$checkProperties as $property){
 			if(is_null($this->$property)){
 				$paramOk = false;
-				trigger_error('Property '. $property. ' of the configuration object has not been assigned a value, see '. implode(', ', self::$checkProperties). ' on line 691 of ConfigurationBase', E_USER_ERROR);
+				trigger_error('Property '. $property.
+				' of the configuration object has not been assigned a value, see '.
+				implode(', ', self::$checkProperties). ' on line 691 of ConfigurationBase', E_USER_ERROR);
 			}
 		}
 		if(!$paramOk){
