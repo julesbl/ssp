@@ -39,9 +39,9 @@
 exit();
 require("includeheader.php");
 require($SSP_IncludePath."htmlobjects.php");
-$session= new SSP_Protect("", false, false);
+$session= new Protect("", false, false);
 
-$ssp = new SSP_setup($session, true);
+$ssp = new Setup($session, true);
 
 $admin = new SSP_UserAdmin($session, $ssp, "", "", "sspsmalltemplate.tpl");
 

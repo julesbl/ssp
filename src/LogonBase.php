@@ -7,43 +7,46 @@
 *   +44 (0)7833 512221
 *
 *   Project:	Simple Site Protection
-*   Routine:	SSP_ProtectBase.php
+*   Routine:	LogonBase.php
 *   Created:	07/01/2005
-*   Descrip:	Base classes for used to run the SSP system.
+*   Descrip:	Base class for logging into a session
 *
-*   Copyright 2005-2009 Julian Blundell, w34u
+*   Copyright 2005-2016 Julian Blundell, w34u
 *
 *   This file is part of Simple Site Protection (SSP).
 *
 *   SSP is free software; you can redistribute it and/or modify
-*   it under the terms of the COMMON DEVELOPMENT AND DISTRIBUTION
-*   LICENSE (CDDL) Version 1.0 as published by the Open Source Initiative.
+*   it under the terms of the The MIT License (MIT)
+*   as published by the Open Source Initiative.
 *
 *   SSP is distributed in the hope that it will be useful,
 *   but WITHOUT ANY WARRANTY; without even the implied warranty of
 *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-*   COMMON DEVELOPMENT AND DISTRIBUTION LICENSE (CDDL) for more details.
-*
-*   You should have received a copy of the COMMON DEVELOPMENT AND DISTRIBUTION
-*   LICENSE (CDDL) along with SSP; if not, view at
-*   http://www.opensource.org; http://www.opensource.org/licenses/cddl1.php
+*   The MIT License (MIT) for more details.
 *
 *   Revision:	a
 *   Rev. Date	07/01/2005
 *   Descrip:	Created.
+* 
+*   Revision:	b
+*   Rev. Date	13/01/2016
+*   Descrip:	Changed to psr-4.
 */
-abstract class SSP_LogonBase {
+
+namespace w34u\ssp;
+
+abstract class LogonBase {
 	// Class to handle user logons
 
-	var $errorDesc; // Description of the error that produce the failure
-	var $error = false; // error reported during attempted login
+	public $errorDesc; // Description of the error that produce the failure
+	public $error = false; // error reported during attempted login
 
 	/** @var SSP_Configuration ssp config var  */
-	var $cfg; // configuration
+	public $cfg; // configuration
 	/** @var SSP_DB database object */
-	var $db; // database object
+	public $db; // database object
 	/** @var SSP_Protect session object */
-	var $session;
+	public $session;
 	/**
 	 * Form output
 	 * @var string 
@@ -52,20 +55,20 @@ abstract class SSP_LogonBase {
 
 	// remember me stuff
 	/** @var bool do remeber me on login form */
-	var $rememberMe = false;
+	private $rememberMe = false;
 	/** @var bool valid remember me user login */
-	var $rememberMeLogin = false;
+	private $rememberMeLogin = false;
 	/** @var bool request to save a cookie to remember me */
-	var $rememberMeSave = false;
+	private $rememberMeSave = false;
 
 
 	/**
 	 * Login base class constructor
 	 * @param SSP_Protect $session - session object
-	 * @param SSP_Template $tpl - template in which to wrap the form
+	 * @param Template $tpl - template in which to wrap the form
 	 * @param bool $ignoreToken - dont use a token on the login form
 	 */
-	function __construct($session, $tpl = "", $ignoreToken = false){
+	public function __construct($session, $tpl = "", $ignoreToken = false){
         
 		$this->session = $session;
 		$this->cfg = $this->session->cfg;
@@ -134,16 +137,16 @@ abstract class SSP_LogonBase {
 
 	/**
 	 * Creates the login form
-	 * @param SSP_Template $tpl - template in which to wrap the form
+	 * @param Template $tpl - template in which to wrap the form
 	 * @param bool $ignoreToken - dont use the timeout token
-	 * @return SFC_Form - form to be used to login
+	 * @return SfcForm - form to be used to login
 	 */
-	function loginScreenDefine($tpl, $ignoreToken){
+	private function loginScreenDefine($tpl, $ignoreToken){
 		// defines the login form
 
 		$useMainTemplate = is_object($tpl);
 
-		$form = new SFC_Form($this->cfg->logonScript, "noTable", "loginForm");
+		$form = new SfcForm($this->cfg->logonScript, "noTable", "loginForm");
 		$form->errorAutoFormDisplay = false;
 		// disable checking of token for embedded login forms
 		if($ignoreToken){
@@ -181,7 +184,7 @@ abstract class SSP_LogonBase {
 		return($form);
 	}
 
-	function loginFormCheck(&$form){
+	private function loginFormCheck(&$form){
 		// check the data supplied by the login form
 
 		$passwordOk=false;
@@ -232,7 +235,7 @@ abstract class SSP_LogonBase {
 		return($passwordOk);
 	}
 
-    function logonCheck($userInfo){
+    private function logonCheck($userInfo){
         // checks the return from a login form, returns true on successful
         // logon, false on failure
 
@@ -346,16 +349,16 @@ abstract class SSP_LogonBase {
         }
     }
 
-	function userCheck($userInfo, $formData){
+	public function userCheck($userInfo, $formData){
 		// stub for user defined login check
 		return(true);
 	}
 
 	/**
 	 * Get remember me info and place user info into the form if found
-	 * @param SFC_Form $form form object
+	 * @param SfcForm $form form object
 	 */
-	function rememberMeGet(&$form){
+	private function rememberMeGet(&$form){
 		if($this->rememberMe){
 			if(isset($_COOKIE[$this->cfg->loginRememberMeCookie])){
 				// clean upremember me entries

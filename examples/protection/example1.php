@@ -18,7 +18,7 @@
 // include the libraries
 require("../../sspadmin/includeheader.php");
 // start the session and protect the page against non admin users
-$session = new SSP_Protect("admin");
+$session = new Protect("admin");
 // everything beyond this point only accessible to the admin user
 echo "user name ".$session->userName."<br />";
 echo "user access level ".$session->userAccessLevel."<br />";

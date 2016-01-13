@@ -34,14 +34,14 @@ class testForm{
 	}
 
 	function previewForm($formData){
-		$form = new SSP_Template($formData, "test2preview.tpl", false);
+		$form = new Template($formData, "test2preview.tpl", false);
 		$form->encode=false;
 		$form->output();
 		return($form->output);
 	}
 }
 
-$form = new SFC_Form("test2.php", "TestSaveTable", "test2form");
+$form = new SfcForm("test2.php", "TestSaveTable", "test2form");
 $form->formCheck = 'testForm::test';
 $form->tplf = "test2.tpl";
 $form->setPreview("testform::previewForm");

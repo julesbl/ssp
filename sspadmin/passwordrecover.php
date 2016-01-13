@@ -37,8 +37,8 @@
 *   Descrip:	new way for doing admin and templates implemented.
 */
 require("includeheader.php");
-$session = new SSP_Protect("", false, false);
-$ssp = new SSP_setup($session);
+$session = new Protect("", false, false);
+$ssp = new Setup($session);
 $ssp->pageTitleAdd('Password recovery');
 
 $admin = new SSP_UserAdmin($session, $ssp, "", "", "sspsmalltemplate.tpl", false);

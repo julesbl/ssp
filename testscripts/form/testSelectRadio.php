@@ -37,7 +37,7 @@ $selectComplex = array(
 );
 $selectComplex[3]->addAttribute('class', 'option3Class');
 
-$form = new SFC_Form('', 'noTable', 'testform');
+$form = new SfcForm('', 'noTable', 'testform');
 $form->tplf = "testSelectRadio.tpl";
 $form->fe("select", 'simpleSelect', "Simple Selection", $selectBasic);
 $form->fe("select", "selectComplex", "Complex selection", $selectComplex);

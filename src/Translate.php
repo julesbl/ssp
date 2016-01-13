@@ -7,7 +7,7 @@
 *   +44 (0)7833 512221
 *
 *   Project:	Simple Site Protection
-*   Routine:	SSP_translate.php
+*   Routine:	Translate.php
 *   Created:	18/02/2013
 *   Descrip:	Translation class for multilingual functions.
 *
@@ -295,5 +295,5 @@ class Translate{
 	}
 }
 
-/* End of file SSP_translate.php */
-/* Location: ./sspincludes/SSP_translate.php */
+/* End of file Translate.php */
+/* Location: ./src/Translate.php */

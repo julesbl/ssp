@@ -7,26 +7,22 @@
 *   +44 (0)7833 512221
 *
 *   Project:	Simple Site Protection
-*   Routine:	SSP_dataCheck.php
+*   Routine:	CheckDataBase.php
 *   Created:	25/09/2009
 *   Descrip:	Set of classes to check data returned by forms and get parameters.
 *
-*   Copyright 2005-2009 Julian Blundell, w34u
+*   Copyright 2005-2016 Julian Blundell, w34u
 *
 *   This file is part of Simple Site Protection (SSP).
 *
 *   SSP is free software; you can redistribute it and/or modify
-*   it under the terms of the COMMON DEVELOPMENT AND DISTRIBUTION
-*   LICENSE (CDDL) Version 1.0 as published by the Open Source Initiative.
+*   it under the terms of the The MIT License (MIT)
+*   as published by the Open Source Initiative.
 *
 *   SSP is distributed in the hope that it will be useful,
 *   but WITHOUT ANY WARRANTY; without even the implied warranty of
 *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-*   COMMON DEVELOPMENT AND DISTRIBUTION LICENSE (CDDL) for more details.
-*
-*   You should have received a copy of the COMMON DEVELOPMENT AND DISTRIBUTION
-*   LICENSE (CDDL) along with SSP; if not, view at
-*   http://www.opensource.org; http://www.opensource.org/licenses/cddl1.php
+*   The MIT License (MIT) for more details.
 *
 *   Revision:	a
 *   Rev. Date	25/09/2009
@@ -35,7 +31,13 @@
 *   Revision:	b
 *   Rev. Date	23/02/2011
 *   Descrip:	Changed to php5 class system.
+*
+*   Revision:	c
+*   Rev. Date	13/01/2016
+*   Descrip:	Changed to psr-4.
 */
+
+namespace w34u\ssp;
 
 /**
  * Class to do data checking of input data
@@ -57,7 +59,7 @@
         lable - 0 to 9, a - z, A - Z, -, _
         gen - any character - when re-displayed any special characters are converted to html special entities and then converted back to characters on submission
  */
-abstract class SSP_checkDataBase{
+abstract class CheckDataBase{
 	
 	/** @var int error number, used to index error messages */
 	public $error = 0;
@@ -128,7 +130,7 @@ abstract class SSP_checkDataBase{
 	 * @param string $validChars - a string used in pregMatch, valid characters
 	 */
 	function addDataCheck($type, $errorMessage, $validChars){
-		$this->dataTypes[$type] = new SSP_typeDataCheck($type, $errorMessage, $validChars);
+		$this->dataTypes[$type] = new TypeDataCheck($type, $errorMessage, $validChars);
 	}
 	
 	/**
@@ -256,7 +258,7 @@ abstract class SSP_checkDataBase{
  * @var string $errorMessage description of error characters
  * @var string $validChars list of valid characters for this type
  */
-class SSP_typeDataCheck{
+class TypeDataCheck{
 	
 	/** @var integer - error number */
 	public $error = 0; 
@@ -340,5 +342,5 @@ class SSP_typeDataCheck{
 	}
 	
 }
-/* End of file SSP_dataCheck.php */
-/* Location: ./sspincludes/SSP_dataCheck.php */
+/* End of file CheckDataBase.php */
+/* Location: ./sspincludes/CheckDataBase.php */

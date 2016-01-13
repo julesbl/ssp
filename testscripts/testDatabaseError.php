@@ -1,6 +1,6 @@
 <?php 
 require_once("../sspadmin/includeheader.php");
-$session = new SSP_Protect();
+$session = new Protect();
 /**
 *   Site by w34u
 *   http://www.w34u.com

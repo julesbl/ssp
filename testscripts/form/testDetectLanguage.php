@@ -16,7 +16,7 @@
 *   Descrip:	Created.
 */
 require_once("include.php");
-$session = new SSP_Protect();
+$session = new Protect();
 require_once($SSP_IncludePath. 'SSP_translate.php');
 require_once($SSP_TranslatePath. 'lang_fr.conf.php');
 require_once($SSP_TranslatePath. 'lang_fr.php');
@@ -38,5 +38,5 @@ $templateContent = array(
 	'browserLanguages' => print_r($browserLanguages, true),
 	'installedLanguages' => print_r($lang->getLanguages(), true)
 );
-$template = new SSP_Template($templateContent, 'testDetectLanguage.tpl', true);
+$template = new Template($templateContent, 'testDetectLanguage.tpl', true);
 $template->output();

@@ -33,7 +33,7 @@
 *   Descrip:	Created.
 */
 require("../includeheader.php");
-$SSP_DB = SSP_DB::get_connection();
+$SSP_DB = SspDb::getConnection();
 $values = array();
 
 $query = "CREATE TABLE ". $SSP_Config->sessionTable. " (
@@ -104,8 +104,8 @@ $query = "CREATE TABLE ". $SSP_Config->responseTable. " (
 )";
 $SSP_DB->query($query, $values, "SSP Database configuration: Creating user misc data table");
 
-	$session = new SSP_Protect();
-	$ssp = new SSP_setup($session);
+	$session = new Protect();
+	$ssp = new Setup($session);
 	$admin = new SSP_UserAdmin($session, $ssp);
 	$admin->adminCreate();
 ?>

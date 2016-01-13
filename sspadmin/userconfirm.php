@@ -33,8 +33,8 @@
 *   Descrip:	Created.
 */
 require("includeheader.php");
-$session= new SSP_Protect("", false, false);
-$ssp = new SSP_setup($session);
+$session= new Protect("", false, false);
+$ssp = new Setup($session);
 $ssp->pageTitleAdd("User Confirmation of membership");
 
 if(isset($_GET["confirmToken"])){

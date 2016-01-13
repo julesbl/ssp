@@ -39,7 +39,7 @@
 
 require("includeheader.php");
 require($SSP_IncludePath."htmlobjects.php");
-$session = new SSP_Protect("admin");
+$session = new Protect("admin");
 
 if(!isset($_SESSION["adminUserId"])){
 	$_SESSION["adminUserId"] = "";
@@ -62,7 +62,7 @@ else{
     $needPassword = false;
 }
 
-$ssp = new SSP_setup($session, true);
+$ssp = new Setup($session, true);
 
 $command = SSP_getParam("command", "info");
 

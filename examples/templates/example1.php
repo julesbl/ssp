@@ -30,7 +30,7 @@ $content = array(
 	"textWithBreaksNoNl" => $textWithBreaks,
 	"textWithBreaksNl2Br" => $textWithBreaks,
 );
-$page = new SSP_Template($content, "example1.tpl");
+$page = new Template($content, "example1.tpl");
 $page->ne("programNe");
 echo $page->output();
 ?>

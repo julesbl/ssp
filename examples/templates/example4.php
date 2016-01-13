@@ -30,9 +30,9 @@ $content = array(
 	"title" => 'Different ways of loading data and templates',
 	"mainTitle" => "Different ways of loading data and templates",
 	"mainContent" => "The data can be loaded from objects and after the template object has been defined.",
-	"dynamic" => new SSP_Template("", $dynamicallyDefinedTemplate, false),
+	"dynamic" => new Template("", $dynamicallyDefinedTemplate, false),
 );
-$page = new SSP_Template($content, "example4.tpl", false);
+$page = new Template($content, "example4.tpl", false);
 $page->restart($moreContent);
 echo $page->output();
 ?>

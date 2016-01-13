@@ -34,8 +34,8 @@
 */
 require("../includeheader.php");
 
-	$session = new SSP_Protect();
-	$ssp = new SSP_setup($session);
+	$session = new Protect();
+	$ssp = new Setup($session);
 	$admin = new SSP_UserAdmin($session, $ssp);
 	$admin->adminCreate();
 

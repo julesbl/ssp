@@ -38,9 +38,9 @@
 */
 require("includeheader.php");
 require($SSP_IncludePath."htmlobjects.php");
-$session = new SSP_Protect("admin");
+$session = new Protect("admin");
 
-$ssp = new SSP_setup($session, true);
+$ssp = new Setup($session, true);
 
 $admin = new SSP_UserAdmin($session, $ssp, "", $session->userId);
 

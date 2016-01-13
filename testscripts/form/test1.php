@@ -37,7 +37,7 @@ class testForm{
 	}
 }
 
-$form = new SFC_Form("test1.php", "TestSave", "testform");
+$form = new SfcForm("test1.php", "TestSave", "testform");
 $form->buildForm = true;
 $form->formCheck = 'testForm::test';
 $form->fe("text", "testtext", "Testing input box", "test input");

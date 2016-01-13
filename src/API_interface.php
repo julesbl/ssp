@@ -259,7 +259,7 @@ class API_interface{
 				$where = array("UserName"=>$remoteLoginRecord->userName);
 				$userLoginInfo = $this->db->get($userTable, $where, "SSP Protect: getting user login information");
 				// create login record
-				$login = new SSP_Logon($this, "", false, true);
+				$login = new Logon($this, "", false, true);
 				$login->logonCheck($userLoginInfo);
 				session_write_close();
 				SSP_Divert(SSP_Path());

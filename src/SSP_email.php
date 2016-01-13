@@ -62,7 +62,7 @@ class SSP_email{
 	 * @return bool - true on success
 	 */
 	public function generalEmail($emailContent, $emailTpl, $fromEmail, $fromName, $toEmail, $toName){
-		$emailBody = new SSP_Template($emailContent, $emailTpl);
+		$emailBody = new Template($emailContent, $emailTpl);
 		$emailBody->encode = false;
 		// first two lines are comment and subject of email
 		$emailBody->numberReturnLines = 2;
@@ -71,7 +71,7 @@ class SSP_email{
 		$emailContent['adminEmail'] = $this->cfg->adminEmail;
 		$subject = $emailBody->returnedLines[1];
 		$subject = '=?'. $this->charset. '?B?'.base64_encode(mb_ereg_replace("[\r\n]", '', $subject)).'?=';
-		$tpl = new SSP_Template($emailContent, $this->emailTemplate);
+		$tpl = new Template($emailContent, $this->emailTemplate);
 		$tpl->encode = false;
 		$tpl->numberReturnLines = 1; // remove comment from the top
 		$message = $tpl->output();

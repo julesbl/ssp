@@ -61,7 +61,7 @@ class SSP_Protect extends SSP_ProtectBase{
 
 	/**
 	 * display screen shown on logging off
-	 * @param SSP_template $tpl - main template
+	 * @param Template $tpl - main template
 	 * @param string $userId - user id of memeber logging off
 	 * @param string $returnPage - url of previous page
 	 */
@@ -78,19 +78,19 @@ class SSP_Protect extends SSP_ProtectBase{
 		);
 
 
-		$logoff = new SSP_Template($content, "logoff.tpl");
+		$logoff = new Template($content, "logoff.tpl");
 		$tpl->setData("content", $logoff->output());
 		echo $tpl->output();
 	}
 }
 
-class SSP_Logon extends SSP_LogonBase{
+class Logon extends LogonBase{
     // user extensions for the logon class
 
 	/**
 	 * Login base class constructor
 	 * @param SSP_Protectg $session - session object
-	 * @param SSP_Template $tpl - template in which to wrap the form
+	 * @param Template $tpl - template in which to wrap the form
 	 * @param bool $ignoreToken - dont use a token on the login form
 	 * @param bool $createForm - create the login form
 	 */
@@ -100,8 +100,8 @@ class SSP_Logon extends SSP_LogonBase{
 			parent::__construct($session, $tpl, $ignoreToken);
     	}
 		else{
-			$this->cfg = SSP_Configuration::get_configuration();
-			$this->db = SSP_DB::get_connection();
+			$this->cfg = Configuration::getConfiguration();
+			$this->db = SspDb::getConnection();
     	}
     }
 
@@ -141,7 +141,7 @@ class SSP_UserAdmin extends SSP_UserAdminBase{
 	 * Create user admin template
 	 * @param array $contentMain - template content data
 	 * @param bool $noMenusAndInfo - don't show user info
-	 * @return SSP_Template 
+	 * @return Template 
 	 */
 	function tpl($contentMain, $noMenusAndInfo = false){
 		// configure main template
@@ -196,7 +196,7 @@ class SSP_UserAdmin extends SSP_UserAdminBase{
         	$needPassword = false;
         }
 
-        $form = new SFC_Form(SSP_Path(), $this->cfg->userTable, "userJoin");
+        $form = new SfcForm(SSP_Path(), $this->cfg->userTable, "userJoin");
         $form->tpl = $this->tpl(array("title" => "Join SSP"), true);
         if($this->subTpl != ""){
         	$form->tplf = $this->subTpl;
@@ -308,7 +308,7 @@ class SSP_UserAdmin extends SSP_UserAdminBase{
         // displays Misc user info
 
 		$content = $this->getMisc("*", "SSP Admin: Database error on misc data fetch for display ");
-		$page = new SSP_Template(get_object_vars($content), "displaymisc.tpl", false);
+		$page = new Template(get_object_vars($content), "displaymisc.tpl", false);
 		$page->repFunctions["Address"] = "nl2br";
  		$contentMain["content"] = $page->output();
 		$contentMain["title"] = "User information";
@@ -324,7 +324,7 @@ class SSP_UserAdmin extends SSP_UserAdminBase{
     */ 
    function userMisc($creating=false, $reDisplay=false){
         // Form elements
-		$form= new SFC_Form(SSP_Path(), $this->cfg->userMiscTable, "userMisc");
+		$form= new SfcForm(SSP_Path(), $this->cfg->userMiscTable, "userMisc");
 		$form->errorAutoFormDisplay = false;
 		$mainContent = array();
 		if($creating){
@@ -413,7 +413,7 @@ class SSP_UserAdmin extends SSP_UserAdminBase{
 	}
 }
 
-class SSP_checkData extends SSP_checkDataBase{
+class CheckData extends SSP_checkDataBase{
 	
 	function __construct(){
 		parent::__construct();

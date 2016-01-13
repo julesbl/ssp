@@ -28,7 +28,7 @@ $content = array(
     "forthMultiple" => "Forth multiple replace"
     );
 
-$page = new SSP_Template($content, "test4.tpl", $display);
+$page = new Template($content, "test4.tpl", $display);
 
 $page->includeTill("include2");
 if($display){

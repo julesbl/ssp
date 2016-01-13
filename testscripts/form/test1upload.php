@@ -1,6 +1,6 @@
 <?php
 require_once("include.php");
-$session = new SSP_protect();
+$session = new Protect();
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -30,14 +30,14 @@ class testForm{
 	// simple test form class
 
 	function createForm($formData){
-		$form = new SSP_Template($formData, "test1upload.tpl", false);
+		$form = new Template($formData, "test1upload.tpl", false);
 		$form->encode=false;
 		$form->output();
 		return($form->output);
 	}
 	
 	function previewForm($formData){
-		$form = new SSP_Template($formData, "test1uploadpreview.tpl", false);
+		$form = new Template($formData, "test1uploadpreview.tpl", false);
 		$form->encode=false;
 		$form->output();
 		return($form->output);
@@ -48,7 +48,7 @@ class testForm{
 	}
 }
 
-$form = new SFC_Form("test1upload.php", "TestSave");
+$form = new SfcForm("test1upload.php", "TestSave");
 $form->templateRoutine = 'testForm::createForm';
 $form->setPreview("testform::previewForm");
 $form->buildForm = false;

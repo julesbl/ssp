@@ -17,7 +17,7 @@
 */
 
 require("include.php");
-$session = new SSP_Protect();
+$session = new Protect();
 require_once($SSP_IncludePath. 'SSP_translate.php');
 require_once($SSP_TranslatePath. 'lang_fr.conf.php');
 require_once($SSP_TranslatePath. 'lang_fr.php');
@@ -29,10 +29,10 @@ if(!isset($_SESSION['SSP_languageCode'])){
 $langCode =& $_SESSION['SSP_languageCode'];
 $lang = new SSP_translate($langCode, $SSP_TranslatePath);
 $lang->detectBrowserLanguage();
-SSP_checkData::addTranslation($lang);
-$dataCheck = new SSP_checkData();
+CheckData::addTranslation($lang);
+$dataCheck = new CheckData();
 
-$formLang = new SFC_Form(SSP_Path(), "noTable", "languageform");
+$formLang = new SfcForm(SSP_Path(), "noTable", "languageform");
 $formLang->tplf = "testDatatypeLanguage.tpl";
 $formLang->formSubmitVar = 'testLanguagechange';
 $formLang->fe('select', 'language', 'Language', $lang->getLanguages());
@@ -45,7 +45,7 @@ else{
 	$setLanguage = $formLang->create();
 }
 
-$form = new SFC_Form(SSP_Path(), "noTable", "testDatatype");
+$form = new SfcForm(SSP_Path(), "noTable", "testDatatype");
 $form->tplf = "testDatatype.tpl";
 $form->tda('lang', $langCode);
 $form->tda('setLanguage', $setLanguage);

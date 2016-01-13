@@ -174,20 +174,35 @@ abstract class ProtectBase{
 	 */
     public function __construct($pageAccessLevel="", $pageCheckEquals=false, $doHistory = true, $config = false){
 
-        session_start();
-
         global $loginContent;
 		
 		if($config === false){
-			$this->config = new SSP_ProtectConfig();
+			$this->config = new ProtectConfig();
 		}
 		else{
 			$this->config = $config;
 		}
 
 		$this->cfg = Configuration::getConfiguration();
-		$this->db = SSP_DB::get_connection();
+		$this->db = SspDb::getConnection();
 		
+		// set up db session handling
+		$handler = new SessionHandler();
+
+		session_set_save_handler(
+			array($handler, 'open'),
+			array($handler, 'close'),
+			array($handler, 'read'),
+			array($handler, 'write'),
+			array($handler, 'destroy'),
+			array($handler, 'gc')
+			);
+
+		// the following prevents unexpected effects when using objects as save handlers
+		register_shutdown_function("session_write_close");
+		
+        session_start();
+
 		$this->setupLanguage();
 
 		$this->maintenanceMode();
@@ -459,12 +474,12 @@ abstract class ProtectBase{
 			// add another template path as priority for the new selected language
 			if($this->lang != $this->cfg->lang){
 				self::$tranlator->setLanguage($this->lang);
-				SSP_Template::addPath(self::$templatePath. $this->lang. '/');
+				Template::addPath(self::$templatePath. $this->lang. '/');
 			}
 		}
 		
 		// set up template path for default language
-		SSP_Template::addPath(self::$templatePath. $this->cfg->lang. '/');
+		Template::addPath(self::$templatePath. $this->cfg->lang. '/');
 		
 		// load general language file for login and protection routines
 		if($this->cfg->translate){
@@ -894,5 +909,5 @@ class ProtectConfig{
 		$this->noHistoryPages[] = $page;
 	}
 }
-/* End of file SSP_ProtectBase.php */
-/* Location: ./sspincludes/SSP_ProtectBase.php */
+/* End of file ProtectBase.php */
+/* Location: ./src/ProtectBase.php */

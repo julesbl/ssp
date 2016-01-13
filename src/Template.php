@@ -3,30 +3,25 @@
 *   Site by w34u
 *   http://www.w34u.com
 *   info@w34u.com
-*   +44 (0)1273 201344
 *   +44 (0)7833 512221
 *
-*   Project:	    Simple Site Protection
-*   Routine:	templateclasses.php
+*   Project:	Simple Site Protection
+*   Routine:	Template.php
 *   Created:	23/09/2005
 *   Descrip:	Classes to implement basic templating functions for the SSP applications.
 *
-*   Copyright 2005-2009 Julian Blundell, w34u
+*   Copyright 2005-2016 Julian Blundell, w34u
 *
 *   This file is part of Simple Site Protection (SSP).
 *
 *   SSP is free software; you can redistribute it and/or modify
-*   it under the terms of the COMMON DEVELOPMENT AND DISTRIBUTION
-*   LICENSE (CDDL) Version 1.0 as published by the Open Source Initiative.
+*   it under the terms of the The MIT License (MIT)
+*   as published by the Open Source Initiative.
 *
 *   SSP is distributed in the hope that it will be useful,
 *   but WITHOUT ANY WARRANTY; without even the implied warranty of
 *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-*   COMMON DEVELOPMENT AND DISTRIBUTION LICENSE (CDDL) for more details.
-*
-*   You should have received a copy of the COMMON DEVELOPMENT AND DISTRIBUTION
-*   LICENSE (CDDL) along with SSP; if not, view at
-*   http://www.opensource.org; http://www.opensource.org/licenses/cddl1.php
+*   The MIT License (MIT) for more details.
 *
 *   Revision:	a
 *   Rev. Date	23/09/2005
@@ -45,9 +40,14 @@
 *   Rev. Date	23/02/2011
 *   Descrip:	Changed to php5 class system.
 *
+*   Revision:	e
+*   Rev. Date	13/01/2016
+*   Descrip:	Changed to psr-4.
 */
 
-class SSP_Template{
+namespace w34u\ssp;
+
+class Template{
     // class to implement a template for the admin programs
 
     var $templateName = ""; // name of the template
@@ -304,7 +304,7 @@ class SSP_Template{
 
                    		case 'includet': // include a template file using supplied data
                             $skipOutput = false;
-                   			$includeTpl = new SSP_Template($this->replaces, $commandTag, false);
+                   			$includeTpl = new Template($this->replaces, $commandTag, false);
                    			$includeContents = $includeTpl->includeTill();
 							$value = $this->replace('{:includet:'.$commandTag.'}', $includeContents, $value);
 							$valuePos = $valuePos + mb_strlen($includeContents);
@@ -536,5 +536,5 @@ class SSP_Template{
 	}
 }
 
-/* End of file templateclasses.php */
-/* Location: ./sspincludes/templateclasses.php */
+/* End of file Template.php */
+/* Location: ./src/Template.php */

@@ -18,7 +18,7 @@
 // include the libraries
 require("../../sspadmin/includeheader.php");
 // start the session and only allow user level users in
-$session = new SSP_Protect("user", true);
+$session = new Protect("user", true);
 // everything beyond this point only accessible user level users
 echo "user name ".$session->userName."<br />";
 echo "user access level ".$session->userAccessLevel."<br />";

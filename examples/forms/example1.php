@@ -18,11 +18,11 @@
 // include libraries
 require("../../sspadmin/includeheader.php");
 
-$mainTemplate = new SSP_Template("Main Template", "exampleMain.tpl");
+$mainTemplate = new Template("Main Template", "exampleMain.tpl");
 
 // form definition
 // id name for the table is used for detection of submission and error messages
-$form = new SFC_Form(SSP_Path(true), "tableNameForSql", "idNameforTable");
+$form = new SfcForm(SSP_Path(true), "tableNameForSql", "idNameforTable");
 $form->tpl = $mainTemplate; // main template to enclose the form, not required, form inserted into {content}
 $form->tplf = "example1.tpl"; // display template for the form
 $form->tda("miscTplData", "Some data for display on the form template");

@@ -79,7 +79,7 @@ require($SSP_IncludePath."userclasses.php");
 require($SSP_IncludePath."templateclasses.php");
 
 // main project and template setup
-require($SSP_IncludePath."SSP_setup.php");
+require($SSP_IncludePath."Setup.php");
 
 // application configuration
 require($SSP_IncludePath."config.php");

@@ -35,44 +35,12 @@
 *   Revision:	b
 *   Rev. Date	13/02/2009
 *   Descrip:	changed the way the includes are done.
+*
+*   Revision:	c
+*   Rev. Date	13/01/2016
+*   Descrip:	Changed to psr-4 and composer.
 */
 
-if(strpos($_SERVER["SERVER_NAME"],"w34u") !== false){
-    $devServer = true;
-	$server = "w34u";
-}
-elseif(strpos($_SERVER["SERVER_NAME"],"localhost") !== false){
-    $devServer = true;
-	$server = "localhost";
-}
-else{
-    $devServer = false;
-	$server = "";
-}
-if($server == "w34u"){
-    // Set up absolute path to site root directory (not publicly viewable area if different)
-    $SSP_RootPath = "/home/julesb/webapps/ssp/";
-    // Set up absolute path to includes directory, to be modified by user, best put outside the browser observable part of the site.
-    $SSP_IncludePath = $SSP_RootPath. "sspincludes/";
-	// Set up abosolute path to translation directory
-	$SSP_TranslatePath = $SSP_RootPath. "translate/";
-}
-elseif($server == "localhost"){
-    // Set up absolute path to site root directory (not publicly viewable area if different)
-    $SSP_RootPath = "/home/julianb/MyDocuments/WebSites/PHPDevelopment/SSP_SimpleSiteProtection/working/";
-    // Set up absolute path to includes directory, to be modified by user, best put outside the browser observable part of the site.
-    $SSP_IncludePath = $SSP_RootPath. "sspincludes/";
-	// Set up abosolute path to translation directory
-	$SSP_TranslatePath = $SSP_RootPath. "translate/";
-}
-else{
-    // Set up absolute path to site root directory (not publicly viewable area if different)
-    $SSP_RootPath = "";
-    // Set up absolute path to includes directory, to be modified by user, best put outside the browser observable part of the site.
-    $SSP_IncludePath = $SSP_RootPath. "includes/";
-	// Set up abosolute path to translation directory
-	$SSP_TranslatePath = $SSP_RootPath. "translate/";
-}
-require($SSP_IncludePath. "include.php");
-
+$loader = require __DIR__. '/../vendor/autoload.php';
+$loader->addPsr4('w34u\\ssp\\', __DIR__. '/../cfg', true);
 ?>

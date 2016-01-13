@@ -33,7 +33,7 @@
 *   Descrip:	Created.
 */
 require("../includeheader.php");
-$SSP_DB = SSP_DB::get_connection();
+$SSP_DB = SspDb::getConnection();
 
 $values = array();
 
@@ -122,8 +122,8 @@ $query = "CREATE TABLE `". $SSP_Config->tableRememberMe. "` (
 ) CHARACTER SET ". $SSP_Config->connectionEncoding. " COLLATE ". $SSP_Config->tableCollation;
 $SSP_DB->query($query, $values, "SSP Database configuration: Creating remember me table");
 
-	$session = new SSP_Protect();
-	$ssp = new SSP_setup($session);
+	$session = new Protect();
+	$ssp = new Setup($session);
 	$admin = new SSP_UserAdmin($session, $ssp);
 	$admin->adminCreate();
 ?>

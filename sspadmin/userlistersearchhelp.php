@@ -1,8 +1,8 @@
 <?php
 require("includeheader.php");
-$session= new SSP_Protect("user");
+$session= new Protect("user");
 $pageTitle="Dada South - Artists Search Help";
-$SSP_template = new SSP_Template($pageTitle, "sspgeneraltemplate.tpl");
+$SSP_template = new Template($pageTitle, "sspgeneraltemplate.tpl");
 $SSP_template->includeTill("menu");
 echo '<a href="'.$SSP_Config->userLister.'?advanced=1">Back to Search</a>';
 $SSP_template->includeTill("content");

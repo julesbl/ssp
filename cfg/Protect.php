@@ -32,17 +32,6 @@ namespace w34u\ssp;
 
 class Protect extends ProtectBase{
 	/**
-	 * Constructor
-	 * @param string $pageAccessLevel - users allowed to access the page
-	 * @param bool $pageCheckEquals - if true only this user type can access this page
-	 * @param bool $doHistory - do history for this page
-	 * @param ProtectConfig $config - Protected session configuration options
-	 */
-	public function __construct($pageAccessLevel="", $pageCheckEquals=false, $doHistory = true, $config = false){
-		parent::__construct($pageAccessLevel, $pageCheckEquals, $doHistory, $config);
-	}
-
-	/**
 	 * Display screen shown on logging off
 	 * @param SSP_template $tpl - main template
 	 * @param string $userId - user id of memeber logging off

@@ -3,30 +3,25 @@
 *   Site by w34u
 *   http://www.w34u.com
 *   info@w34u.com
-*   +44 (0)1273 201344
 *   +44 (0)7833 512221
 *
 *   Project:	Simple Site Protection
-*   Routine:	db_adodb.php
+*   Routine:	SspDb.php
 *   Created:	07/05/2008
 *   Descrip:	Adodb database classe
 *
-*   Copyright 2005-2009 Julian Blundell, w34u
+*   Copyright 2005-2016 Julian Blundell, w34u
 *
 *   This file is part of Simple Site Protection (SSP).
 *
 *   SSP is free software; you can redistribute it and/or modify
-*   it under the terms of the COMMON DEVELOPMENT AND DISTRIBUTION
-*   LICENSE (CDDL) Version 1.0 as published by the Open Source Initiative.
+*   it under the terms of the The MIT License (MIT)
+*   as published by the Open Source Initiative.
 *
 *   SSP is distributed in the hope that it will be useful,
 *   but WITHOUT ANY WARRANTY; without even the implied warranty of
 *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-*   COMMON DEVELOPMENT AND DISTRIBUTION LICENSE (CDDL) for more details.
-*
-*   You should have received a copy of the COMMON DEVELOPMENT AND DISTRIBUTION
-*   LICENSE (CDDL) along with SSP; if not, view at
-*   http://www.opensource.org; http://www.opensource.org/licenses/cddl1.php
+*   The MIT License (MIT) for more details.
 *
 *   Revision:	a
 *   Rev. Date	07/05/2008
@@ -35,12 +30,15 @@
 *   Revision:	b
 *   Rev. Date	23/02/2011
 *   Descrip:	Changed to php5 class system.
+*
+*   Revision:	c
+*   Rev. Date	13/01/2016
+*   Descrip:	Changed to psr-4.
 */
 
-/**
- * Class to handle database interfacing using adodb
- */
-class SSP_DB{
+namespace w34u\ssp;
+
+class SspDb{
 	// database routines for Adodb
 
 	/** @var ADOConnection adodb database connection */
@@ -93,7 +91,7 @@ class SSP_DB{
 		// constructor
 
 		$this->db = ADONewConnection($dsn);
-		$this->cfg = SSP_Configuration::get_configuration();
+		$this->cfg = Configuration::getConfiguration();
 		$this->error("SSP Session: Opening Database", $dsn);
 
 		if(!$this->error){
@@ -618,16 +616,16 @@ class SSP_DB{
 	
 	/**
 	 * Get the database connection, if necessary create the database connection
-	 * @return SSP_DB
+	 * @return sspDb
 	 */
-	public static function get_connection(){
-		$SSP_Config = SSP_Configuration::get_configuration();
+	public static function getConnection(){
+		$SSP_Config = Configuration::getConfiguration();
 		
 		if(self::$connection === null){
-			self::$connection = new SSP_DB($SSP_Config->dsn);
+			self::$connection = new SspDb($SSP_Config->dsn);
 		}
 		return self::$connection;
 	}
 }
-/* End of file db_adodb.php */
-/* Location: ./sspincludes/db_adodb.php */
+/* End of file SspDb.php */
+/* Location: ./src/SspDb.php */

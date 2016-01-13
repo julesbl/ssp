@@ -11,27 +11,29 @@
 *   Created:	08/01/2005
 *   Descrip:	Functions used in the application.
 *
-*   Copyright 2005-2009 Julian Blundell, w34u
+*   Copyright 2005-2016 Julian Blundell, w34u
 *
 *   This file is part of Simple Site Protection (SSP).
 *
 *   SSP is free software; you can redistribute it and/or modify
-*   it under the terms of the COMMON DEVELOPMENT AND DISTRIBUTION
-*   LICENSE (CDDL) Version 1.0 as published by the Open Source Initiative.
+*   it under the terms of the The MIT License (MIT)
+*   as published by the Open Source Initiative.
 *
 *   SSP is distributed in the hope that it will be useful,
 *   but WITHOUT ANY WARRANTY; without even the implied warranty of
 *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-*   COMMON DEVELOPMENT AND DISTRIBUTION LICENSE (CDDL) for more details.
-*
-*   You should have received a copy of the COMMON DEVELOPMENT AND DISTRIBUTION
-*   LICENSE (CDDL) along with SSP; if not, view at
-*   http://www.opensource.org; http://www.opensource.org/licenses/cddl1.php
+*   The MIT License (MIT) for more details.
 *
 *   Revision:	a
 *   Rev. Date	08/01/2005
 *   Descrip:	Created.
+*
+*   Revision:	b
+*   Rev. Date	13/01/2016
+*   Descrip:	Changed to psr-4.
 */
+
+namespace w34u\ssp;
 
 /**
  * Generate a unique id
@@ -115,12 +117,11 @@ function SSP_stringCode($string){
 
 /**
  * Encrypt a string using php mcrypt functions
- * @global SSP_Configure $SSP_Config
  * @param string $input
  * @return string
  */
 function SSP_encrypt($input){
-    $SSP_Config = SSP_Configuration::get_configuration();
+    $SSP_Config = Configuration::getConfiguration();
     if($SSP_Config->useEncryption){
         if(get_magic_quotes_gpc()){
             $inputConv = stripslashes($input);
@@ -149,7 +150,7 @@ function SSP_encrypt($input){
  * @return string
  */
 function SSP_decrypt($input){
-    $SSP_Config = SSP_Configuration::get_configuration();
+    $SSP_Config = Configuration::getConfiguration();
     if($SSP_Config->useEncryption){
         return(mcrypt_ecb(MCRYPT_3DES, $SSP_Config->encryptionString, $input, MCRYPT_DECRYPT));
     }
@@ -187,7 +188,7 @@ function SSP_paddIp($ipNumber){
  * @return string
  */
 function SSP_trimIp($ipNumber){
-    $SSP_Config = SSP_Configuration::get_configuration();
+    $SSP_Config = Configuration::getConfiguration();
 	if(strpos($ipNumber, ":") !== false){
 		$ipv6 = true;
 	}
@@ -211,8 +212,8 @@ function SSP_trimIp($ipNumber){
  * @global type $SSP_DB
  */
 function SSP_CleanToken(){
-    $SSP_Config = SSP_Configuration::get_configuration();
-	$SSP_DB = SSP_DB::get_connection();
+    $SSP_Config = Configuration::getConfiguration();
+	$SSP_DB = SspDb::getConnection();;
 
     $query="delete from ".$SSP_Config->tokenTable." where ". $SSP_DB->qt("time"). " < ?";
     $values = array((time()-$SSP_Config->tokenClean));
@@ -227,8 +228,8 @@ function SSP_CleanToken(){
  * @return string - token
  */
 function SSP_Token($id){
-    $SSP_Config = SSP_Configuration::get_configuration();
-	$SSP_DB = SSP_DB::get_connection();
+    $SSP_Config = Configuration::getConfiguration();
+	$SSP_DB = SspDb::getConnection();;
 
     // generate the token
     $token=md5(uniqid($SSP_Config->magicToken,true));
@@ -254,8 +255,8 @@ function SSP_Token($id){
  * @return bool - true on match
  */
 function SSP_TokenCheck($token, $id){
-    $SSP_Config = SSP_Configuration::get_configuration();
-	$SSP_DB = SSP_DB::get_connection();
+    $SSP_Config = Configuration::getConfiguration();
+	$SSP_DB = SspDb::getConnection();;
 
     $tokenOk = false;
 
@@ -281,7 +282,7 @@ function SSP_TokenCheck($token, $id){
 function SSP_Path($withParams=false, $forceSSLPath=false){
     // returns the path to the current admin script
 
-    $SSP_Config = SSP_Configuration::get_configuration();
+    $SSP_Config = Configuration::getConfiguration();
 
     $script = $_SERVER['REQUEST_URI'];
     if(false and $withParams and isset($_SERVER['QUERY_STRING']) and trim($_SERVER['QUERY_STRING']) != ""){
@@ -313,7 +314,7 @@ function SSP_Path($withParams=false, $forceSSLPath=false){
  */
 function SSP_Domain(){
 
-    $SSP_Config = SSP_Configuration::get_configuration();
+    $SSP_Config = Configuration::getConfiguration();
 
     if($SSP_Config->useSSL){
         // if ssl already uses full path
@@ -376,8 +377,8 @@ function ECRIAmailer($fromName, $fromAddress, $toName, $toAddress, $subject, $me
  * @return string - token 32v chars
  */
 function SSP_ResponseToken($userId, $time){
-    $SSP_Config = SSP_Configuration::get_configuration();
-	$SSP_DB = SSP_DB::get_connection();
+    $SSP_Config = Configuration::getConfiguration();
+	$SSP_DB = SspDb::getConnection();;
 
     // generate the token
     $token = md5(uniqid($SSP_Config->magicToken,true));
@@ -402,8 +403,8 @@ function SSP_ResponseToken($userId, $time){
  * @return string/bool - UserId or false on not found
  */
 function SSP_CheckResponseToken($token){
-    $SSP_Config = SSP_Configuration::get_configuration();
-	$SSP_DB = SSP_DB::get_connection();
+    $SSP_Config = Configuration::getConfiguration();
+	$SSP_DB = SspDb::getConnection();;
 
     $tokenOk=false;
 
@@ -425,8 +426,8 @@ function SSP_CheckResponseToken($token){
  * @global type $SSP_DB
  */
 function SSP_ResponseClean(){
-    $SSP_Config = SSP_Configuration::get_configuration();
-	$SSP_DB = SSP_DB::get_connection();
+    $SSP_Config = Configuration::getConfiguration();
+	$SSP_DB = SspDb::getConnection();;
 
     $query="delete from ".$SSP_Config->responseTable." where ". $SSP_DB->qt("time"). " < ?";
     $values = array(time());
@@ -476,7 +477,7 @@ function SSP_FileDownload($fileName, $filePath, $downloadName="", $type="applica
  * @param bool $divert - do automatic divert else shows the divert page
  */
 function SSP_Divert($path, $content="", $template="", $divert=true){
-    $SSP_Config = SSP_Configuration::get_configuration();
+    $SSP_Config = Configuration::getConfiguration();
 
     // generate page for auto diversion failure or if auto diversion not used
     if($template == ""){
@@ -514,7 +515,7 @@ function SSP_Divert($path, $content="", $template="", $divert=true){
     if($divert and !$SSP_Config->divertDebug){
         header("Location: ".$divertPath);
     }
-    $page = new SSP_Template($templateContent, $templatePath);
+    $page = new Template($templateContent, $templatePath);
     echo $page->output();
 
     // prevent any further page output
@@ -655,7 +656,7 @@ function SSP_Dump($var, $display=true, $die = false){
  */
 function SSP_errorHandler($errno, $errstr, $errfile, $errline){
 	/* @var $SSP_Config SSP_Configuration */
-    $SSP_Config = SSP_Configuration::get_configuration();
+    $SSP_Config = Configuration::getConfiguration();
 	$error = SSP_error($errstr, $errno, false);
 	if($SSP_Config->displayNoticesWarnings){
 		echo '<pre>';
@@ -677,7 +678,7 @@ function SSP_errorHandler($errno, $errstr, $errfile, $errline){
  */
 function SSP_log($text){
 	/* @var $SSP_Config SSP_Configuration */
-    $SSP_Config = SSP_Configuration::get_configuration();
+    $SSP_Config = Configuration::getConfiguration();
 	error_log($text, $SSP_Config->message_type, $SSP_Config->errorLog, $SSP_Config->adminEmail);
 }
 
@@ -815,4 +816,4 @@ function SSP_isAjaxCall(){
 	return $ajaxCall;
 }
 /* End of file functions.php */
-/* Location: ./sspincludes/functions.php */
+/* Location: ./src/functions.php */

@@ -7,26 +7,22 @@
 *   +44 (0)7833 512221
 *
 *   Project:    Simple Form Creation
-*   Routine:	formclasses.php
+*   Routine:	SfcForm.php
 *   Created:	07/01/2005
 *   Descrip:	Classes for creating and handling database forms.
 *
-*   Copyright 2005-2009 Julian Blundell, w34u
+*   Copyright 2005-2016 Julian Blundell, w34u
 *
 *   This file is part of Simple Site Protection (SSP).
 *
 *   SSP is free software; you can redistribute it and/or modify
-*   it under the terms of the COMMON DEVELOPMENT AND DISTRIBUTION
-*   LICENSE (CDDL) Version 1.0 as published by the Open Source Initiative.
+*   it under the terms of the The MIT License (MIT)
+*   as published by the Open Source Initiative.
 *
 *   SSP is distributed in the hope that it will be useful,
 *   but WITHOUT ANY WARRANTY; without even the implied warranty of
 *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-*   COMMON DEVELOPMENT AND DISTRIBUTION LICENSE (CDDL) for more details.
-*
-*   You should have received a copy of the COMMON DEVELOPMENT AND DISTRIBUTION
-*   LICENSE (CDDL) along with SSP; if not, view at
-*   http://www.opensource.org; http://www.opensource.org/licenses/cddl1.php
+*   The MIT License (MIT) for more details.
 *
 *   Revision:	a
 *   Rev. Date	07/01/2005
@@ -51,77 +47,71 @@
 *   Revision:	f
 *   Rev. Date	3/05/2013
 *   Descrip:	Added internationalisation facilities.
+*
+*   Revision:	g
+*   Rev. Date	13/01/2016
+*   Descrip:	Changed to psr-4.
 */
+
+namespace w34u\ssp;
 
 /**
  * Class to define the form elements
- * @property string $type Type of form element to be created - text, password, select, textarea, startrow, endrow, colrow, submit, reset, button, image, file, check, radio
- * @property string $name name of form field, also its id and database field unless otherwise sepcified
- * @property string $description description for field, used in form and display, is also text for submit, reset and button.
- * @property string $elClass class to be applied to the element
- * @property string $lClass class for the lable
- * @property string $maxLength maximum amount of characters that can be entered, html limiter
- * @property array $data data fro dropdown and checkboxes etc.
- * @property string $deflt default value for the element
- * @property string $accessKey html access key for element
  */
-class SFC_FE{
-    /*
-    Class used to define the array of form elements
-    */
+class SfcFe{
 
     // html properties
 	/** type of form element - text, password, select, textarea, startrow, endrow, colrow, submit, reset, button, image, file, check, radio
 	 * @var string */
-    var $type = "text";
+    public $type = "text";
 	/** @var string - name of form field, also its id and database field */
-    var $name = "";
+    public $name = "";
 	/** @var string id for form element if different from the element name */
-	var $id = "";
+	public $id = "";
 	/** @var string - description for field, used in form and display, is also text for submit, reset and button. */
-    var $description = "";
+    public $description = "";
 	/** Placeholder text
 	 * @var string  */
-	var $placeholder = "";
+	public $placeholder = "";
 	/** @var string addtional class to be applid to the element */
-    var $elClass = "";
+    public $elClass = "";
 	/** @var string addtional class to be applied to the label */
-    var $lClass = "";
+    public $lClass = "";
 	/** @var string default type for the <button tag */
-    var $buttonType = 'submit';
+    public $buttonType = 'submit';
 	/** @var int maximum amount of characters that can be entered, html limiter */
-    var $maxLength = "";
+    public $maxLength = "";
 	/** @var array data for dropdowns, checkboxes etc. */
-    var $data = "";
+    public $data = "";
 	/** @var array valid results for a selection or radio button, particularly useful for ajax loading of the element */
-	var $validResults = array();
+	public $validResults = array();
 	/** @var string default value for elements. */
-    var $deflt = "";
-    var $accessKey = ""; // give the element and access key
-    var $image = ""; // relative path for image
-    var $orientation = "horizontal"; // radio, vertical or horizontal
-    var $radioDesc = true; // show the radio buttons text;
-	var $textBefore = true; // text before radio buttons and encapsulated elements
-	var $encap = false; // put the form element in the description label
-    var $script = ""; // event and javascript
-    var $useExternal = false; // use external data in elementSelections for dropdown etc.
-    var $tabIndex = ""; // tabindex for field
-    var $readonly = false; // if set to true the text or text area field is readonly, user cannot modify field
-    var $disabled = false; // if set to true text or textarea is disabled on first display
-	var $helpText = ""; // help text for filling in the form used in title and used in third column if enabled
-	var $genText = ""; // general text to be put in box with input element
-    var $style = ""; // locally applied style
-    var $ldir = ""; // language direction, can be ltr or rtl
-    var $lang = ""; // language code for element
-    var $width =""; // width in characters for input field
-    var $lines = ""; // number of lines in textarea, dropdown, select
+    public $deflt = "";
+    public $accessKey = ""; // give the element and access key
+    public $image = ""; // relative path for image
+    public $orientation = "horizontal"; // radio, vertical or horizontal
+    public $radioDesc = true; // show the radio buttons text;
+	public $textBefore = true; // text before radio buttons and encapsulated elements
+	public $encap = false; // put the form element in the description label
+    public $script = ""; // event and javascript
+    public $useExternal = false; // use external data in elementSelections for dropdown etc.
+    public $tabIndex = ""; // tabindex for field
+    public $readonly = false; // if set to true the text or text area field is readonly, user cannot modify field
+    public $disabled = false; // if set to true text or textarea is disabled on first display
+	public $helpText = ""; // help text for filling in the form used in title and used in third column if enabled
+	public $genText = ""; // general text to be put in box with input element
+    public $style = ""; // locally applied style
+    public $ldir = ""; // language direction, can be ltr or rtl
+    public $lang = ""; // language code for element
+    public $width =""; // width in characters for input field
+    public $lines = ""; // number of lines in textarea, dropdown, select
 	/** @var string accept field for the file field */
-	var $accept = "";
+	public $accept = "";
 
     // sql properties
-    var $dbField = ""; // database field name if different from element name.
-    var $load = true; // If false the field is never loaded from input data
-    var $sql = true; // If false sql is never generated for this field
+    public $dbField = ""; // database field name if different from element name.
+    public $load = true; // If false the field is never loaded from input data
+    public $sql = true; // If false sql is never generated for this field
 
 	// error handling properties
     /*
@@ -142,17 +132,17 @@ class SFC_FE{
         bin - 0,1
         gen - any character - when re-displayed any special characters are converted to html special entities and then converted back to characters on submission
     */
-    var $dataType = "text"; // data type
-    var $field = ""; // data for this element returned from form submission or sql load
-    var $required = false; // field is required
-    var $maxChar = '0'; // maximum number characters allowed, throws error if greater, 0 means no test unless in the data type.
-	var $minChar = '0'; // minimum number of chars, less than throws error
-	var $precision = false; // if given a number will round a real number to this
-	var $error = false; // Can be set by $this->check() or external code
+    public $dataType = "text"; // data type
+    public $field = ""; // data for this element returned from form submission or sql load
+    public $required = false; // field is required
+    public $maxChar = '0'; // maximum number characters allowed, throws error if greater, 0 means no test unless in the data type.
+	public $minChar = '0'; // minimum number of chars, less than throws error
+	public $precision = false; // if given a number will round a real number to this
+	public $error = false; // Can be set by $this->check() or external code
 	/** @var array Error strings to be displayed locally */
-	var $errorText = array();
-	var $check = false; // check value entered
-	var $errorFunction = ''; // used by call_user_func, function($elements, $more) elements and additional data passed by reference, do not put brackets on function name
+	public $errorText = array();
+	public $check = false; // check value entered
+	public $errorFunction = ''; // used by call_user_func, function($elements, $more) elements and additional data passed by reference, do not put brackets on function name
 
     /**
 	 * Constructo for a form element
@@ -255,7 +245,7 @@ class SFC_FE{
 /**
  * Option object used for select options 
  */
-class SFC_option{
+class SfcSelectOptions{
 	/** @var string text description for option or optgroup */
 	public $text = "";
 	/** @var string type of option, can be optgroup */
@@ -286,12 +276,12 @@ class SFC_option{
 	}
 }
 
-class SFC_Hidden{
-    // Element for hidden fields added to the form as the SFC_Form::hiddenFields array
-    var $name; // name of field
-    var $data; // data to be sored in hidden field
-    var $dataType = "text"; // type of data to be stored, see SFC_FE for more information
-    var $elClass = ""; // class assigned to the hidden element
+class SfcHidden{
+    // Element for hidden fields added to the form as the SfcForm::hiddenFields array
+    public $name; // name of field
+    public $data; // data to be sored in hidden field
+    public $dataType = "text"; // type of data to be stored, see SFC_FE for more information
+    public $elClass = ""; // class assigned to the hidden element
 
     function __construct($name, $data, $dataType = "", $elClass=""){
         // constructor
@@ -304,68 +294,62 @@ class SFC_Hidden{
     }
 }
 
-class SFC_Form{
-    /*
+    /**
     Class to create the form together with queries to populate the form and update the database.
 
     The resultant query is designed to be processed by prepare and execute type statements to prevent SQL injection attacks, if the data from the form has been automatically slashed, ie. get_magic_quotes_gpc() returns true, the slashes will be stripped using stripslashes().
     */
 
+class SfcForm{
+
     // data for form creation and processing
-    var $elements = array(); // array of form elements of SFC_FE defining the form.
-    var $currentElement = ""; // current element name
-    var $errorElement = "Duplicate element name %s in this form for data table %s";
-    var $elementSelections = array(); // array of arrays with data for element dropdowns etc.
-    var $data = array(); // data from query, post or get array to populate the form
-    var $fileObjects = array(); // file objects for file uploads
-    var $method = "post"; // get or post
-    var $action; // path to script to be actioned by form.
-    var $enctype = ""; // eg. multipart form-data
-    var $script = ""; // javascript for form
-    var $formT; // target name of window or frame
-    var $hiddenFields = array(); // any additional hidden fields needed, type SFC_Hidden
-	var $hiddenFieldsData = array(); // any data returned from hidden fields
-    var $update = false; // load data to be updated
-    var $name = ""; // name of form used in error handling
+    public $elements = array(); // array of form elements of SFC_FE defining the form.
+    public $currentElement = ""; // current element name
+    public $errorElement = "Duplicate element name %s in this form for data table %s";
+    public $elementSelections = array(); // array of arrays with data for element dropdowns etc.
+    public $data = array(); // data from query, post or get array to populate the form
+    public $fileObjects = array(); // file objects for file uploads
+    public $method = "post"; // get or post
+    public $action; // path to script to be actioned by form.
+    public $enctype = ""; // eg. multipart form-data
+    public $script = ""; // javascript for form
+    public $formT; // target name of window or frame
+    public $hiddenFields = array(); // any additional hidden fields needed, type SFC_Hidden
+	public $hiddenFieldsData = array(); // any data returned from hidden fields
+    public $update = false; // load data to be updated
+    public $name = ""; // name of form used in error handling
 	/** @var string defualt charcter set */
-	var $charSet = "UTF-8";
+	public $charSet = "UTF-8";
 
     // Submission field config
-	var $formSubmitVar = "SFC_Submit"; // hidden field to detect form submission, contains submission token if enabled.
-	/** @var bool check token using funcTokenCheck */
-	var $checkToken = true;
-    var $submitted = false; // form has been submitted
-    // also set by constant SFC_FORMSUBMITVARTYPE
-    var $formSubmitVarType = ""; // 0-9, a-z
-    // also set by SFC_FUNCTOKENMAKE
-    var $funcTokenMake = ""; // function to create form submission token, token stored in $formSubmitVar
-    // also set by SFC_FUNCTOKENCHECK
-    var $funcTokenCheck = ""; // function to check form submission token, returns true if ok
-    var $tokenExpired = false; // taken too long to submit form
-    var $tokenTimeoutError = "The form has expired, please submit the form again"; // token time out error
-    var $tokenDataCheckError = 'Token data type incorrect, possible hack attempt, data:%s:'; // token returns with wrong data type
-	var $dateFormat = "dd/mm/yyyy"; // format used for dates
-	var $timeFormat = "hh:mm:ss"; // format used for time
-	var $fieldDataChecks = array(); // array of data check types
+	public $formSubmitVar = "SFC_Submit"; // hidden field to detect form submission, contains submission token if enabled.
+	public $checkToken = true;
+    public $submitted = false; // form has been submitted
+    public $tokenExpired = false; // taken too long to submit form
+    public $tokenTimeoutError = "The form has expired, please submit the form again"; // token time out error
+    public $tokenDataCheckError = 'Token data type incorrect, possible hack attempt, data:%s:'; // token returns with wrong data type
+	public $dateFormat = "dd/mm/yyyy"; // format used for dates
+	public $timeFormat = "hh:mm:ss"; // format used for time
+	public $fieldDataChecks = array(); // array of data check types
 
     // Results after checking
-    var $errorResult = array(); // array error strings from fields
-    var $error = false; // formCheck produced an error
+    public $errorResult = array(); // array error strings from fields
+    public $error = false; // formCheck produced an error
 	/** automatic re-display of form on error
 	 * @var bool  */
-    var $errorAutoFormDisplay = true;
-    var $errorOutput = ""; // form error output result
-    var $formCheck = ""; // function to check general form error, $this needs to be passed by reference to return a result
-	var $moreCheck = ""; // additional variable or array sent to form check function
-    var $errorTextHack = 'Possible hack attempt, hidden field %s came back with wrong data type, data:%s:'; // error for  invalid hidden field return
-    var $errorHack = false; // flags a hack attempt
-    var $hackFunction = ""; // function called on hack attempt detection
+    public $errorAutoFormDisplay = true;
+    public $errorOutput = ""; // form error output result
+    public $formCheck = ""; // function to check general form error, $this needs to be passed by reference to return a result
+	public $moreCheck = ""; // additional variable or array sent to form check function
+    public $errorTextHack = 'Possible hack attempt, hidden field %s came back with wrong data type, data:%s:'; // error for  invalid hidden field return
+    public $errorHack = false; // flags a hack attempt
+    public $hackFunction = ""; // function called on hack attempt detection
 	/** @var bool display form element errors localy to that element and not in the global list, switches the error strings */
 	public $errorsLocal = false;
 	/** @var string error string for invalid data input */
-    var $errorTextData = '%s has a problem, %s';
+    public $errorTextData = '%s has a problem, %s';
 	/** @var array Error strings for errors returned by the data checking functions and placed in global errors */
-	var $errorTextDataStrings = array(
+	public $errorTextDataStrings = array(
 					1 => "invalid characters have been entered, valid characters are: %s, please modify your entry to reflect this. Thanks!",
 					2 => "the URL is too long",
 					3 => "the URL needs a period",
@@ -374,7 +358,7 @@ class SFC_Form{
 					6 => "this email needs an @ and a period, please check and add them. Thanks!",
 				);
 	/** @var array Error strings for errors returned by the data checking functions and placed in local errors */
-	var $errorTextDataStringsLocal = array(
+	public $errorTextDataStringsLocal = array(
 					1 => "Invalid characters have been entered, valid characters are: %s, please modify your entry to reflect this. Thanks!",
 					2 => "This URL is too long",
 					3 => "This URL needs a period",
@@ -384,25 +368,25 @@ class SFC_Form{
 				);
 	/**
 	 * data checking object
-	 * @var SSP_checkData */
-	var $checkData;
+	 * @var CheckData */
+	public $checkData;
 	/**
 	 * flags a data error
 	 * @var bool */
-    var $errorData = false;
+    public $errorData = false;
 	/**
 	 * error string for invalid element configuration 
 	 * @var string */
-    var $errorTextInvalidElement = 'Invalid element type: %s, element name: %s';
+    public $errorTextInvalidElement = 'Invalid element type: %s, element name: %s';
 	/** @var array default error strings used by form elements and placed in global error list */
-    var $elementErrorStrings = array(
+    public $elementErrorStrings = array(
 			"required" => "%s is a required field, please enter a value. Thanks!", // string used for an empty required element
 			"maxChar" => "Please ensure that %s has less than %s characters. Thanks!",
 			"minChar" => "Please ensure that %s has at least %s characters. Thanks!",
 			"errorVal" => "Value returned by %s not in valid results"
 		);
 	/** @var array default error strings used by form elements and placed in local error list */
-    var $elementErrorStringsLocal = array(
+    public $elementErrorStringsLocal = array(
 			"required" => "This is a required field, please enter a value. Thanks!", // string used for an empty required element
 			"maxChar" => 'Please ensure that this has less than %2$s characters. Thanks!',
 			"minChar" => 'Please ensure that this has at least %2$s characters. Thanks!',
@@ -410,34 +394,34 @@ class SFC_Form{
 		);
 
     // data for sql generation
-    var $dataTable = ""; // name of data table associated with the form
-    var $whereCondition = ""; // condition to retrieve or update the data with ? replacement fields
-    var $whereValues = array(); // array of values for where condition replaceable filelds
-    var $alsoAdd = array(); // array of data to be added to insert or update query, not added to form
-    var $resultQuery; // string - resulting query from form with ? parameters.
-    var $resultData = array(); // array - array of data to use in replacement parameters
-    var $saveFields = array(); // fields and values to be saved from the form
-    var $selectFields = array(); // array of fields to be selected for the form
-    var $ignorElements = " submit reset image button startrow endrow colrow"; // elements to be ignored when creating queries and checking data
+    public $dataTable = ""; // name of data table associated with the form
+    public $whereCondition = ""; // condition to retrieve or update the data with ? replacement fields
+    public $whereValues = array(); // array of values for where condition replaceable filelds
+    public $alsoAdd = array(); // array of data to be added to insert or update query, not added to form
+    public $resultQuery; // string - resulting query from form with ? parameters.
+    public $resultData = array(); // array - array of data to use in replacement parameters
+    public $saveFields = array(); // fields and values to be saved from the form
+    public $selectFields = array(); // array of fields to be selected for the form
+    public $ignorElements = " submit reset image button startrow endrow colrow"; // elements to be ignored when creating queries and checking data
 
-    var $quote = false; // quote fieled names
-    var $quoteStart = '"';
-    var $quoteEnd = '"';
+    public $quote = false; // quote fieled names
+    public $quoteStart = '"';
+    public $quoteEnd = '"';
 
 	// paged form configuration
-	var $pageNumber = 0; // page number currently displayed
-	var $noPages = 1; // number of pages in form - not used for now
-	var $pageName = array(0 => "First Page"); // names of pages
+	public $pageNumber = 0; // page number currently displayed
+	public $noPages = 1; // number of pages in form - not used for now
+	public $pageName = array(0 => "First Page"); // names of pages
 
 	// formatting properties
-	var $buildForm = false; // auto generate form using tables, else use template
-	var $templateRoutine = ""; // externally defined template routine, uses eval and passes the form fields as an array. Should return the xhtml for the resulting form.
-	var $tDataAdditional = array(); // additional data for the template
-	var $tData; // array of form fields data for the template routine
-	var $tpl; // general template
-	var $tplElement = "content"; // element in the main template into which the form is put
-	var $tplf = ""; // form template name
-	var $tplp = ""; // preview template name
+	public $buildForm = false; // auto generate form using tables, else use template
+	public $templateRoutine = ""; // externally defined template routine, uses eval and passes the form fields as an array. Should return the xhtml for the resulting form.
+	public $tDataAdditional = array(); // additional data for the template
+	public $tData; // array of form fields data for the template routine
+	public $tpl; // general template
+	public $tplElement = "content"; // element in the main template into which the form is put
+	public $tplf = ""; // form template name
+	public $tplp = ""; // preview template name
 	/**
 	 * generate form using template 
 	 * @var bool
@@ -445,49 +429,49 @@ class SFC_Form{
 	public $generateForm = true;
 
     // preview configuration
-    var $preview = false; // do a preview for the form result
-    var $previewRoutine=""; // routine used to preview results of the form, uses eval and passes the form fields as an array. Should return the xhtml for the resulting form.
-    var $previewBackName = "previewBack"; // name of back button on preview form
-    var $previewSaveName = "previewSave"; // name of save button on preview form
-    var $previewBack = false; // back pressed on preview form
-    var $previewSave = false; // save pressed on preview form
+    public $preview = false; // do a preview for the form result
+    public $previewRoutine=""; // routine used to preview results of the form, uses eval and passes the form fields as an array. Should return the xhtml for the resulting form.
+    public $previewBackName = "previewBack"; // name of back button on preview form
+    public $previewSaveName = "previewSave"; // name of save button on preview form
+    public $previewBack = false; // back pressed on preview form
+    public $previewSave = false; // save pressed on preview form
 
     // formatting for form elements
-    var $id = "form"; // id assigned to the form for style sheets etc.
-    var $fclass = "";
-    var $tableTabIndex = 0; // automatic tab index for elements
-	var $tableTabIndexAuto = false; // automatically create a tabindex
-    var $ldir = ""; // language direction, can be ltr or rtl
-    var $lang = ""; // language code for element
-    var $style = ""; // local styling for form
-    var $reqChar = "* %s"; // formatting string to put caracter on required strings
-    var $errorClass = "SFCError"; // Class used on erroring field descriptions.
-    var $hiddenClass = "sfcHidden"; // class to apply to hidden fields
+    public $id = "form"; // id assigned to the form for style sheets etc.
+    public $fclass = "";
+    public $tableTabIndex = 0; // automatic tab index for elements
+	public $tableTabIndexAuto = false; // automatically create a tabindex
+    public $ldir = ""; // language direction, can be ltr or rtl
+    public $lang = ""; // language code for element
+    public $style = ""; // local styling for form
+    public $reqChar = "* %s"; // formatting string to put caracter on required strings
+    public $errorClass = "SFCError"; // Class used on erroring field descriptions.
+    public $hiddenClass = "sfcHidden"; // class to apply to hidden fields
 	/** Add placeholder elements using description
 	 * @var bool  */
 	public $addPlaceholder = false;
 
 	// parameters for the auto generated form
-	var $formTitle = ""; // Title and text to be printed above the form
-	var $formFooter = ""; // text to be printed after the form
-	var $genTextFormat = "<p>%s</p>";
-	var $threeCols = false; // put in help text as third column
-	var $startCont = '<table>'; //start of ofrmatting structure
-	var $startRow = '<tr><td>'; // xhtml on beginning of line
-	var $startRowOdd = '<tr class="oddRow"><td>'; // xhtml on beginning of line for odd row
-    var $startRowEven = '<tr class="evenRow"><td>'; // xhtml on beginning of line for even row
-    var $lableRows = false; // lable odd and even rows using startRowOdd and StartRowEven
-    var $rowEven = false; // row is even
-	var $sepCol1 = '</td><td>'; // column seperator between 1 and 2
-	var $sepCol2 = '</td><td>'; // column seperator between 2 and 3 if there is a third column
-	var $endRow = '</td></tr>'; // end of line
-    var $colRow = '</td><td>';
-	var $endCont = '</table>'; // end of formatting structure if used
+	public $formTitle = ""; // Title and text to be printed above the form
+	public $formFooter = ""; // text to be printed after the form
+	public $genTextFormat = "<p>%s</p>";
+	public $threeCols = false; // put in help text as third column
+	public $startCont = '<table>'; //start of ofrmatting structure
+	public $startRow = '<tr><td>'; // xhtml on beginning of line
+	public $startRowOdd = '<tr class="oddRow"><td>'; // xhtml on beginning of line for odd row
+    public $startRowEven = '<tr class="evenRow"><td>'; // xhtml on beginning of line for even row
+    public $lableRows = false; // lable odd and even rows using startRowOdd and StartRowEven
+    public $rowEven = false; // row is even
+	public $sepCol1 = '</td><td>'; // column seperator between 1 and 2
+	public $sepCol2 = '</td><td>'; // column seperator between 2 and 3 if there is a third column
+	public $endRow = '</td></tr>'; // end of line
+    public $colRow = '</td><td>';
+	public $endCont = '</table>'; // end of formatting structure if used
 
-    var $elementProperties; // properties available in element class
+    public $elementProperties; // properties available in element class
 
-	var $debug = false;
-	var $debugResults = array();
+	public $debug = false;
+	public $debugResults = array();
 
 	/** @var bool attempt to translate the text */
 	private static $translate = false;
@@ -497,6 +481,21 @@ class SFC_Form{
 	private static $tranlator;
 	/** @var string name of method used in tranlation object */
 	private static $translateMethod = 't';
+	/**
+	 * Function to generate form submission tokens
+	 * @var string
+	 */
+	private static $tokenMaker = '\w34u\ssp\SSP_Token';
+	/**
+	 * Function to check token submitted by the form
+	 * @var string
+	 */
+	private static $tokenChecker = '\w34u\ssp\SSP_TokenCheck';
+	/**
+	 * Data type of toekn submitted
+	 * @var string
+	 */
+	private static $tokenDataType = 'hex';
 	
    	/**
 	 * Form constructor
@@ -508,26 +507,17 @@ class SFC_Form{
         // constructor for class
 		
 		// set up check data object
-		$this->checkData = new SSP_checkData();
+		$this->checkData = new CheckData();
 		
 		// target of the form
         $this->action=$action;
 		$this->dataTable = $dataTable;
         // set up token functions if they exist
-        if(defined("SFC_FORMSUBMITVARTYPE")){
-            $this->formSubmitVarType = SFC_FORMSUBMITVARTYPE;
-        }
-        if(defined("SFC_FUNCTOKENMAKE")){
-            $this->funcTokenMake = SFC_FUNCTOKENMAKE;
-        }
-        if(defined("SFC_FUNCTOKENCHECK")){
-            $this->funcTokenCheck = SFC_FUNCTOKENCHECK;
-        }
-        if(($this->funcTokenMake == "" and $this->funcTokenCheck != "") or ($this->funcTokenMake != "" and $this->funcTokenCheck == "")){
+        if((self::$tokenMaker == "" and self::$tokenChecker != "") or (self::$tokenMaker != "" and self::$tokenChecker == "")){
             SSP_error("SFC form, Token functions improperly defined");
         }
         //
-        $this->elementProperties = get_class_vars("sfc_fe");
+        $this->elementProperties = get_class_vars('\w34u\ssp\SfcFe');
 		
 		// check for valid form name
 		if(!isset($name) or trim($name) == "" or $this->dataCheck($name, "password", "Form name") !== true){
@@ -537,33 +527,31 @@ class SFC_Form{
 			$this->name = $name;
 		}
     }
-
+	
+	/**
+	 * adds a form element to the form
+	 * @param string $type - element type
+	 * @param string $name - element name
+	 * @param string $description - description for label etc.
+	 * @param string/array $data - data for initialise, dropdown etc.
+	 */
     public function fe($type, $name, $description="", $data=""){
-        // adds a form element to the form
-        //
-        // parameters
-        //  $name - string - name of form field and entry in array
-        //  $type - string - type of field
-        //  $description - string - description for element
-        //  $data - string or array - data for initialise, dropdown etc.
-
         if(!isset($this->elements[$name])){
             // if element does not exist already create it
             $this->currentElement = $name;
-            $this->elements[$name] = new SFC_FE($type, $name, $description, $data);
+            $this->elements[$name] = new SfcFe($type, $name, $description, $data);
         }
         else{
-            SSP_error("SFC_Form ". $this->name. ":". sprintf($this->t($this->errorElement), $name, $this->dataTable));
+            SSP_error("SfcForm ". $this->name. ":". sprintf($this->t($this->errorElement), $name, $this->dataTable));
         }
     }
 
+	/**
+	 * set parameters for a form element
+	 * @param string $params - string of parameters to be set name1=value, name2=value, etc.
+	 * @param type $name - name of element, if "" current element will be used
+	 */
     public function fep($params, $name=""){
-        // set parameters for a form element
-        //
-        // parameters
-        //  $params - string - string of parameters to be set name1=value, name2=value, etc.
-        //  $name - string - name of element, if "" current element will be used
-
         if($name != ""){
             $elementName = $name;
         }
@@ -586,17 +574,17 @@ class SFC_Form{
 							$param[1] = false;
 						}
 						if(array_key_exists($param[0], $this->elementProperties)){
-						$this->elements[$elementName]->$param[0] = $param[1];
+							$this->elements[$elementName]->$param[0] = $param[1];
 						}
 						else{
-							SSP_error("SFC_Form::fep $this->name, Form element property $param[0] does not exist in $elementName");
+							SSP_error("SfcForm::fep $this->name, Form element property $param[0] does not exist in $elementName");
 						}
 					}
 				}
 			}
         }
         else{
-            SSP_error("SFC_Form::fep $this->name, Need a string of data for $elementName");
+            SSP_error("SfcForm::fep $this->name, Need a string of data for $elementName");
         }
     }
 	
@@ -627,7 +615,7 @@ class SFC_Form{
 			$result = $this->elements[$elementName]->field;
 		}
 		else{
-			SSP_error("SFC_Form::getField $this->name: Element $elementName does not exist");
+			SSP_error("SfcForm::getField $this->name: Element $elementName does not exist");
 		}
 		return($result);
 	}
@@ -646,7 +634,7 @@ class SFC_Form{
 			$result = $this->hiddenFieldsData[$hiddenFieldName];
 		}
 		else{
-			SSP_error("SFC_Form::getField $this->name: Hidden field $hiddenFieldName does not exist");
+			SSP_error("SfcForm::getField $this->name: Hidden field $hiddenFieldName does not exist");
 		}
 		return($result);
 	}
@@ -661,7 +649,7 @@ class SFC_Form{
 			$this->elements[$elementName]->field = $value;
 		}
 		else{
-			SSP_error("SFC_Form::setField $this->name: Element $elementName does not exist");
+			SSP_error("SfcForm::setField $this->name: Element $elementName does not exist");
 		}
 	}
 
@@ -677,7 +665,7 @@ class SFC_Form{
 			$this->error = true;
 		}
 		else{
-			SSP_error("SFC_Form::setField $this->name: Element $elementName does not exist");
+			SSP_error("SfcForm::setField $this->name: Element $elementName does not exist");
 		}
 	}
 
@@ -915,7 +903,7 @@ class SFC_Form{
 						$this->tData($el, $this->elFile($el));
 						if(isset($this->fileObjects[$el->name]) and !$this->submitted){
 							if($this->preview and !$this->fileObjects[$el->name]->preview){
-								SSP_error("SFC_Form::create $this->name: preview information needed for $el->name");
+								SSP_error("SfcForm::create $this->name: preview information needed for $el->name");
 							}
 							// check for a file upload object and an existing file from db
 							if($filePath = $this->fileObjects[$el->name]->getDisplay($this->data)){
@@ -927,7 +915,7 @@ class SFC_Form{
                 break;
                 default:
                     // throw error for invalid element
-                    SSP_error("SFC_Form::create $this->name: ". sprintf($this->t($this->errorTextInvalidElement), $el->type, $el->name));
+                    SSP_error("SfcForm::create $this->name: ". sprintf($this->t($this->errorTextInvalidElement), $el->type, $el->name));
             }
         }
 		if($this->buildForm){
@@ -967,7 +955,7 @@ class SFC_Form{
 		if((is_object($this->tplf) and strcmp(strtolower(get_class($this->tplf)), "ssp_template") == 0) or $this->tplf != ""){
 			if(is_string($this->tplf)){
 				// template name supplied
-			$form = new SSP_Template($this->tData, $this->tplf, false);
+			$form = new Template($this->tData, $this->tplf, false);
 			}
 			else{
 				// template object supplied
@@ -1004,7 +992,7 @@ class SFC_Form{
 			}
 		}
 		else{
-			SSP_error("SFC_Form::formTemplate $this->name: Please supply a form template name or object in ->tplf");
+			SSP_error("SfcForm::formTemplate $this->name: Please supply a form template name or object in ->tplf");
 		}
 
 		return($output);
@@ -1072,7 +1060,7 @@ class SFC_Form{
 
     /**
 	 * Generate text input box
-	 * @param SFC_FE $el - form element
+	 * @param SfcFe $el - form element
 	 * @return string
 	 */
 	private function elText($el){
@@ -1133,7 +1121,7 @@ class SFC_Form{
 
     /**
 	 * Genearate a radio button set
-	 * @param SFC_FE $el - form element
+	 * @param SfcFe $el - form element
 	 * @return string - xhtml return
 	 */
 	private function elRadio($el){
@@ -1214,7 +1202,7 @@ class SFC_Form{
 	 * Adding attributes to options and optgroups
 	 * If an option is an object but does not have type == optgroup the text property is used as the text and the other
 	 * properties are put in as attributes
-	 * @param SFC_FE $el - select element
+	 * @param SfcFe $el - select element
 	 * @return string 
 	 */
 	private function elSelect($el){
@@ -1232,7 +1220,7 @@ class SFC_Form{
             $selections = $el->data;
         }
         if(!is_array($selections)){
-            echo SSP_error("SFC_Form::elSelect $this->name: Need selections array for $el->name");
+            echo SSP_error("SfcForm::elSelect $this->name: Need selections array for $el->name");
         }
 		/*
         if(!$this->update and (trim($el->deflt) == "" or !array_key_exists($el->deflt, $selections))){
@@ -1254,7 +1242,7 @@ class SFC_Form{
 	
 	/**
 	 * Recursive routine to generate select options and optgroups
-	 * @param SFC_FE $el - select element
+	 * @param SfcFe $el - select element
 	 * @param array $selections - array of select selections
 	 * @param string $currentValue - current value of selection
 	 * @return string - resulting xhtml
@@ -1265,10 +1253,10 @@ class SFC_Form{
 			// work through option groups
 			if(is_object($attributes) and isset($attributes->type) and $attributes->type == "optgroup"){
 				if(!isset($attributes->text)){
-					echo SSP_error("SFC_Form::elSelect {$this->name}: Invalid options group in {$el->name}, needs text property");
+					echo SSP_error("SfcForm::elSelect {$this->name}: Invalid options group in {$el->name}, needs text property");
 				}
 				if(!isset($attributes->options) or !is_array($attributes->options)){
-					echo SSP_error("SFC_Form::elSelect {$this->name}: Invalid options group in {$el->name}, optgroup {$attributes->text} needs array of options property");
+					echo SSP_error("SfcForm::elSelect {$this->name}: Invalid options group in {$el->name}, optgroup {$attributes->text} needs array of options property");
 				}
 				$xhtml .= '<optgroup label="'. $this->t($attributes->text). '"';
 				// add optgroup attributes
@@ -1292,7 +1280,7 @@ class SFC_Form{
 						$attributes = get_object_vars($attributes);
 					}
 					if(!isset($attributes['text'])){
-						echo SSP_error("SFC_Form::elSelect {$this->name}: Invalid option {$value} in {$el->name}, needs text property");
+						echo SSP_error("SfcForm::elSelect {$this->name}: Invalid option {$value} in {$el->name}, needs text property");
 					}
 					foreach($attributes as $attribute => $attributeValue){
 						if($attribute == "text"){
@@ -1319,7 +1307,7 @@ class SFC_Form{
 
     /**
 	 * Create a text element
-	 * @param SFC_FE $el - element object
+	 * @param SfcFe $el - element object
 	 * @return string - html result
 	 */
 	private function elTextArea($el){
@@ -1389,7 +1377,7 @@ class SFC_Form{
 
     /**
 	 * Generate file element
-	 * @param SFC_FE $el - form element
+	 * @param SfcFe $el - form element
 	 * @return string - xhtml result
 	 */
 	private function elFile($el){
@@ -1423,7 +1411,7 @@ class SFC_Form{
 	
     /**
 	 * Do common parameters for the form element
-	 * @param SFC_FE $el - forma element
+	 * @param SfcFe $el - forma element
 	 * @param string $class - classes added to the element
 	 * @return string - xhtml for the element 
 	 */
@@ -1491,8 +1479,8 @@ class SFC_Form{
     private function hiddenFields(){
         // create hidden fields for the form
         // form submission check field
-        if($this->checkToken and $this->funcTokenMake != ""){
-            $tokenValue = call_user_func($this->funcTokenMake, $this->name);
+        if($this->checkToken and self::$tokenMaker != ""){
+            $tokenValue = call_user_func(self::$tokenMaker, $this->name);
         }
         else{
             $tokenValue = "1";
@@ -1510,7 +1498,7 @@ class SFC_Form{
             		$xhtml .= '<input type="hidden" name="'. $hidden->name. '" id= "'. $hidden->name. '" value="'. $hidden->data. '"'. $class. ' />';
             	}
             	else{
-            		SSP_error("SFC_Form::hiddenFields $this->name: Hidden field $key not of SFC_Hidden type");
+            		SSP_error("SfcForm::hiddenFields $this->name: Hidden field $key not of SFC_Hidden type");
             	}
             }
         }
@@ -1521,7 +1509,7 @@ class SFC_Form{
 		if($dataType != "" and !$this->checkData->isType($dataType)){
 			SSP_error("Invalid data type $dataType for hidden field $name");
 		}
-    	$this->hiddenFields[$name] = new SFC_Hidden($name, $value, $dataType, $elClass);
+    	$this->hiddenFields[$name] = new SfcHidden($name, $value, $dataType, $elClass);
     }
 
     public function setPreview($previewFunction, $backButtonName="", $saveButtonName=""){
@@ -1740,16 +1728,16 @@ class SFC_Form{
 				}
             }
             // check form submission token if enabled
-            if($this->checkToken and trim($this->funcTokenCheck) != ""){
+            if($this->checkToken and trim(self::$tokenChecker) != ""){
                 // check token returned is of correct type
-                if($this->isError($this->dataCheck($this->data[$this->formSubmitVar], $this->formSubmitVarType, $this->formSubmitVar))){
+                if($this->isError($this->dataCheck($this->data[$this->formSubmitVar], self::$tokenDataType, $this->formSubmitVar))){
                     $this->errorHack = true;
                     $this->errorResult[] = sprintf($this->t($this->tokenDataCheckError), $this->encode($this->data[$this->formSubmitVar]));
                     $this->error = true;
                 }
                 else{
                     // check for timeout error
-                    if(!call_user_func($this->funcTokenCheck, $this->data[$this->formSubmitVar], $this->name)){
+                    if(!call_user_func(self::$tokenChecker, $this->data[$this->formSubmitVar], $this->name)){
                         $this->error = true;
                         $this->tokenExpired = true;
                         $this->errorResult[] = $this->t($this->tokenTimeoutError);
@@ -2147,7 +2135,7 @@ class SFC_Form{
 
 	/**
 	 * Generate label for an element
-	 * @param SFC_FE $el - form element
+	 * @param SfcFe $el - form element
 	 * @param string $encapsulate - html of form elelement to be ecapsulated
 	 * @return type string - lable, perhaps encapsulating the field
 	 */
@@ -2221,7 +2209,7 @@ class SFC_Form{
 	 * @param string $dataType - data type to check against
 	 * @param string $description - description of field or data
 	 * @param bool $local - generate local error for a form field
-	 * @return SFC_Error - error object or false
+	 * @return SfcError - error object or false
 	 */
 	private function dataCheck($data, $dataType, $description, $local = false){
         /*
@@ -2270,7 +2258,7 @@ class SFC_Form{
 						$errorText = sprintf($this->t($this->errorTextData), $this->t($description), $this->t($this->errorTextDataStrings[$result]));
 					}
 				}
-				$return = new SFC_Error($errorText);
+				$return = new SfcError($errorText);
 			}
 			else{
 				$return = true;
@@ -2421,32 +2409,32 @@ class SFC_Form{
 	}
 }
 
-class SFC_file{
+class SfcFile{
 	// class to upload files to the server
 	// One object per file upload field in form->fileObjects array.
 
-	var $elName; // form element name
+	public $elName; // form element name
 
-	var $targetDir; // directory wher the file will be saved
-	var $targetView; // path to view an image
-	var $fileName; // name of file to be saved
-	var $fileNameOld; // name of old file from db or submit with preview
-	var $fileNameRoutine=""; // procedure to generate the unique part of the file name
-	var $fileNameReplace=""; // totally replace the file name with this, keep extension
-	var $validTypes; // array of valid file types
-	var $maxSize; // maximum file size allowed
+	public $targetDir; // directory wher the file will be saved
+	public $targetView; // path to view an image
+	public $fileName; // name of file to be saved
+	public $fileNameOld; // name of old file from db or submit with preview
+	public $fileNameRoutine=""; // procedure to generate the unique part of the file name
+	public $fileNameReplace=""; // totally replace the file name with this, keep extension
+	public $validTypes; // array of valid file types
+	public $maxSize; // maximum file size allowed
 
-	var $preview = false; // preview upload
-	var $previewDir; // directory used for preview
-	var $previewView; // path to view image in preview directory
-	var $fileInPreview = false; // file is in preview directory
+	public $preview = false; // preview upload
+	public $previewDir; // directory used for preview
+	public $previewView; // path to view image in preview directory
+	public $fileInPreview = false; // file is in preview directory
 
-	var $fileUploaded = false; // valid file upload on this submit
-	var $fileInfo; // on a file upload file information
-	var $fileNameExtension; // extension of file uploaded
-	var $fileNameRest; // rest of file name without extension
-	var $error = false; // error during file upload
-	var $errorText = ""; // error result
+	public $fileUploaded = false; // valid file upload on this submit
+	public $fileInfo; // on a file upload file information
+	public $fileNameExtension; // extension of file uploaded
+	public $fileNameRest; // rest of file name without extension
+	public $error = false; // error during file upload
+	public $errorText = ""; // error result
 
 	function __construct($el, $targetDir, $targetView, $validTypes, $maxSize, $fileNameRoutine="",$fileNameReplace=""){
 		// constructor
@@ -2650,7 +2638,7 @@ class SFC_file{
 /**
  * Error object returned by error routines
  */
-class SFC_Error{
+class SfcError{
 	/** @var string primary error string */
 	public $error = "";
 	/** @var string local error used for field errors */
@@ -2666,5 +2654,5 @@ class SFC_Error{
 		$this->errorLocal = $errorLocal;
 	}
 }
-/* End of file formclasses.php */
-/* Location: ./sspincludes/formclasses.php */
+/* End of file SfcForm.php */
+/* Location: ./src/SfcForm.php */

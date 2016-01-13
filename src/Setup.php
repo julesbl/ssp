@@ -3,37 +3,38 @@
 *   Site by w34u
 *   http://www.w34u.com
 *   info@w34u.com
-*   +44 (0)1273 201344
 *   +44 (0)7833 512221
 *
 *   Project:	Simple Site Protection
-*   Routine:	SSP_setup.php
+*   Routine:	Setup.php
 *   Created:	02-Dec-2010
 *   Descrip:	Create templates and general functions for simple site protection admin.
 *
-*   Copyright 2005-2011 Julian Blundell, w34u
+*   Copyright 2005-2016 Julian Blundell, w34u
 *
 *   This file is part of Simple Site Protection (SSP).
 *
 *   SSP is free software; you can redistribute it and/or modify
-*   it under the terms of the COMMON DEVELOPMENT AND DISTRIBUTION
-*   LICENSE (CDDL) Version 1.0 as published by the Open Source Initiative.
+*   it under the terms of the The MIT License (MIT)
+*   as published by the Open Source Initiative.
 *
 *   SSP is distributed in the hope that it will be useful,
 *   but WITHOUT ANY WARRANTY; without even the implied warranty of
 *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-*   COMMON DEVELOPMENT AND DISTRIBUTION LICENSE (CDDL) for more details.
-*
-*   You should have received a copy of the COMMON DEVELOPMENT AND DISTRIBUTION
-*   LICENSE (CDDL) along with SSP; if not, view at
-*   http://www.opensource.org; http://www.opensource.org/licenses/cddl1.php
+*   The MIT License (MIT) for more details.
 *
 *   Revision:	a
 *   Rev. Date	02-Dec-2010
 *   Descrip:	Created.
+*
+*   Revision:	b
+*   Rev. Date	13/01/2016
+*   Descrip:	Changed to psr-4.
 */
 
-class SSP_setup{
+namespace w34u\ssp;
+
+class Setup{
 
 	/** @var SSP_Protect ssp session object */
 	public $session;
@@ -59,8 +60,8 @@ class SSP_setup{
 	 */
 	function __construct($session, $translateAdmin = false, $template = false){
 		$this->session = $session;
-		$this->cfg = SSP_Configuration::get_configuration();
-		$this->db = SSP_DB::get_connection();
+		$this->cfg = Configuration::getConfiguration();
+		$this->db = SspDb::getConnection();
 		
 		if($this->cfg->translate and $translateAdmin){
 			SSP_Protect::$tranlator->loadFile(false, 'admin');
@@ -77,7 +78,7 @@ class SSP_setup{
 	* @param string $tpl alternative template name
 	* @param bool $createMenu create the main menu
 	* @param bool $suppressLangSelect - suppress the language selection dropdown
-	* @return SSP_Template main template
+	* @return Template main template
 	*/
 	function tpl($contentMain, $tpl="", $createMenu=true, $suppressLangSelect = false){
 
@@ -118,12 +119,12 @@ class SSP_setup{
 					'{languageDropdown}',
 					'{formHidden}',
 					'</form>');
-			$form = new SFC_Form(SSP_Path(true), 'notable', 'languageSelect');
+			$form = new SfcForm(SSP_Path(true), 'notable', 'languageSelect');
 			$form->translateDisable = true;
 			$form->checkToken = false;
 			$form->errorAutoFormDisplay = false;
 			$form->formSubmitVar = 'languageSelectionformToken';
-			$form->tplf = new SSP_Template("", $formTemplate);
+			$form->tplf = new Template("", $formTemplate);
 			$languages = $this->session->getLanguages();
 			$dropdownInformation = array();
 			foreach ($languages as $lang => $languageInfo){
@@ -168,7 +169,7 @@ class SSP_setup{
 		if(!isset($contentMain["menu"])){
 			$contentMain["menu"] = "";
 		}
-		$tpl = new SSP_Template($contentMain, $template, false);
+		$tpl = new Template($contentMain, $template, false);
 		return($tpl);
 	}
 	
@@ -176,5 +177,5 @@ class SSP_setup{
 		$this->pageTitleSegments[] = $titleSegment;
 	}
 }
-/* End of file SSP_setup.php */
-/* Location: ./sspincludes/SSP_setup.php */
+/* End of file Setup.php */
+/* Location: ./src/Setup.php */

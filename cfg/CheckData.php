@@ -3,13 +3,12 @@
 *   Site by w34u
 *   http://www.w34u.com
 *   info@w34u.com
-*   +44 (0)1273 201344
 *   +44 (0)7833 512221
 *
-*   Project:	    Simple Site Protection
-*   Routine:	logoff.php
-*   Created:	25/01/2005
-*   Descrip:	Logoff routine, logs off a user.
+*   Project:	Simple Site Protection
+*   Routine:	DataCheck.php
+*   Created:	13/01/2016
+*   Descrip:	SSP protection class, instanciated at the top of protected pages.
 *
 *   Copyright 2005-2016 Julian Blundell, w34u
 *
@@ -23,26 +22,16 @@
 *   but WITHOUT ANY WARRANTY; without even the implied warranty of
 *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 *   The MIT License (MIT) for more details.
-*
+* 
 *   Revision:	a
-*   Rev. Date	25/01/2005
-*   Descrip:	Created.
-*  
-*  Revision: b
-*  Date: 12/06/2006
-*  Descrip: Templating and user information added
+*   Rev. Date	12/01/2016
+*   Descrip:	Class moved from a singe file with multiple classes.
 */
+
 namespace w34u\ssp;
 
-require 'includeheader.php';
+class CheckData extends CheckDataBase{
+}
 
-$session = new Protect("", false, false);
-$ssp = new Setup($session);
-
-$contentMain = array();
-$contentMain["title"] = "Logoff";
-$tpl = $ssp->tpl($contentMain, "sspsmalltemplate.tpl", false);
-
-$session->logoff($tpl);
-
-?>
+/* End of file DataCheck.php */
+/* Location: ./cfg/DataCheck.php */

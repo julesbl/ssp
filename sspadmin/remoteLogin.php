@@ -36,7 +36,7 @@
 require("includeheader.php");
 require($SSP_IncludePath. "API_interface.php");
 
-$session = new SSP_Protect("admin");
+$session = new Protect("admin");
 
 $url = "http://www.localdomain.com/sspadmin/sspapi.php";
 $cookieJar = $SSP_Config->cookieJarPath. "jar_". $session->sessionToken. ".txt";

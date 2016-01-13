@@ -23,7 +23,7 @@ require("../../sspadmin/includeheader.php");
 $noLoginDivert = true;
 // prevent testing and update of random cookie
 $noCookieUpdate = true;
-$session = new SSP_Protect("user");
+$session = new Protect("user");
 // do ajax output
 echo "<h1>hello world</h1>";
 // if the session fails for whatever reason the string "false" will be returned

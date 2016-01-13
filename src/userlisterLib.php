@@ -240,7 +240,7 @@ class memberFilter{
 
 class userLister{
 
-	/** @var SSP_setup ssp setup object */
+	/** @var Setup ssp setup object */
 	var $ssp;
 	var $filter; // user filter
 	var $session; // session object
@@ -250,7 +250,7 @@ class userLister{
 
 	/**
 	 *
-	 * @param SSP_setup $ssp - SSP_setup object
+	 * @param Setup $ssp - Setup object
 	 * @param string $command - latest command
 	 */
 	function __construct($ssp, $command){
@@ -390,7 +390,7 @@ class userLister{
 	function displayFilterForm(){
 		// display form to update filter values
 
-		$form = new SFC_Form($this->cfg->userLister, "noTable", "sspFilter");
+		$form = new SfcForm($this->cfg->userLister, "noTable", "sspFilter");
 		$form->tda("tpl", $this->tpl(array("title"=>"Modify search criteria")));
 		$form->tda("tplf", "userListerSearchForm.tpl");
 		$form->templateRoutine = "userLister::formFilterCreate";
@@ -463,7 +463,7 @@ class userLister{
 	function formFilterCreate($form){
 		// create search form
 
-		$fields = new SSP_Template($form, "userListerSearchFields.tpl");
+		$fields = new Template($form, "userListerSearchFields.tpl");
 		$fields->replaceIndex = true;
 		$fields->encode = false;
 		$fieldsHtml = "";
@@ -474,7 +474,7 @@ class userLister{
 		}
 		$form["searchFields"] = $fieldsHtml;
 		
-		$formPage = new SSP_Template($form, $form["tplf"]);
+		$formPage = new Template($form, $form["tplf"]);
 		$formPage->encode=false;
 		
 		$tpl = $form["tpl"];
@@ -539,7 +539,7 @@ class userLister{
 
 		$contentPage["list"] = $list->displayList($lineContent, "userListerLine.tpl", "userListerNoResult.tpl", "userListerOddLine.tpl",true);
 
-		$page = new SSP_Template($contentPage, "userListerPage.tpl", false);
+		$page = new Template($contentPage, "userListerPage.tpl", false);
 		$contentMain = array("title"=>"User list", "content"=>$page->output());
 		$tpl = $this->tpl($contentMain);
 		return $tpl->output();
@@ -588,7 +588,7 @@ class userLister{
 					$content = get_object_vars($user);
 					$content["command"] = $this->command;
 					$content["path"] = SSP_Path();
-					$page = new SSP_Template($content, "userListerDeletePrompt.tpl", false);
+					$page = new Template($content, "userListerDeletePrompt.tpl", false);
 					$mainContent = array();
 					$mainContent["title"] = " - delete user ". $user->FirstName. " ". $user->FamilyName;
 					$mainContent["content"] = $page->output();
@@ -605,7 +605,7 @@ class userLister{
 	/**
 	 *
 	 * @param array $contentMain - template content data
-	 * @return SSP_Template 
+	 * @return Template 
 	 */
 	function tpl($contentMain){
 		// configure main template

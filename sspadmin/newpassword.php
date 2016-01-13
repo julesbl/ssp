@@ -33,9 +33,12 @@
 *   Rev. Date	18/07/2005
 *   Descrip:	Created.
 */
-require("includeheader.php");
-$session = new SSP_Protect("", false, false);
-$ssp = new SSP_setup($session);
+namespace w34u\ssp;
+
+require 'includeheader.php';
+
+$session = new Protect("", false, false);
+$ssp = new Setup($session);
 
 $contentMain = array();
 $ssp->pageTitleAdd("Password recovery, enter new password");

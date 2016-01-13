@@ -212,7 +212,7 @@ abstract class ConfigurationBase
 	 * Path to the templates directory
 	 * @var string
 	 */
-	public $templateDir = "../cfg/templates/";
+	public $templateDir = "/../cfg/templates/";
 	/**
 	 * name of logon script in admin
 	 * @var string
@@ -749,7 +749,7 @@ abstract class ConfigurationBase
 		// set template path for template routines
 		define("SFC_FUNCTOKENMAKE", "SSP_Token"); // specify function for form token creation
 		define("SFC_FUNCTOKENCHECK", "SSP_TokenCheck"); // function to veryify token
-		define("SFC_FORMSUBMITVARTYPE", "hex"); // data type for form token
+		define("SfcFormSUBMITVARTYPE", "hex"); // data type for form token
 
 		// Translation configuration
 		if($this->translate){
@@ -765,7 +765,7 @@ abstract class ConfigurationBase
 			$SSP_lang = new SSP_translate($SSP_Config->lang, $SSP_TranslatePath);
 
 			SSP_checkData::addTranslation($SSP_lang);
-			SFC_Form::addTranslation($SSP_lang);
+			SfcForm::addTranslation($SSP_lang);
 			SSP_Protect::addTranslation($SSP_lang);
 		}
 
@@ -814,6 +814,7 @@ abstract class ConfigurationBase
 
 		// specifies the domain to set in session_cookie.
 		ini_set("session.cookie_domain", $this->cookieDomain);
+		
 	}
 	
 	/**
@@ -878,4 +879,4 @@ abstract class ConfigurationBase
 	}
 }
 /* End of file ConfigurationBase.php */
-/* Location: ./sspincludes/ConfigurationBase.php */
+/* Location: ./src/ConfigurationBase.php */

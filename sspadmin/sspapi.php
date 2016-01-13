@@ -36,7 +36,7 @@
 require("includeheader.php");
 require($SSP_IncludePath. "API_interface.php");
 
-$session = new SSP_Protect();
+$session = new Protect();
 
 $api = new API_interface($SSP_Config->apiEncryptionKey, $SSP_Config->remoteSystemApi, "");
 $api->mirror = $SSP_Config->mirror;

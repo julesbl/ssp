@@ -16,7 +16,7 @@
 *   Descrip:	Created.
 */
 require_once("include.php");
-$session = new SSP_Protect();
+$session = new Protect();
 require_once($SSP_IncludePath. 'SSP_translate.php');
 require_once($SSP_TranslatePath. 'lang_fr.conf.php');
 require_once($SSP_TranslatePath. 'lang_fr.php');
@@ -58,10 +58,10 @@ if(!isset($_SESSION['SSP_errorLocal'])){
 $errorLocal =& $_SESSION['SSP_errorLocal'];
 
 $lang = new SSP_translate($langCode, $SSP_TranslatePath);
-SSP_checkData::addTranslation($lang);
-SFC_Form::addTranslation($lang);
+CheckData::addTranslation($lang);
+SfcForm::addTranslation($lang);
 
-$formLang = new SFC_Form(SSP_Path(), "noTable", "languageform");
+$formLang = new SfcForm(SSP_Path(), "noTable", "languageform");
 $formLang->tplf = "testDatatypeLanguage.tpl";
 $formLang->formSubmitVar = 'testLanguagechange';
 $formLang->fe('select', 'language', 'Language', $lang->getLanguages());
@@ -83,7 +83,7 @@ else{
 }
 
 
-$form = new SFC_Form("testcheckData.php", "TestSaveTable", "testdataform");
+$form = new SfcForm("testcheckData.php", "TestSaveTable", "testdataform");
 $form->tplf = "testCheckData_". $langCode. ".tpl";
 $form->tda('lang', $langCode);
 $form->tda('setLanguage', $setLanguage);

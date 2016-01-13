@@ -7,26 +7,22 @@
 *   +44 (0)7833 512221
 *
 *   Project:	Simple Site Protection
-*   Routine:	session.php
+*   Routine:	SessionHandler.php
 *   Created:	08/01/2005
 *   Descrip:	Session routines and configuration.
 *
-*   Copyright 2005-2015 Julian Blundell, w34u
+*   Copyright 2005-2016 Julian Blundell, w34u
 *
 *   This file is part of Simple Site Protection (SSP).
 *
 *   SSP is free software; you can redistribute it and/or modify
-*   it under the terms of the COMMON DEVELOPMENT AND DISTRIBUTION
-*   LICENSE (CDDL) Version 1.0 as published by the Open Source Initiative.
+*   it under the terms of the The MIT License (MIT)
+*   as published by the Open Source Initiative.
 *
 *   SSP is distributed in the hope that it will be useful,
 *   but WITHOUT ANY WARRANTY; without even the implied warranty of
 *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-*   COMMON DEVELOPMENT AND DISTRIBUTION LICENSE (CDDL) for more details.
-*
-*   You should have received a copy of the COMMON DEVELOPMENT AND DISTRIBUTION
-*   LICENSE (CDDL) along with SSP; if not, view at
-*   http://www.opensource.org; http://www.opensource.org/licenses/cddl1.php
+*   The MIT License (MIT) for more details.
 *
 *   Revision:	a
 *   Rev. Date	08/01/2005
@@ -35,11 +31,12 @@
 *   Revision:	b
 *   Rev. Date	18/09/2015
 *   Descrip:	Changed to an object oriented approach.
+*
+*   Revision:	c
+*   Rev. Date	13/01/2016
+*   Descrip:	Changed to psr-4.
 */
 //***********************************************************
-// set up session functions
-
-// database functions
 
 /*
 Table format
@@ -52,7 +49,9 @@ SessionCheckuserIp int - 0 - default action as specifed in config, 1 - check use
 SessionData blob - data saved by sesssion, max 65535 bytes, if you are going to save more extend this to medium blob
 */
 
-class ssp_session_handler{
+namespace w34u\ssp;
+
+class SessionHandler{
 	/**
 	 * Save path used for file based sesion handling
 	 * @var string
@@ -75,8 +74,8 @@ class ssp_session_handler{
 	private $cfg;
 	
 	public function __construct(){
-		$this->cfg = SSP_Configuration::get_configuration();
-		$this->db = SSP_DB::get_connection();
+		$this->cfg = Configuration::getConfiguration();
+		$this->db = SspDb::getConnection();
 	}
 
 	/**
@@ -197,19 +196,6 @@ class ssp_session_handler{
 		return(true);
 	}
 }
-$handler = new ssp_session_handler();
 
-session_set_save_handler(
-    array($handler, 'open'),
-    array($handler, 'close'),
-    array($handler, 'read'),
-    array($handler, 'write'),
-    array($handler, 'destroy'),
-    array($handler, 'gc')
-    );
-
-// the following prevents unexpected effects when using objects as save handlers
-register_shutdown_function("session_write_close");
-
-/* End of file session.php */
-/* Location: ./sspincludes/session.php */
+/* End of file SessionHandler.php */
+/* Location: ./src/SessionHandler.php */

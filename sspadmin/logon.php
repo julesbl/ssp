@@ -37,14 +37,19 @@
 *   Descrip:	Totally revised.
 */
 
-require("includeheader.php");
-$session = new SSP_Protect("", false, false);
-$ssp = new SSP_setup($session);
+
+namespace w34u\ssp;
+
+require 'includeheader.php';
+
+
+$session = new Protect("", false, false);
+$ssp = new Setup($session);
 
 $contentMain = array();
 $ssp->pageTitleAdd('Logon');
 $tpl = $ssp->tpl($contentMain, "sspsmalltemplate.tpl", false);
 
-$login = new SSP_Logon($session, $tpl);
+$login = new Logon($session, $tpl);
 echo $login->output;
 ?>

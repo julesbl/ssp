@@ -29,7 +29,7 @@ $content = array(
 	"blank" => "",
     );
 
-$page = new SSP_Template($content, "returnLines.tpl", $display);
+$page = new Template($content, "returnLines.tpl", $display);
 $page->numberReturnLines = 2;
 
 $page->includeTill("include2");

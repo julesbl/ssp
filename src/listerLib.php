@@ -277,16 +277,16 @@ class lister{
 
         $listing = "";
 		if($this->noResult){
-			$list = new SSP_Template($content, $noResultsTpl, false);
+			$list = new Template($content, $noResultsTpl, false);
 			$listing = $list->output();
 		}
 		else{
-			$listEven = new SSP_Template($content, $listEvenLineTpl, false);
+			$listEven = new Template($content, $listEvenLineTpl, false);
 			if($listOddLineTpl != ""){
-				$listOdd = new SSP_Template($content, $listOddLineTpl, false);
+				$listOdd = new Template($content, $listOddLineTpl, false);
 			}
 			else{
-				$listOdd = new SSP_Template($content, $listEvenLineTpl, false);
+				$listOdd = new Template($content, $listEvenLineTpl, false);
 			}
 			$line = $this->pageStart;
 			$i = 1;

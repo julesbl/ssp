@@ -26,9 +26,9 @@ $content = array(
 	"title" => 'Title for the page',
 	"mainTitle" => "Main Title from main content",
 	"mainContent" => "Main content stuff from the main content",
-	"subTemplate" => new SSP_Template($contentSub, "example2Sub1.tpl"),
-	"subTemplateMainData" => new SSP_Template("", "example2Sub1.tpl"),
+	"subTemplate" => new Template($contentSub, "example2Sub1.tpl"),
+	"subTemplateMainData" => new Template("", "example2Sub1.tpl"),
 );
-$page = new SSP_Template($content, "example2.tpl", false);
+$page = new Template($content, "example2.tpl", false);
 echo $page->output();
 ?>

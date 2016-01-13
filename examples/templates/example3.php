@@ -26,6 +26,6 @@ $content = array(
 if(isset($_GET["displayRest"])){
 	$content["displayOther"] = "";
 }
-$page = new SSP_Template($content, "example3.tpl", false);
+$page = new Template($content, "example3.tpl", false);
 echo $page->output();
 ?>

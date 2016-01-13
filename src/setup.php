@@ -33,14 +33,14 @@
 *   Descrip:	Created.
 */
 // Set up global configuration variable.
-$SSP_Config = SSP_Configuration::get_configuration();
+$SSP_Config = Configuration::getConfiguration();
 
 date_default_timezone_set($SSP_Config->siteTimezoneIdentifier);
 
 // set template path for template routines
 define("SFC_FUNCTOKENMAKE", "SSP_Token"); // specify function for form token creation
 define("SFC_FUNCTOKENCHECK", "SSP_TokenCheck"); // function to veryify token
-define("SFC_FORMSUBMITVARTYPE", "hex"); // data type for form token
+define("SfcFormSUBMITVARTYPE", "hex"); // data type for form token
 define('SSP_TEMPLATEPATHBASE', $SSP_RootPath. $SSP_Config->templateDir);
 
 // Translation configuration
@@ -56,8 +56,8 @@ if($SSP_Config->translate){
 	// configure language translation object
 	$SSP_lang = new SSP_translate($SSP_Config->lang, $SSP_TranslatePath);
 	
-	SSP_checkData::addTranslation($SSP_lang);
-	SFC_Form::addTranslation($SSP_lang);
+	CheckData::addTranslation($SSP_lang);
+	SfcForm::addTranslation($SSP_lang);
 	SSP_Protect::addTranslation($SSP_lang);
 }
 

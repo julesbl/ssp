@@ -40,17 +40,16 @@
 *   Rev. Date	16/03/2007
 *   Descrip:	Streamlined with new template processes and improved dessign.
 */
-require("includeheader.php");
+namespace w34u\ssp;
 
-require($SSP_IncludePath."htmlobjects.php");
-require($SSP_IncludePath."listerLib.php");
-require($SSP_IncludePath."userlisterLib.php");
-$session= new SSP_Protect("admin");
+require 'includeheader.php';
+
+$session= new Protect("admin");
 
 // check for command
 $command = SSP_getParam("command", "list");
 
-$ssp = new SSP_setup($session, true);
+$ssp = new Setup($session, true);
 
 $lister = new userLister($ssp, $command);
 
