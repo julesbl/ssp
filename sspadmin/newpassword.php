@@ -43,7 +43,7 @@ $ssp = new Setup($session);
 $contentMain = array();
 $ssp->pageTitleAdd("Password recovery, enter new password");
 
-$admin = new SSP_UserAdmin($session, $ssp, "", "", "sspsmalltemplate.tpl", false);
+$admin = new UserAdmin($session, $ssp, "", "", "sspsmalltemplate.tpl", false);
 if(isset($_GET['token'])){
 	$token = $_GET['token'];
 }

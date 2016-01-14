@@ -31,6 +31,10 @@
 *  Revision: b
 *  Date: 12/06/2006
 *  Descrip: Templating and user information added
+*
+*   Revision:	c
+*   Rev. Date	14/01/2016
+*   Descrip:	Composer implemented.
 */
 namespace w34u\ssp;
 
