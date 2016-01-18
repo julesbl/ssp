@@ -1,7 +1,10 @@
 <?php
-require("includeheader.php");
+namespace w34u\ssp;
+
+require 'includeheader.php';
+
 $session= new Protect("user");
-$pageTitle="Dada South - Lister Help";
+$pageTitle="SSP - Lister Help";
 $SSP_template = new Template($pageTitle, "sspgeneraltemplate.tpl");
 $SSP_template->includeTill("menu");
 echo '<a href="'.$SSP_Config->userLister.'">Back to Lister</a>';

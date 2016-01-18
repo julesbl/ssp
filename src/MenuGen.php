@@ -3,7 +3,6 @@
 *   Site by w34u
 *   http://www.w34u.com
 *   info@w34u.com
-*   +44 (0)1273 201344
 *   +44 (0)7833 512221
 *
 *   Project:	Simple Site Protection
@@ -11,22 +10,18 @@
 *   Created:	19/03/2007
 *   Descrip:	Objects to help create html structures.
 *
-*   Copyright 2005-2009 Julian Blundell, w34u
+*   Copyright 2005-2016 Julian Blundell, w34u
 *
 *   This file is part of Simple Site Protection (SSP).
 *
 *   SSP is free software; you can redistribute it and/or modify
-*   it under the terms of the COMMON DEVELOPMENT AND DISTRIBUTION
-*   LICENSE (CDDL) Version 1.0 as published by the Open Source Initiative.
+*   it under the terms of the The MIT License (MIT)
+*   as published by the Open Source Initiative.
 *
 *   SSP is distributed in the hope that it will be useful,
 *   but WITHOUT ANY WARRANTY; without even the implied warranty of
 *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-*   COMMON DEVELOPMENT AND DISTRIBUTION LICENSE (CDDL) for more details.
-*
-*   You should have received a copy of the COMMON DEVELOPMENT AND DISTRIBUTION
-*   LICENSE (CDDL) along with SSP; if not, view at
-*   http://www.opensource.org; http://www.opensource.org/licenses/cddl1.php
+*   The MIT License (MIT) for more details.
 *
 *   Revision:	a
 *   Rev. Date	19/03/2007
@@ -35,8 +30,18 @@
 *   Revision:	b
 *   Rev. Date	23/02/2011
 *   Descrip:	Changed to php5 class system.
+*
+*   Revision:	c
+*   Rev. Date	14/01/2016
+*   Descrip:	Composer implemented.
 */
-class classBase{
+
+namespace w34u\ssp;
+
+/**
+ * Base class for adding parameters to html objects
+ */
+class ClassBase{
 	// base class to give basic functions to others
 
 	/**
@@ -88,25 +93,58 @@ class classBase{
 /**
  * class for a html link
  */
-class htmlLink extends classBase{
+class HtmlLink extends ClassBase{
 	// creates a html link
-	/** @var string url for link */
-	var $url = ""; // url to document
-	/** @var string text to be displayed in link */
-	var $text = ""; // text to go in link
-	var $id = ""; // id of link
-	var $lClass = ""; // class for link
-	var $target = ""; // target, frame or window
-	var $title = ""; // link title
-	var $misc = ""; // additional parameters eg javascript
+	/** 
+	 * url for link
+	 * @var string */
+	public $url = "";
+	/** 
+	 * text to be displayed in link
+	 * @var string */
+	public $text = "";
+	/**
+	 * id of link
+	 * @var string
+	 */
+	public $id = "";
+	/**
+	 * class for link
+	 * @var string
+	 */
+	public $lClass = "";
+	/**
+	 * target, frame or window
+	 * @var string
+	 */
+	public $target = "";
+	/**
+	 * link title
+	 * @var string 
+	 */
+	public $title = "";
+	/**
+	 * additional parameters eg javascript
+	 * @var string
+	 */
+	public $misc = "";
 
-	function __construct($url, $text){
+	/**
+	 * Constructor
+	 * @param string $url - url for link
+	 * @param string $text - text for link
+	 */
+	public function __construct($url, $text){
 		// constructor
 		$this->url = $url;
 		$this->text = $text;
 	}
 
-	function cLink(){
+	/**
+	 * Create the xhtml for hte link
+	 * @return string - xhtml
+	 */
+	public function cLink(){
 		// creates xhml for link
 		$xhtml = '<a href="'. $this->url. '"';
 		if($this->id != ""){
@@ -132,21 +170,32 @@ class htmlLink extends classBase{
 	}
 }
 
-class menuEntry extends htmlLink{
-	// defines a menu entry
-
-	var $entryId = "";
-	var $entryClass = "";
-	var $entryHighlight = ""; // added to class on construction
-	var $entryStyle = "";
-
-	function __construct($url, $text){
-		// constructor
-		$this->url = $url;
-		$this->text = $text;
-	}
-
-	function cEntry(){
+/**
+ * Class for a menu entry
+ */
+class MenuEntry extends HtmlLink{
+	/**
+	 * Entry ID
+	 * @var string
+	 */
+	public $entryId = "";
+	/**
+	 * Entry class
+	 * @var string
+	 */
+	public $entryClass = "";
+	/**
+	 * Class added to the class list on construction if entry selected
+	 * @var string
+	 */
+	public $entryHighlight = ""; // added to class on construction
+	/**
+	 * Styling added to the entry
+	 * @var string
+	 */
+	public $entryStyle = "";
+	
+	public function cEntry(){
 		// generates html for menu item
 		$xhtml = '<li';
 		if($this->entryId != ""){
@@ -178,16 +227,46 @@ class menuEntry extends htmlLink{
 	}
 }
 
-class menuGen{
-	// generates menus using unordered lists
-
-	var $highlightClass = "here"; // class used to hightlight menu entry
-	var $menu = ""; // array of menu elements
-	var $currentEntry = 0; // current menu entry
-	var $id = ""; // id for menu
-	var $mclass = ""; // class for menu
-
-	function __construct($highlightClass = ""){
+/**
+ * Menu generator class
+ */
+class MenuGen{
+	/**
+	 * Class used to highlight selected menu entries
+	 * @var string
+	 */
+	public $highlightClass = "here";
+	/**
+	 * array of menu elements
+	 * @var array
+	 */
+	public $menu = [];
+	/**
+	 * current menu entry
+	 * @var int 
+	 */
+	public $currentEntry = 0;
+	/**
+	 * id for menu
+	 * @var string
+	 */
+	public $id = "";
+	/**
+	 * class for menu
+	 * @var string
+	 */
+	public $mclass = "";
+	/**
+	 * Current menu entry
+	 * @var w34u\ssp\MenuEntry
+	 */
+	public $currentItem = null;
+	
+	/**
+	 * Constructor
+	 * @param string $highlightClass - class for heighlighting selected menu entry
+	 */
+	public function __construct($highlightClass = ""){
 		// generates the menu based on information in an array
 
 		// parameters
@@ -198,31 +277,42 @@ class menuGen{
 		}
 	}
 
-	function add($url, $text, $highLight=false){
-		// adds a menu entry
-
+	/**
+	 * adds a menu entry
+	 * @param string $url - url for menu entry
+	 * @param type $text - text for menu entry
+	 * @param type $highLight - set to true if current entry
+	 */
+	public function add($url, $text, $highLight=false){
 		$this->currentEntry++;
-		$this->menu[$this->currentEntry] = new menuEntry($url, $text);
+		$this->currentItem = $this->menu[$this->currentEntry] = new MenuEntry($url, $text);
 		if($highLight){
 			$this->menu[$this->currentEntry]->entryHighlight = $this->highlightClass;
 		}
 	}
-
-	function sv($params){
-		// set properties for menu entry
-
+	
+	/**
+	 * Set properties of a menu entry
+	 * @param string $params - parameters
+	 */
+	public function sv($params){
 		$this->menu[$this->currentEntry]->sv($params);
 	}
 
-	function svp($param, $value){
-		// set properties for menu entry
-
+	/**
+	 * set properties for menu entry
+	 * @param string $param - parameter name
+	 * @param misc $value - value to be set
+	 */
+	public function svp($param, $value){
 		$this->menu[$this->currentEntry]->svp($param, $value);
 	}
 
-	function cMenu(){
-		// create menu xhtml
-
+	/**
+	 * create menu xhtml
+	 * @return string - xhtml for the menu
+	 */
+	public function cMenu(){
 		$xhtml = '<ul';
 		if($this->id != ""){
 			$xhtml .= ' id="'. $this->id. '"';
@@ -239,6 +329,15 @@ class menuGen{
 	}
 }
 
+/**
+ * Create a form dropdown
+ * @param string $name - name of the form
+ * @param array $data - dropdown entries
+ * @param misc $current - current selected value
+ * @param string $misc - addtional stuff for select tag
+ * @param string $id - id for the form
+ * @return string - return html
+ */
 function formDropdown($name, $data, $current="", $misc="", $id=""){
 	// return a dropdown selector for a form
 
@@ -273,5 +372,5 @@ function formDropdown($name, $data, $current="", $misc="", $id=""){
 	$html .= '</select>';
 	return($html);
 }
-/* End of file htmlobjects.php */
-/* Location: ./sspincludes/htmlobjects.php */
+/* End of file MenuGen.php */
+/* Location: ./src/MenuGen.php */

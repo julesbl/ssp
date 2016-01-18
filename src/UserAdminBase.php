@@ -368,7 +368,7 @@ abstract class UserAdminBase{
 			$this->updateUser(array("UserWaiting"=>1), "SSP Admin: Seeting user waiting flag on joiup email creation", $id);
         }
         // send email
-		$email = new SSP_email($this->cfg);
+		$email = new Email($this->cfg);
 		$email->noReplyEmail($content, "emailmemberjoining.tpl", $emailAddress->UserEmail, $userData->FirstName. ' '. $userData->FamilyName);
      }
 
@@ -381,7 +381,7 @@ abstract class UserAdminBase{
         $form->tpl = $this->tpl(array("title" => "Send joining email"));
         $form->tplf = "sendjoinupemail.tpl";
         $form->fe("submit", "submit", "Send joinup email to this user?");
-        $form->hiddenFields["command"] = new SFC_Hidden("command", $this->command);
+        $form->addHidden('command', $this->command);
 
 		$return = false;
 		if($form->processForm($_POST)){
@@ -416,7 +416,7 @@ abstract class UserAdminBase{
         // if admin has to check the user send an email to admin to inform them of a new one
         if($this->cfg->adminCheck){
             // send email
-			$email = new SSP_email($this->cfg);
+			$email = new Email($this->cfg);
 			$email->noReplyEmail($content, "emailadminmemberjoined.tpl", $this->cfg->adminEmail, $this->cfg->adminName);
         }
         // Send joining email
@@ -433,7 +433,6 @@ abstract class UserAdminBase{
         $userData = $this->getMisc("*", "Getting welcome screen user data");
         $content = array_merge($content, get_object_vars($userData));
         $page = new Template($content, "welcomescreen.tpl");
-        ;
 		$tpl = $this->tpl(array("content" => $page->output()));
 		echo $tpl->output();
     }
@@ -529,7 +528,7 @@ abstract class UserAdminBase{
         $form->fe("password", "password2", "Enter new password again");
 		$form->fep("required=true,width=30,load=false,sql=false,dataType=password, minChar=". $this->cfg->minPassword);
 
-		$form->hiddenFields["command"] = new SFC_Hidden("command", $this->command);
+		$form->addHidden('command', $this->command);
 
         $return = '';
 
@@ -819,7 +818,7 @@ abstract class UserAdminBase{
 				$content["subject"] = $form->getField("subject");
 				$content["firstName"] = $rowFrom->FirstName;
 				$content["familyName"] = $rowFrom->FamilyName;
-				$email = new SSP_email($this->cfg);
+				$email = new Email($this->cfg);
 				$email->generalEmail($content, "emailmember.tpl", $this->session->userEmail, ($rowFrom->FirstName. " ". $rowFrom->FamilyName), $emailTo, ($rowTo->FirstName. " ". $rowTo->FamilyName));
 				$form->tda("saved");
 				echo $form->create(true);
@@ -877,7 +876,7 @@ abstract class UserAdminBase{
 						$content['token'] = $token;
                         $content["adminEmail"] = $this->cfg->adminEmail;
 						
-						$email = new SSP_email($this->cfg);
+						$email = new Email($this->cfg);
 						$email->noReplyEmail($content, "emailpasswordrecovery0.tpl", $row->UserEmail, $rowMisc->FirstName. " ". $rowMisc->FamilyName);
                     }
                     else{
@@ -890,7 +889,7 @@ abstract class UserAdminBase{
                         $content["UserPassword"] = $row["UserPassword"];
                         $content["adminEmail"] = $this->cfg->adminEmail;
 
-						$email = new SSP_email($this->cfg);
+						$email = new Email($this->cfg);
 						$email->noReplyEmail($content, "emailpasswordrecovery1.tpl", $row->UserEmail, $rowMisc->FirstName. " ". $rowMisc->FamilyName);
                     }
                     $form->tda("sent");

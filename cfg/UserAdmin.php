@@ -51,7 +51,7 @@ class UserAdmin extends UserAdminBase{
 
         // generate menu
         if($this->generateMenus and !$noMenusAndInfo){
-            $menu = new menuGen();
+            $menu = new MenuGen();
             $path = $this->cfg->userAdminScript;
             $menu->add($path. "?command=chInfo", $this->session->t("Change Info"), ($this->command=="chInfo"));
             $menu->sv("title={$this->session->t('Change user information')}");

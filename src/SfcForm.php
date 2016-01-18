@@ -303,7 +303,7 @@ class SfcHidden{
 class SfcForm{
 
     // data for form creation and processing
-    public $elements = array(); // array of form elements of SFC_FE defining the form.
+    public $elements = array(); // array of form elements of SfcFe defining the form.
     public $currentElement = ""; // current element name
     public $errorElement = "Duplicate element name %s in this form for data table %s";
     public $elementSelections = array(); // array of arrays with data for element dropdowns etc.
@@ -314,7 +314,7 @@ class SfcForm{
     public $enctype = ""; // eg. multipart form-data
     public $script = ""; // javascript for form
     public $formT; // target name of window or frame
-    public $hiddenFields = array(); // any additional hidden fields needed, type SFC_Hidden
+    public $hiddenFields = array(); // any additional hidden fields needed, type SfcHidden
 	public $hiddenFieldsData = array(); // any data returned from hidden fields
     public $update = false; // load data to be updated
     public $name = ""; // name of form used in error handling
@@ -1488,7 +1488,7 @@ class SfcForm{
         $xhtml = '<input type="hidden" name="'. $this->formSubmitVar. '" value="'. $tokenValue. '" class="'. $this->hiddenClass. '" />';
         if(is_Array($this->hiddenFields)){
             foreach($this->hiddenFields as $key => $hidden){
-            	if(is_object($hidden) and strcmp(strtolower(get_class($hidden)), "sfc_hidden") == 0){
+            	if(is_object($hidden) and strcmp(strtolower(get_class($hidden)), "w34u\ssp\sfchidden") == 0){
             		if($hidden->elClass != ""){
             			$class = ' class="'. $hidden->elClass. '"';
             		}
@@ -1498,7 +1498,7 @@ class SfcForm{
             		$xhtml .= '<input type="hidden" name="'. $hidden->name. '" id= "'. $hidden->name. '" value="'. $hidden->data. '"'. $class. ' />';
             	}
             	else{
-            		SSP_error("SfcForm::hiddenFields $this->name: Hidden field $key not of SFC_Hidden type");
+            		SSP_error("SfcForm::hiddenFields $this->name: Hidden field $key not of SfcHidden type");
             	}
             }
         }
@@ -2271,10 +2271,10 @@ class SfcForm{
     }
 
     private function isError($object){
-    	// checks for SFC_Error type
+    	// checks for SfcError type
 
     	$result = false;
-    	if(is_object($object) and strcmp("sfc_error", strtolower(get_class($object))) == 0){
+    	if(is_object($object) and strcmp("w34u\ssp\sfcerror", strtolower(get_class($object))) == 0){
     		$result = true;
     	}
     	return($result);
@@ -2448,8 +2448,8 @@ class SfcFile{
 		//	$fileNameRoutine - string - eval'd to produce an addition to the file name to guarantee unique
 		//	$fileNameReplace - string - totally replace the file name with this, keeps the extension
 
-		if(!is_object($el) or strtolower(get_class($el)) != "sfc_fe" or $el->type != "file"){
-			trigger_error("SFC_file: need a valid form file form element", E_USER_ERROR);
+		if(!is_object($el) or strtolower(get_class($el)) != "SfcFe" or $el->type != "file"){
+			trigger_error("SfcFile: need a valid form file form element", E_USER_ERROR);
 		}
 
 		$this->elName = $el->name;
@@ -2458,14 +2458,14 @@ class SfcFile{
 			$this->targetDir = $targetDir;
 		}
 		else{
-			SSP_error("SFC_File::construct: file upload object, invalid target directory: $targetDir for $this->desc");
+			SSP_error("SfcFile::construct: file upload object, invalid target directory: $targetDir for $this->desc");
 		}
 		$this->targetView = $targetView;
 		if(is_array($validTypes)){
 			$this->validTypes = $validTypes;
 		}
 		else{
-			SSP_error("SFC_File::construct: file upload object, needs valid file types array for $this->desc");
+			SSP_error("SfcFile::construct: file upload object, needs valid file types array for $this->desc");
 		}
 		$this->maxSize = $maxSize;
 		if($fileNameRoutine != ""){
@@ -2488,7 +2488,7 @@ class SfcFile{
 			$this->previewDir = $previewDir;
 		}
 		else{
-			SSP_error("SFC_File::construc: file upload object, invalid preview directory: $previewDir for $this->desc");
+			SSP_error("SfcFile::construc: file upload object, invalid preview directory: $previewDir for $this->desc");
 		}
 		$this->previewView = $previewView;
 	}

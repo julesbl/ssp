@@ -1,5 +1,8 @@
 <?php
-require("includeheader.php");
+namespace w34u\ssp;
+
+require 'includeheader.php';
+
 $session= new Protect("user");
 $pageTitle="SSP - User Admin Help";
 $SSP_template = new Template($pageTitle, "sspgeneraltemplate.tpl");

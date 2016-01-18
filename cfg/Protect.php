@@ -50,7 +50,7 @@ class Protect extends ProtectBase{
 		);
 
 
-		$logoff = new SSP_Template($content, "logoff.tpl");
+		$logoff = new Template($content, "logoff.tpl");
 		$tpl->setData("content", $logoff->output());
 		echo $tpl->output();
 	}

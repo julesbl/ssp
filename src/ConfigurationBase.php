@@ -764,7 +764,7 @@ abstract class ConfigurationBase
 			// configure language translation object
 			$SSP_lang = new SSP_translate($SSP_Config->lang, $SSP_TranslatePath);
 
-			SSP_checkData::addTranslation($SSP_lang);
+			CheckData::addTranslation($SSP_lang);
 			SfcForm::addTranslation($SSP_lang);
 			SSP_Protect::addTranslation($SSP_lang);
 		}

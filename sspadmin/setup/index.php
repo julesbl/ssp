@@ -5,7 +5,6 @@
 			Site by w34u
 			http://www.w34u.com
 			info@w34u.com
-			+44 (0)1273 201344
 			+44 (0)7833 512221
 			-->
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />

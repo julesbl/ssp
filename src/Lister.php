@@ -3,30 +3,25 @@
 *   Site by w34u
 *   http://www.w34u.com
 *   info@w34u.com
-*   +44 (0)1273 201344
 *   +44 (0)7833 512221
 *
 *   Project:	Simple Site protection
-*   Routine:	listerLib.php
+*   Routine:	Lister.php
 *   Created:	07/02/2005
 *   Descrip:	Class for creating a listing form.
 *
-*   Copyright 2005-2009 Julian Blundell, w34u
+*   Copyright 2005-2016 Julian Blundell, w34u
 *
 *   This file is part of Simple Site Protection (SSP).
 *
 *   SSP is free software; you can redistribute it and/or modify
-*   it under the terms of the COMMON DEVELOPMENT AND DISTRIBUTION
-*   LICENSE (CDDL) Version 1.0 as published by the Open Source Initiative.
+*   it under the terms of the The MIT License (MIT)
+*   as published by the Open Source Initiative.
 *
 *   SSP is distributed in the hope that it will be useful,
 *   but WITHOUT ANY WARRANTY; without even the implied warranty of
 *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-*   COMMON DEVELOPMENT AND DISTRIBUTION LICENSE (CDDL) for more details.
-*
-*   You should have received a copy of the COMMON DEVELOPMENT AND DISTRIBUTION
-*   LICENSE (CDDL) along with SSP; if not, view at
-*   http://www.opensource.org; http://www.opensource.org/licenses/cddl1.php
+*   The MIT License (MIT) for more details.
 *
 *   Revision:	a
 *   Rev. Date	07/02/2005
@@ -44,54 +39,12 @@
 *   Rev. Date	23/02/2011
 *   Descrip:	Changed to php5 class system.
 *
+*   Revision:	e
+*   Rev. Date	14/01/2016
+*   Descrip:	Composer implemented.
 */
 
-/**
- * List postion saving class
- *
- * properties
- * 	@page - int - position in list
- * 	@limit - int - number of rowsa per page
- */
-class listerSave{
-    var $page = 1; // position in list
-    var $limit = 0; // number of rows per page
-	/** @var int number of rows paged last time */
-	var $lastNumber = 0;
-	/** @var string list id to prevent tow list on the same page interacting */
-	var $listId = "";
-
-    /**
-	 * constructor
-	 *
-	 * parameters
-	 * 	@limit - int - number of lines per page
-	 */
-	function __construct($limit, $listId=""){
-        // Constructor
-        $this->limit = $limit;
-		$this->listId = $listId;
-    }
-
-	/** updates the lister save from gets and posts
-	*/
-	function update(){
-
-        // Number of lines to be printed
-		SSP_changeParam($this->limit, "limit". $this->listId, false, "int");
-        // Page list starting position change
-		SSP_changeParam($this->page, "page". $this->listId, true, "int");
-	}
-
-	/**
-	 * reset the page to one
-	 */
-	function res(){
-		// 
-		$this->page = 1;
-	}
-
-}
+namespace w34u\ssp;
 
 /**
  * Display a list of items
@@ -118,7 +71,7 @@ class listerSave{
  *   @par - string - addtional get parameters for page navigation
  *   @processLine - string - routine to process each line
 */
-class lister{
+class Lister{
     // class to display a list of items
     var $listerSave; // object containing saved information
     var $db; // database object
@@ -353,5 +306,5 @@ class lister{
         return($listing);
     }
 }
-/* End of file listerLib.php */
-/* Location: ./sspincludes/listerLib.php */
+/* End of file Lister.php */
+/* Location: ./src/Lister.php */

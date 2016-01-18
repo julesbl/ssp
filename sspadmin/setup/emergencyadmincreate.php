@@ -3,40 +3,42 @@
 *   Site by w34u
 *   http://www.w34u.com
 *   info@w34u.com
-*   +44 (0)1273 201344
 *   +44 (0)7833 512221
 *
-*   Project:	    SSP Emergency admin create
+*   Project:	SSP Emergency admin create
 *   Routine:	emergencyadmincreate.php
 *   Created:	30/11/2005
 *   Descrip:	Create an admin user if there is non in the database.
 *
-*   Copyright 2005-2009 Julian Blundell, w34u
+*   Copyright 2005-2016 Julian Blundell, w34u
 *
 *   This file is part of Simple Site Protection (SSP).
 *
 *   SSP is free software; you can redistribute it and/or modify
-*   it under the terms of the COMMON DEVELOPMENT AND DISTRIBUTION
-*   LICENSE (CDDL) Version 1.0 as published by the Open Source Initiative.
+*   it under the terms of the The MIT License (MIT)
+*   as published by the Open Source Initiative.
 *
 *   SSP is distributed in the hope that it will be useful,
 *   but WITHOUT ANY WARRANTY; without even the implied warranty of
 *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-*   COMMON DEVELOPMENT AND DISTRIBUTION LICENSE (CDDL) for more details.
-*
-*   You should have received a copy of the COMMON DEVELOPMENT AND DISTRIBUTION
-*   LICENSE (CDDL) along with SSP; if not, view at
-*   http://www.opensource.org; http://www.opensource.org/licenses/cddl1.php
+*   The MIT License (MIT) for more details.
 *
 *   Revision:	a
 *   Rev. Date	30/11/2005
 *   Descrip:	Created.
+*
+*   Revision:	b
+*   Rev. Date	14/01/2016
+*   Descrip:	Composer implemented.
 */
+
+namespace w34u\ssp;
+
 require("../includeheader.php");
 
 	$session = new Protect();
 	$ssp = new Setup($session);
-	$admin = new SSP_UserAdmin($session, $ssp);
+	$admin = new UserAdmin($session, $ssp);
 	$admin->adminCreate();
 
 ?>

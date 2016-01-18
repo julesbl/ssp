@@ -154,7 +154,7 @@ class Setup{
 				$section = "";
 			}
 			$url = $_SERVER["SCRIPT_NAME"];
-			$menu = new menuGen();
+			$menu = new MenuGen();
 			$menu->add($this->cfg->adminDir. 'useradmin.php?userId=' .$this->session->userId, $this->session->t("My Details"), strpos($url,"useradmin.php") !== false);
 			$menu->add($this->cfg->adminDir.'adminusercreation.php', $this->session->t("New User"), strpos($url,"adminusercreation.php") !== false);
 			$menu->add($this->cfg->userLister, $this->session->t("List Users"), strpos($url,"index.php") !== false);

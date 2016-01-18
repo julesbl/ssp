@@ -531,7 +531,7 @@ function SSP_Divert($path, $content="", $template="", $divert=true){
  */
 function SSP_getParam($paramName, $default, $getParam=true, $dataType="lable"){
 	
-	$checkData = new SSP_checkData();
+	$checkData = new CheckData();
 	
 	if($getParam){
 		if(isset($_GET[$paramName])){
@@ -571,7 +571,7 @@ function SSP_getParam($paramName, $default, $getParam=true, $dataType="lable"){
  * @param string $dataType - data type to check
  */
 function SSP_changeParam(&$param, $paramName, $getParam=true, $dataType="lable"){
-	$checkData = new SSP_checkData();
+	$checkData = new CheckData();
 	
 	$result = "";
 	$gotChange = false;

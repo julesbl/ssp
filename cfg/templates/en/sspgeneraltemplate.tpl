@@ -5,7 +5,6 @@
 	Site by w34u
 	http://www.w34u.com
 	info@w34u.com
-	 + 44 (0)1273 201344
 	 + 44 (0)7833 512221
  -->
 <title>{title}</title>
@@ -56,10 +55,10 @@
 <table id="footer" border="0" cellpadding="0" align="center">
 	<tr>
 		<td style="text-align:left;">
-            <p>Simple Site Protection<br />Copyright 2005-2012 Julian Blundell - <a href="http://www.w34u.com" title="Go to w34u" target="_blank">w34u</a></p>
+            <p>Simple Site Protection<br />Copyright 2005-2016 Julian Blundell - <a href="http://www.w34u.com" title="Go to w34u" target="_blank">w34u</a></p>
 		</td>
 		<td style="text-align:right;">
-		<p>Common Development and Distribution<br />License (CDDL)</p>
+		<p>MIT Open Source License (MIT)</p>
 		</td>
 	</tr>
 </table>
