@@ -40,20 +40,42 @@ namespace w34u\ssp;
 
 class UserLister{
 
-	/** @var Setup ssp setup object */
-	var $ssp;
-	var $filter; // user filter
-	var $session; // session object
-	var $command = ""; // commad used to invoke the routine
-	var $cfg; // configuration object
-	var $db; // database object
+	/** 
+	 *  ssp setup object
+	 * @var Setup */
+	private $ssp;
+	/**
+	 * user filter
+	 * @var MemberFilter
+	 */
+	private $filter;
+	/**
+	 * session object
+	 * @var Protect
+	 */
+	private $session;
+	/**
+	 * commad used to invoke the routine
+	 * @var string
+	 */
+	private $command = "";
+	/**
+	 * configuration object
+	 * @var Configuration
+	 */
+	private $cfg;
+	/**
+	 * database object
+	 * @var SspDb
+	 */
+	private $db;
 
 	/**
-	 *
+	 * Constructor
 	 * @param Setup $ssp - Setup object
 	 * @param string $command - latest command
 	 */
-	function __construct($ssp, $command){
+	public function __construct($ssp, $command){
 		// constructor
 
 		$this->ssp = $ssp;
@@ -69,7 +91,12 @@ class UserLister{
 		$this->filter =& $_SESSION["SSP_MemberFilter"];
 	}
 
-    function buildQuery($fields){
+	/**
+	 * Build sql for the query
+	 * @param array $fields - fields to be displayed
+	 * @return stdClass - query string with replacement values
+	 */
+    private function buildQuery(array $fields){
         // Builds the query based on the filters in place, and the columns selected.
         //
         // parameters
@@ -284,15 +311,14 @@ class UserLister{
 		return($tpl->output());
 	}
 
-
-    function alphaFilter($selClass="here", $alphaClass="alphaFilter", $par=""){
-        // creates a list of the alphabet filter
-        //
-        // parameters
-        //  $alpha - string - current alpha selection
-        //  $selClass - string class used to highlight selected alpha
-        //	$par - string
-
+	/**
+	 * Create alpha filter
+	 * @param string $selClass - class to highlight current selection
+	 * @param string $alphaClass - class to put on selector
+	 * @param string $par - character to put after each letter
+	 * @return string - html for alpha filter
+	 */
+    public function alphaFilter($selClass="here", $alphaClass="alphaFilter", $par=""){
         $letters = explode(" ",$this->filter->listAlpha);
         $string = '<ul class="'. $alphaClass. '">';
 
@@ -318,6 +344,8 @@ class UserLister{
 		$listerSave =& $_SESSION["SSP_ListerSave"];
 
 		$listerSave->update();
+		
+		SSP_changeParam($this->filter->alpha, 'alpha', true);
 
 		// build query
 		$fields = array("FirstName", "FamilyName", 'TownCity');

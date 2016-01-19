@@ -31,12 +31,14 @@
 namespace w34u\ssp;
 
  class ListerSave{
-    var $page = 1; // position in list
-    var $limit = 0; // number of rows per page
+    public $page = 1; // position in list
+    public $limit = 0; // number of rows per page
 	/** @var int number of rows paged last time */
-	var $lastNumber = 0;
-	/** @var string list id to prevent tow list on the same page interacting */
-	var $listId = "";
+	public $lastNumber = 0;
+	/** 
+	 * list id to prevent two lists on the same page interacting
+	 * @var string  */
+	public $listId = "";
 
     /**
 	 * constructor
@@ -50,7 +52,8 @@ namespace w34u\ssp;
 		$this->listId = $listId;
     }
 
-	/** updates the lister save from gets and posts
+	/**
+	 * updates the lister save from gets and posts
 	*/
 	function update(){
 
