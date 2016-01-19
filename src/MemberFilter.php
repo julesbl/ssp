@@ -62,6 +62,7 @@ class MemberFilter{
     var $userWaiting = 0; // show users who need to reply to startup emails
 	var $limit = "";
 	var $listAlpha = "all a b c d e f g h i j k l m n o p q r s t u v w x y z";
+	public $listAlphaAll = 'all';
 
 	var $cfg; // configuration object
 

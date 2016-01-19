@@ -32,8 +32,11 @@
 *   Rev. Date	22/05/2013
 *   Descrip:	Created.
 *
+*   Revision:	b
+*   Rev. Date	19-Jan-2016
+*   Descrip:	Changed for composer.
 */
-SSP_translate::addToLanguage('fr', array(
+w34u\ssp\Translate::addToLanguage('fr', array(
 	// protection object strings
 	'Invalid page access level' => 'Niveau d\'accès erroné',
 	'parameter pageCaching should be of type bool' => 'Paramètres pour la miss en cache devraient être de type bool',

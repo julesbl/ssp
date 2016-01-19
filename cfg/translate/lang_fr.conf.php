@@ -14,7 +14,11 @@
 *   Revision:	a
 *   Rev. Date	26-Apr-2013
 *   Descrip:	Created.
+*
+*   Revision:	b
+*   Rev. Date	19-Jan-2016
+*   Descrip:	Changed for composer.
 */
-SSP_translate::setupLanguage('fr', 'Français', 'ltr');
+w34u\ssp\Translate::setupLanguage('fr', 'Français', 'ltr');
 /* End of file lang_fr.conf.php */
 /* Location: /translate  */

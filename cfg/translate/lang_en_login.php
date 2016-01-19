@@ -32,8 +32,11 @@
 *   Rev. Date	3/05/2013
 *   Descrip:	Created.
 *
+*   Revision:	b
+*   Rev. Date	19-Jan-2016
+*   Descrip:	Changed for composer.
 */
-SSP_translate::addToLanguage('en', array(
+w34u\ssp\Translate::addToLanguage('en', array(
 	// protection object strings
 	'Invalid page access level' => 'Invalid page access level',
 	'parameter pageCaching should be of type bool' => 'parameter pageCaching should be of type bool',

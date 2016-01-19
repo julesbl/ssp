@@ -212,7 +212,7 @@ abstract class ConfigurationBase
 	 * Path to the templates directory
 	 * @var string
 	 */
-	public $templateDir = "/../cfg/templates/";
+	public $templateDir = null;
 	/**
 	 * name of logon script in admin
 	 * @var string
@@ -287,9 +287,21 @@ abstract class ConfigurationBase
 	 * enable translation routines
 	 * @var bool   */
 	public $translate = false;
-	// if you enable the translation routines the language files will have to
-	// have .change removed from their names, this is to prevent overwriting of
-	// any of your changes on update.
+	/**
+	 * Translation languages available
+	 * @var array of string
+	 */
+	public $translateLangs = array('en', 'fr');
+	/**
+	 * Path to translation directory
+	 * @var string
+	 */
+	public $translatePath = null;
+	/**
+	 * Put translation software into debug mode
+	 * @var bool
+	 */
+	public $translateDebug = false;
 
 	// Divert template configuration, used for automatic diversion to routines using SSP_Divert
 	/**
@@ -688,11 +700,11 @@ abstract class ConfigurationBase
 	 * Properties that are checked on object creation to be non null
 	 * @var string
 	 */
-	private static $checkProperties = [
+	private static $checkProperties = array(
 		'dsn', 'noReplyEmail', 'url', 'cookieDomain', 'siteRoot', 'sessVarName',
 		'randomCookie', 'loginRememberMeCookie', 'magicUser', 'encryptionString', 'errorAdmins',
-		'magicToken'
-	];
+		'magicToken', 'templateDir'
+	);
 
 	// constructor for configuration class
 	public function __construct() {
@@ -746,27 +758,19 @@ abstract class ConfigurationBase
 		
 		Protect::setTemplatePath(__DIR__. $this->templateDir);
 		
-		// set template path for template routines
-		define("SFC_FUNCTOKENMAKE", "SSP_Token"); // specify function for form token creation
-		define("SFC_FUNCTOKENCHECK", "SSP_TokenCheck"); // function to veryify token
-		define("SfcFormSUBMITVARTYPE", "hex"); // data type for form token
-
 		// Translation configuration
 		if($this->translate){
-			require($SSP_IncludePath. 'SSP_translate.php');
-			require($SSP_TranslatePath. 'lang_en.conf.php');
-			require($SSP_TranslatePath. 'lang_fr.conf.php');
-			// add other language files here
-
 			// basic language setup
 			// start debug mode
-			//SSP_translate::debug();
+			if($this->translateDebug){
+				SSP_translate::debug();
+			}
 			// configure language translation object
-			$SSP_lang = new SSP_translate($SSP_Config->lang, $SSP_TranslatePath);
+			$SSP_lang = new Translate($this->lang, $this->translateLangs, __DIR__. $this->translatePath);
 
 			CheckData::addTranslation($SSP_lang);
 			SfcForm::addTranslation($SSP_lang);
-			SSP_Protect::addTranslation($SSP_lang);
+			Protect::addTranslation($SSP_lang);
 		}
 
 		// set up pages not to be included in the history
@@ -826,6 +830,14 @@ abstract class ConfigurationBase
 			if(is_null($this->$property)){
 				$paramOk = false;
 				trigger_error('Property '. $property.
+				' of the configuration object has not been assigned a value, see '.
+				implode(', ', self::$checkProperties). ' on line 691 of ConfigurationBase', E_USER_ERROR);
+			}
+		}
+		if($this->translate){
+			if(is_null($this->translatePath)){
+				$paramOk = false;
+				trigger_error('Property '. 'translatePath'.
 				' of the configuration object has not been assigned a value, see '.
 				implode(', ', self::$checkProperties). ' on line 691 of ConfigurationBase', E_USER_ERROR);
 			}

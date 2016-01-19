@@ -64,7 +64,7 @@ class Setup{
 		$this->db = SspDb::getConnection();
 		
 		if($this->cfg->translate and $translateAdmin){
-			SSP_Protect::$tranlator->loadFile(false, 'admin');
+			Protect::$tranlator->loadFile(false, 'admin');
 		}
 		
 		if($template !== false){
@@ -131,7 +131,7 @@ class Setup{
 				$dropdownInformation[$lang] = array('text' => $languageInfo['description'], 'dir' => $languageInfo['dir'], 'class' => 'lang_'. $lang, 'style' => 'background-image: url(images/flag_'. $lang. '.png);');
 			}
 			$form->fe('select', 'languageDropdown', '', $dropdownInformation);
-			$form->fep('deflt = '. SSP_Protect::$tranlator->getLanguage());
+			$form->fep('deflt = '. Protect::$tranlator->getLanguage());
 			$form->setParam('script', 'onChange="this.form.submit()"');
 			if($form->processForm($_POST)){
 				if(!$form->error){

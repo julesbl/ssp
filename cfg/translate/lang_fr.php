@@ -32,8 +32,11 @@
 *   Rev. Date	22/02/2013
 *   Descrip:	Created.
 *
+*   Revision:	b
+*   Rev. Date	19-Jan-2016
+*   Descrip:	Changed for composer.
 */
-SSP_translate::setupStrings('fr', array(
+w34u\ssp\Translate::setupStrings('fr', array(
 	// strings for SSP_datacheck
 	'alphanumeric characters, CR, TAB, \', ", +, -, _ space comma () / ! [] and ?' => 'caractères alphanumériques, CR, TAB, \ \', ", +, -, virgule espace _ () / [] et ?',
 	'0 to 9, a to z, A to Z' => '0 à 9, a à z, A à Z',

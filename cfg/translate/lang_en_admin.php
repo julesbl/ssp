@@ -32,8 +32,11 @@
 *   Rev. Date	21/05/2013
 *   Descrip:	Created.
 *
+*   Revision:	b
+*   Rev. Date	19-Jan-2016
+*   Descrip:	Changed for composer.
 */
-SSP_translate::addToLanguage('en', array(
+w34u\ssp\Translate::addToLanguage('en', array(
 	// genearl site stuff
 	'SSP Development' => 'SSP Development',
 	'Member admin' => 'Member admin',
@@ -142,6 +145,9 @@ SSP_translate::addToLanguage('en', array(
 	'Search Now' => 'Search Now',
 	'Reset Search Criteria' => 'Reset Search Criteria',
 	// List translations
+	'all a b c d e f g h i j k l m n o p q r s t u v w x y z' => 'all a b c d e f g h i j k l m n o p q r s t u v w x y z',
+	// the next item is used to detect that all has been selected from the list for generating the query
+	'all' => 'all',
 	'User fault' => 'User flag fault',
 ));
 /* End of file lang_fr.php */

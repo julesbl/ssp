@@ -14,7 +14,11 @@
 *   Revision:	a
 *   Rev. Date	26-Apr-2013
 *   Descrip:	Created.
+*
+*   Revision:	b
+*   Rev. Date	19-Jan-2016
+*   Descrip:	Changed for composer.
 */
-SSP_translate::setupLanguage('en', 'English', 'ltr');
+w34u\ssp\Translate::setupLanguage('en', 'English', 'ltr');
 /* End of file lang_en.conf.php */
 /* Location: /translate  */

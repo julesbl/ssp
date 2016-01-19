@@ -41,25 +41,50 @@
 namespace w34u\ssp;
 
 class Translate{
-	/** @var array array of strings to be translated */
+	/** 
+	 * array of strings to be translated
+	 * @var array  */
 	private static $translationStrings = array();
-	/** @var string current language for translation */
+	/** 
+	 * current language for translation
+	 * @var string  */
 	private $language = 'en';
-	/** @var string - path to the language directory */
+	/** 
+	 * path to the language directory
+	 * @var string */
 	private $loadPath = '';
-	/** @var string - default language for site */
+	/** 
+	 * default language for site
+	 * @var string  */
 	private $defaultLanguage = 'en';
-	/** @var bool in debug mode */
+	/** 
+	 * in debug mode
+	 * @var bool  */
 	private static $debug = false;
+	/**
+	 * List of available languages
+	 * @var array
+	 */
+	private $languageList = array();
 	
 	/**
 	 * contructor
 	 * @param string $langCode - language code
+	 * @param array $languageList - list of available languages
 	 * @param string $loadPath - path to load language files
 	 */
-	public function __construct($langCode, $loadPath) {
+	public function __construct($langCode, array $languageList, $loadPath) {
 		$this->defaultLanguage = $langCode;
 		$this->loadPath = $loadPath;
+		foreach($languageList as $language){
+			$fileName = 'lang_%s.conf.php';
+			if(file_exists($loadPath. sprintf($fileName, $language))){
+				require $loadPath. sprintf($fileName, $language);
+			}
+			else{
+				SSP_error('SSP Language configuration file does not exist '. $loadPath. sprintf($fileName, $language));
+			}
+		}
 		$this->setLanguage($langCode);
 	}
 	
@@ -88,7 +113,7 @@ class Translate{
 			}
 		}
 		else{
-			SSP_error('SSP Language not configured, cannot language file '. $languageFile);
+			SSP_error('SSP Language not configured, cannot find language file '. $languageFile);
 		}
 	}
 

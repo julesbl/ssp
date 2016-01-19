@@ -48,7 +48,7 @@ class UserLister{
 	 * user filter
 	 * @var MemberFilter
 	 */
-	private $filter;
+	public $filter;
 	/**
 	 * session object
 	 * @var Protect
@@ -140,7 +140,7 @@ class UserLister{
 		}
 
         // alphabetical filtering
-        if($this->filter->alpha != "all"){
+        if(strcmp($this->filter->alpha, $this->session->t($this->filter->listAlphaAll)) !== 0){
             $where[]= $this->db->qt($this->filter->alphaField)." like ? ";
 			$sqlValues[] = $this->filter->alpha. "%";
         }
@@ -323,7 +323,7 @@ class UserLister{
         $string = '<ul class="'. $alphaClass. '">';
 
         foreach($letters as $letter){
-            if($letter == $this->filter->alpha){
+            if(strcmp($letter, $this->filter->alpha) === 0){
                 $selection = ' class="'. $selClass. '"';
             }
             else{
