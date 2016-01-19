@@ -80,7 +80,10 @@ abstract class LogonBase {
 		$this->rememberMeGet($form);
 
 		if($this->rememberMeLogin){
-			$this->loginSuccess();
+			$userId = $this->logonCheck($form->userInfo);
+			if($userId){
+				$this->loginSuccess();
+			}
 		}
 		if($form->processForm($_POST)){
 			if(!$form->error and $this->loginFormCheck($form) and $userId = $this->logonCheck($form->userInfo)){
@@ -107,6 +110,11 @@ abstract class LogonBase {
 		}
 	}
 	
+	/**
+	 * Divert back to page login from which login was invoked
+	 * optionally display login success page.
+	 * @param string/bool $userId - users id
+	 */
 	private function loginSuccess($userId = false){
 		$returnPage = $this->session->getReturnPage();
 		if(trim($returnPage) != ""){
@@ -183,10 +191,13 @@ abstract class LogonBase {
 		$form->tda("joinSiteLink", $this->cfg->userCreation);
 		return($form);
 	}
-
+	
+	/**
+	 * Check the data returned by the login form is for an existing user
+	 * @param w34u\ssp\SfcForm $form
+	 * @return bool - true on existing user
+	 */
 	private function loginFormCheck(&$form){
-		// check the data supplied by the login form
-
 		$passwordOk=false;
 
         if($this->cfg->loginType==0){
@@ -235,13 +246,13 @@ abstract class LogonBase {
 		return($passwordOk);
 	}
 
+	/**
+	 * Check user account is valid for login and sets up session and remember me
+	 * cookie if requested
+	 * @param object $userInfo - user login information returned by the db
+	 * @return string/bool - user's id on success else false
+	 */
     private function logonCheck($userInfo){
-        // checks the return from a login form, returns true on successful
-        // logon, false on failure
-
-        // clean up old sessions
-        // SSPdbgc (ini_get("session.gc_maxlifetime"));
-
         $loginOk=false;
 
 		// if external login check ok do the rest
@@ -312,34 +323,27 @@ abstract class LogonBase {
 				}
 
 				// update session table
-				$where = array("SessionId"=>session_id());
+				$where = array("SessionId" => session_id());
 				$this->db->update($this->cfg->sessionTable, $querySet, $where, "SSP Logon: Set up user session after succesful login");
 
 				// update login times
 				$oldLoginTime = $userInfo->UserDateLogon;
 				$currentLogonTime = time();
 
-				$fields = array("UserDateLogon"=>$currentLogonTime, "UserDateLastLogon"=>$oldLoginTime);
-				$where = array("UserId"=>$userInfo->UserId);
-				$this->db->update($this->cfg->userTable, $fields, $where, "SSP session handling: updating new session record after session regen");
+				$fields = array("UserDateLogon" => $currentLogonTime, "UserDateLastLogon" => $oldLoginTime);
+				$where = array("UserId" => $userInfo->UserId);
+				$this->db->update($this->cfg->userTable, $fields, $where, "SSP session handling: Update login times");
 			}
 		}
 
         if($loginOk){
-
-			if(function_exists('session_regenerate_id')){
-				// change the current session ID to prevent session fixation attacks
-				// only works if php version >= 4.3.2
-
-				$oldSessionId = session_id();
-
-				session_regenerate_id();
-
-				$fields = array("SessionId"=>session_id());
-				$where = array("SessionId"=>$oldSessionId);
-				$this->db->update($this->cfg->sessionTable, $fields, $where, "SSP session handling: updating new session record after session regen");
-			}
-
+			// change the current session ID to prevent session fixation attacks
+			$oldSessionId = session_id();
+			session_regenerate_id();
+			$fields = array("SessionId" => session_id());
+			$where = array("SessionId" => $oldSessionId);
+			$this->db->update($this->cfg->sessionTable, $fields, $where, "SSP session handling: updating new session record after session regen");
+			
             return($userInfo->UserId);
         }
         else{
@@ -349,7 +353,12 @@ abstract class LogonBase {
         }
     }
 
-	public function userCheck($userInfo, $formData){
+	/**
+	 * Additional user check if programmed
+	 * @param object $userInfo - user login information
+	 * @return bool - true on success
+	 */
+	public function userLoginCheck($userInfo){
 		// stub for user defined login check
 		return(true);
 	}
