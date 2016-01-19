@@ -319,7 +319,7 @@ class UserLister{
 	 * @return string - html for alpha filter
 	 */
     public function alphaFilter($selClass="here", $alphaClass="alphaFilter", $par=""){
-        $letters = explode(" ",$this->filter->listAlpha);
+        $letters = explode(" ", $this->session->t($this->filter->listAlpha));
         $string = '<ul class="'. $alphaClass. '">';
 
         foreach($letters as $letter){
