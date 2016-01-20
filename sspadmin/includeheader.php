@@ -35,7 +35,9 @@
 *   Rev. Date	13/01/2016
 *   Descrip:	Changed to psr-4 and composer.
 */
-error_reporting(E_ALL);
+
 $loader = require __DIR__. '/../vendor/autoload.php';
-$loader->addPsr4('w34u\\ssp\\', __DIR__. '/../cfg', true);
+if(file_exists('devinclude.php')){
+	require 'devinclude.php';
+}
 ?>

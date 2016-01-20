@@ -1,6 +1,8 @@
 {
     "name": "w34u/ssp",
+	"type": "library",
     "description": "Secure login system for php frameworks, applications and sites",
+	"keywords": ["security","auth", "authenticate"],
     "require": {
         "adodb/adodb-php": "^5.20",
 		"php": "^5.5 || ^7.0"
@@ -15,8 +17,9 @@
     "authors": [
         {
             "name": "Julian Blundell",
-            "email": "j.blundell@w34u.com"
+            "email": "j.blundell@w34u.com",
+            "homepage": "http://w34u.com",
+            "role": "Developer"
         }
-    ],
-    "minimum-stability": "stable"
+    ]
 }

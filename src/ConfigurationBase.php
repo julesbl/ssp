@@ -145,15 +145,15 @@ abstract class ConfigurationBase
 	/** 
 	 * name shown in emails to users from admin
 	 * @var string  */
-	public $adminName = "SSP Admin";
+	public $adminName = null;
 	/** 
 	 * Email used by the administrator
 	 * @var string  */
-	public $adminEmail = "info@w34u.com";
+	public $adminEmail = null;
 	/** 
 	 * name shown on no reply emails
 	 * @var string  */
-	public $noReplyName = "No Reply";
+	public $noReplyName = null;
 	/** 
 	 * no reply emails
 	 * change
@@ -701,7 +701,7 @@ abstract class ConfigurationBase
 	 * @var string
 	 */
 	private static $checkProperties = array(
-		'dsn', 'noReplyEmail', 'url', 'cookieDomain', 'siteRoot', 'sessVarName',
+		'dsn', 'adminName', 'adminEmail', 'noReplyName', 'noReplyEmail', 'url', 'cookieDomain', 'siteRoot', 'sessVarName',
 		'randomCookie', 'loginRememberMeCookie', 'magicUser', 'encryptionString', 'errorAdmins',
 		'magicToken', 'templateDir'
 	);

@@ -44,7 +44,20 @@ class Configuration extends ConfigurationBase
 	 * @var string  */
 	public $dsn = null;
 	/** 
+	 * name shown in emails to users from admin
+	 * @var string  */
+	public $adminName = null;
+	/** 
+	 * Email used by the administrator
+	 * @var string  */
+	public $adminEmail = null;
+	/** 
+	 * name shown on no reply emails
+	 * @var string  */
+	public $noReplyName = null;
+	/** 
 	 * email used for no reply emails
+	 * e.g. no-reply@site.com
 	 * @var string  */
 	public $noReplyEmail = null;
 	/** 
@@ -52,7 +65,7 @@ class Configuration extends ConfigurationBase
 	 * @var string  */
 	public $url = null;
 	/**
-	 * set the doamin for the cookie, if you put ".yourdomain.com" it will be
+	 * set the domain for the cookie, if you put ".yourdomain.com" it will be
 	 * valid for www.yourdomain.com and yourdomain.com and 
 	 * www.subdomain.yourdomain.com
 	 * @var string
@@ -66,16 +79,19 @@ class Configuration extends ConfigurationBase
 	public $siteRoot = null;
 	/**
 	 * name of session public storage instance, usually a cookie
+	 * Give it a nice random name, nothing to do with your site name e.g. $jumble#123
 	 * @var string
 	 */
 	public $sessVarName = null;
 	/**
 	 * random cookie name, has a rolling random number to make session stealing difficult
+	 * Give it a nice random name different from the session name, nothing to do with your site name e.g. $sedric#123
 	 * @var string
 	 */
 	public $randomCookie = null;
 	/** 
 	 * remember me cookie name
+	 * Give it a nice random name different from the session name, nothing to do with your site name e.g. engleberty#123
 	 * @var string  */
 	public $loginRememberMeCookie = null;
 	/**
