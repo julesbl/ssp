@@ -1,4 +1,5 @@
 <?php 
+namespace w34u\ssp;
 require_once("../sspadmin/includeheader.php");
 $session = new Protect();
 /**
@@ -19,5 +20,6 @@ $session = new Protect();
 */
 $sql = "select someColumn from sometable";
 $values = array();
+$SSP_DB = \w34u\ssp\SspDb::getConnection();
 $SSP_DB->query($sql, $values, "test quary for db routines");
 ?>

@@ -1,4 +1,5 @@
 <?php
+namespace w34u\ssp;
 require("include.php");
 /*
  Very basic test form for the layout stuff and shows the queries that can be produced
@@ -30,7 +31,7 @@ require("include.php");
 */
 class testForm{
 	// simple test form class
-	function test(&$form){
+	static function test($form){
 		if(strlen($form->getField("testtext"))<3){
 			$form->addError("Checking routine does not like testtexts length");
 		}
@@ -39,7 +40,7 @@ class testForm{
 
 $form = new SfcForm("test1.php", "TestSave", "testform");
 $form->buildForm = true;
-$form->formCheck = 'testForm::test';
+$form->formCheck = 'w34u\ssp\testForm::test';
 $form->fe("text", "testtext", "Testing input box", "test input");
 $params = "dataType = text, elClass = boxClass, maxLength = 100, accessKey=a,tabIndex=10,style=border-width:10px, ldir=ltr,lang=en,width=100,required=true, minChar=3";
 $form->fep($params);
@@ -92,9 +93,6 @@ if($form->processForm($_POST)){
 else{
     echo $form->create();
 }
-echo "<pre>";
-var_dump($form->elements);
-echo "</pre>";
 ?>
 </body>
 </html>

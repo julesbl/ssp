@@ -1,4 +1,5 @@
 <?php
+namespace w34u\ssp;
 require_once("include.php");
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
@@ -27,13 +28,13 @@ require_once("include.php");
 */
 class testForm{
 	// simple test form class
-	function test(&$form){
+	static function test($form){
 		if(strlen($form->getField("testtext"))<3){
 			$form->addError("Checking routine does not like testtexts length");
 		}
 	}
 
-	function previewForm($formData){
+	static function previewForm($formData){
 		$form = new Template($formData, "test2preview.tpl", false);
 		$form->encode=false;
 		$form->output();
@@ -42,9 +43,9 @@ class testForm{
 }
 
 $form = new SfcForm("test2.php", "TestSaveTable", "test2form");
-$form->formCheck = 'testForm::test';
+$form->formCheck = '\w34u\ssp\testForm::test';
 $form->tplf = "test2.tpl";
-$form->setPreview("testform::previewForm");
+$form->setPreview("\w34u\ssp\testform::previewForm");
 
 $form->fe("text", "testtext", "Testing input box", "test input");
 $params = "dataType = text, elClass = boxClass, maxLength = 100, accessKey=a,tabIndex=10,style=border-width:10px, ldir=ltr,lang=en,width=100,required=true, minChar=3";

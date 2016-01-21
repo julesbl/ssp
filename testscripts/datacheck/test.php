@@ -15,30 +15,20 @@
 *   Rev. Date	29/09/2009
 *   Descrip:	Created.
 */
-
+namespace w34u\ssp;
 require("include.php");
 $session = new Protect();
-require_once($SSP_IncludePath. 'SSP_translate.php');
-require_once($SSP_TranslatePath. 'lang_fr.conf.php');
-require_once($SSP_TranslatePath. 'lang_fr.php');
-require_once($SSP_TranslatePath. 'lang_en.conf.php');
-require_once($SSP_TranslatePath. 'lang_en.php');
-if(!isset($_SESSION['SSP_languageCode'])){
-	$_SESSION['SSP_languageCode'] = 'en';
-}
-$langCode =& $_SESSION['SSP_languageCode'];
-$lang = new SSP_translate($langCode, $SSP_TranslatePath);
-$lang->detectBrowserLanguage();
-CheckData::addTranslation($lang);
 $dataCheck = new CheckData();
 
 $formLang = new SfcForm(SSP_Path(), "noTable", "languageform");
 $formLang->tplf = "testDatatypeLanguage.tpl";
 $formLang->formSubmitVar = 'testLanguagechange';
-$formLang->fe('select', 'language', 'Language', $lang->getLanguages());
-$formLang->fep('deflt = '. $langCode);
-if($formLang->isSubmit($_POST)){
-	$langCode = $formLang->getField('language');
+$formLang->fe('select', 'language', 'Language', Protect::$tranlator->getLanguages());
+$formLang->fep('deflt = '. $session->lang);
+$formLang->setParam('script', 'onChange="this.form.submit()"');
+if($formLang->processForm($_POST)){
+	$session->lang = $formLang->getField('language');
+	session_write_close();
 	SSP_Divert(SSP_Path());
 }
 else{
@@ -47,7 +37,7 @@ else{
 
 $form = new SfcForm(SSP_Path(), "noTable", "testDatatype");
 $form->tplf = "testDatatype.tpl";
-$form->tda('lang', $langCode);
+$form->tda('lang', $session->lang);
 $form->tda('setLanguage', $setLanguage);
 $form->fe("text", "data", "Data to be checked");
 $form->fep("dataType = gen");
@@ -71,7 +61,7 @@ $dataType = array(
 		);
 $form->fe("select", "dataType", "Data type to check against", $dataType);
 
-if($form->isSubmit($_POST)){
+if($form->processForm($_POST)){
 	if(!$form->error){
 		$error = $dataCheck->check($form->getField("dataType"), $form->getField("data"));
 		$form->tda("errorNumber", $error);
