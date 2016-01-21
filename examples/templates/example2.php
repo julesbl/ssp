@@ -16,6 +16,7 @@
 *   Rev. Date	27-May-2010
 *   Descrip:	Created.
 */
+namespace w34u\ssp;
 require("../../sspadmin/includeheader.php");
 
 $contentSub = array(
@@ -31,4 +32,5 @@ $content = array(
 );
 $page = new Template($content, "example2.tpl", false);
 echo $page->output();
+require './back.html';
 ?>

@@ -26,5 +26,7 @@
 	<p>{mainContent}</p>
 	<h4>Dynamic template from the data, using the main data</h4>
 	<div style="border: 1px #000 solid">{:includeti:dynamic}</div>
+	<h2>Some content loaded after the template definition</h2>
+	<p>{moreContent}</p>
 	</body>
 </html>

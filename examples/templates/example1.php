@@ -16,6 +16,7 @@
 *   Rev. Date	27-May-2010
 *   Descrip:	Created.
 */
+namespace w34u\ssp;
 require("../../sspadmin/includeheader.php");
 
 $htmlStuff = '<p class="thingy">Some html to display <strong>be very careful with html from databases</strong>.</p>';
@@ -33,4 +34,5 @@ $content = array(
 $page = new Template($content, "example1.tpl");
 $page->ne("programNe");
 echo $page->output();
+require './back.html';
 ?>

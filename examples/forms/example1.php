@@ -3,7 +3,6 @@
 *   Site by w34u
 *   http://www.w34u.com
 *   info@w34u.com
-*   +44 (0)1273 201344
 *   +44 (0)7833 512221
 *
 *   Project:	Simple Site Protection
@@ -15,6 +14,7 @@
 *   Rev. Date	23/03/2009
 *   Descrip:	Created.
 */
+namespace w34u\ssp;
 // include libraries
 require("../../sspadmin/includeheader.php");
 
@@ -25,7 +25,7 @@ $mainTemplate = new Template("Main Template", "exampleMain.tpl");
 $form = new SfcForm(SSP_Path(true), "tableNameForSql", "idNameforTable");
 $form->tpl = $mainTemplate; // main template to enclose the form, not required, form inserted into {content}
 $form->tplf = "example1.tpl"; // display template for the form
-$form->tda("miscTplData", "Some data for display on the form template");
+$form->tda("miscTplData", "Some data for display on the form template, password is 'thingy'");
 $form->fe("text", "firstElement", "First element, a text box");
 $form->fep("required=true, dataType=text"); // element is required and is of data type text
 $form->fe("password", "pasword", "enter a password");

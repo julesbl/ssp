@@ -16,6 +16,7 @@
 *   Descrip:	Created.
 */
 // include the libraries
+namespace w34u\ssp;
 require("../../sspadmin/includeheader.php");
 // start the session and protect the page against non user level users
 $session = new Protect("user");
@@ -33,4 +34,5 @@ if($session->isAccess("admin")) echo "Admin or above level user<br />";
 if($session->isAccess("user", true)) echo "This is a user level user<br />";
 if($session->isAccess("admin", true)) echo "This is a admin level user<br />";
 if($session->admin) echo "This is a admin or above level user<br />";
+require './back.html';
 ?>

@@ -16,6 +16,7 @@
 *   Descrip:	Created.
 */
 // include the libraries
+namespace w34u\ssp;
 require("../../sspadmin/includeheader.php");
 // start the session and protect the page against non admin users
 $session = new Protect("admin");
@@ -28,5 +29,5 @@ echo "logged in ".($session->loggedIn?"true":"false")."<br />";
 echo "admin ".($session->admin?"true":"false")."<br />";
 echo "session token ".$session->sessionToken."<br />";
 echo "<br >";
-
+require './back.html';
 ?>

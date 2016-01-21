@@ -22,5 +22,6 @@
 
 <body>
 	{content}
+	<p><a href="../">Back</a></p>
 </body>
 </html>

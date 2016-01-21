@@ -16,9 +16,10 @@
 *   Rev. Date	27-May-2010
 *   Descrip:	Created.
 */
+namespace w34u\ssp;
 require("../../sspadmin/includeheader.php");
 
-$moreContent = new stdClass();
+$moreContent = new \stdClass();
 $moreContent->moreContent = "Some more content";
 $dynamicallyDefinedTemplate[] = "<h3>Dynamically defined template</h3>";
 $dynamicallyDefinedTemplate[] = "<p>Creating a template on the fly, very useful for things like forms</p>";
@@ -35,4 +36,5 @@ $content = array(
 $page = new Template($content, "example4.tpl", false);
 $page->restart($moreContent);
 echo $page->output();
+require './back.html';
 ?>

@@ -16,6 +16,7 @@
 *   Descrip:	Created.
 */
 // include the libraries
+namespace w34u\ssp;
 require("../../sspadmin/includeheader.php");
 // start the session and protect the page against non user level users
 // global variable, prevent the protection class from divertingto the login routine on
@@ -27,4 +28,5 @@ $session = new Protect("user");
 // do ajax output
 echo "<h1>hello world</h1>";
 // if the session fails for whatever reason the string "false" will be returned
+require './back.html';
 ?>
