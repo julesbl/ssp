@@ -538,7 +538,8 @@ class SspDb{
 			$error .= sprintf("Users remote IP address: %s\n", $_SERVER['REMOTE_ADDR']);
 			if(is_object($session) and $session->loggedIn){
 				// put in user info if available
-				$error .= sprintf("Users name: %s\n", UserAdmin::getName($session->userId, false));
+				$userAdmin = new UserAdmin($session, '');
+				$error .= sprintf("Users name: %s\n", $userAdmin->getName($session->userId, false));
 				$error .= sprintf("Users id: %s\n", $session->userId);
 			}
 			$this->errorDescription = $error;
