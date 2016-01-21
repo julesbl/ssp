@@ -80,8 +80,8 @@ abstract class UserAdminBase{
 	public function __construct($session, $ssp, $command="", $id="", $templateFile="", $generateMenus = true){
 		// constructor for the user admin object
 
-		$this->cfg = $ssp->cfg;
-		$this->db = $ssp->db;
+		$this->cfg = Configuration::getConfiguration();
+		$this->db = SspDb::getConnection();
 
 		if($id != ""){
 			$this->id = $id;
