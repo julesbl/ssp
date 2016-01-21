@@ -312,7 +312,7 @@ class Template{
 
 						case 'includeti': // use the supplied template object with internal data
 							$skipOutput = false;
-							if(isset($this->replaces[$commandTag]) and is_object($this->replaces[$commandTag]) and strtolower(get_class($this->replaces[$commandTag])) == "ssp_template"){
+							if(isset($this->replaces[$commandTag]) and is_object($this->replaces[$commandTag]) and get_class($this->replaces[$commandTag]) === "w34u\ssp\Template"){
 								$includeTpl = $this->replaces[$commandTag];
 								$includeTpl->display = false;
 								$includeTpl->restart($this->replaces);
@@ -333,12 +333,17 @@ class Template{
                 }
                 elseif(array_key_exists($tag, $this->replaces)){
                 	$data = $this->replaces[$tag];
-					if(is_object($data) and strtolower(get_class($data)) == "ssp_template"){
-						// if is a template object, return with string from that
-						$data->display = false;
-						$includeContents = $data->includeTill();
-						$value = $this->replace('{'.$tag.'}', $includeContents, $value);
-						$valuePos = $valuePos + mb_strlen($includeContents);
+					if(is_object($data)){
+						if(get_class($data) === "w34u\ssp\Template"){
+							// if is a template object, return with string from that
+							$data->display = false;
+							$includeContents = $data->includeTill();
+							$value = $this->replace('{'.$tag.'}', $includeContents, $value);
+							$valuePos = $valuePos + mb_strlen($includeContents);
+						}
+						else{
+							die("SSP_Template: Invalide template object supplied for $tag");
+						}
 					}
 					elseif($this->encode){
 						if(!array_key_exists($tag, $this->repFunctions)){
