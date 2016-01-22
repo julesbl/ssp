@@ -39,12 +39,12 @@ $selectComplex = array(
 	5 => "Option 5",
 );
 $selectComplex[3]->addAttribute('class', 'option3Class');
-//$form->fe("select", "selectComplex", "Complex selection", $selectComplex);
+$form->fe("select", "selectComplex", "Complex selection", $selectComplex);
 //$form->fe("select", 'errorSimple', "Simple Selection", $selectBasic);
 //$form->fe("select", "errorComplex", "Complex selection", $selectComplex);
 //$form->fe("select", 'noSelect', "No selections", array());
-//$form->fe("radio", 'radioSelect', "Radio selections", $selectBasic);
-//$form->fep("deflt=1");
+$form->fe("radio", 'radioSelect', "Radio selections", $selectBasic);
+$form->fep("deflt=1");
 //$form->fe("radio", 'radioSelectError', "Radio error", $selectBasic);
 //$form->setParam('validResults', array(1,2,3,4));
 if($form->processForm($_POST)){
