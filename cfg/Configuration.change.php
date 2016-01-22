@@ -44,6 +44,10 @@ class Configuration extends ConfigurationBase
 	 * @var string  */
 	public $dsn = null;
 	/** 
+	 * name of site, used in error logging etc.
+	 * @var string  */
+	public $siteName = null;
+	/** 
 	 * name shown in emails to users from admin
 	 * @var string  */
 	public $adminName = null;

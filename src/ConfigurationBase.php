@@ -137,7 +137,7 @@ abstract class ConfigurationBase
 	/** 
 	 * name of site, used in error logging etc.
 	 * @var string  */
-	public $siteName = "SSP Development";
+	public $siteName = null;
 	/** 
 	 * set the default timezone
 	 * @var string  */
@@ -701,7 +701,7 @@ abstract class ConfigurationBase
 	 * @var string
 	 */
 	private static $checkProperties = array(
-		'dsn', 'adminName', 'adminEmail', 'noReplyName', 'noReplyEmail', 'url', 'cookieDomain', 'siteRoot', 'sessVarName',
+		'dsn', 'siteName', 'adminName', 'adminEmail', 'noReplyName', 'noReplyEmail', 'url', 'cookieDomain', 'siteRoot', 'sessVarName',
 		'randomCookie', 'loginRememberMeCookie', 'magicUser', 'encryptionString', 'errorAdmins',
 		'magicToken', 'templateDir'
 	);
