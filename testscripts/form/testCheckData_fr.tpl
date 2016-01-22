@@ -39,7 +39,9 @@
 {setLanguage}
 <p>Liste des erreurs globales</p>
 {errorList}
+{:if:localErrors}
 <p>Formulaire d'erreurs locales</p>
+{:endif:localErrors}
 <form method="{formMethod}" action="{formAction}">
 	{textTypeErrorList}
 	{textTypeDesc} {textType}<br />

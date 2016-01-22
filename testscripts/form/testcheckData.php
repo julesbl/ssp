@@ -15,16 +15,12 @@
 *   Rev. Date	29/09/2009
 *   Descrip:	Created.
 */
+namespace w34u\ssp;
 require_once("include.php");
 $session = new Protect();
-require_once($SSP_IncludePath. 'SSP_translate.php');
-require_once($SSP_TranslatePath. 'lang_fr.conf.php');
-require_once($SSP_TranslatePath. 'lang_fr.php');
-require_once($SSP_TranslatePath. 'lang_en.conf.php');
-require_once($SSP_TranslatePath. 'lang_en.php');
 
 // add french translations for this page
-SSP_translate::addToLanguage('fr', array(
+Translate::addToLanguage('fr', array(
 	'Text input' => 'La saisie de texte',
 	'Password input' => 'Mot de passe d\'entrée',
 	'Url input' => 'Url entrée',
@@ -46,36 +42,28 @@ SSP_translate::addToLanguage('fr', array(
 	'A local error added to the password field' => 'Une erreur locale ajoutés au champ Mot de passe',
 ));
 
-if(!isset($_SESSION['SSP_languageCodeForm'])){
-	$_SESSION['SSP_languageCodeForm'] = 'en';
-}
-$langCode =& $_SESSION['SSP_languageCodeForm'];
-
 // local/global error list
 if(!isset($_SESSION['SSP_errorLocal'])){
 	$_SESSION['SSP_errorLocal'] = true;
 }
 $errorLocal =& $_SESSION['SSP_errorLocal'];
 
-$lang = new SSP_translate($langCode, $SSP_TranslatePath);
-CheckData::addTranslation($lang);
-SfcForm::addTranslation($lang);
-
 $formLang = new SfcForm(SSP_Path(), "noTable", "languageform");
 $formLang->tplf = "testDatatypeLanguage.tpl";
 $formLang->formSubmitVar = 'testLanguagechange';
-$formLang->fe('select', 'language', 'Language', $lang->getLanguages());
-$formLang->fep('deflt = '. $langCode);
+$formLang->fe('select', 'language', 'Language', Protect::$tranlator->getLanguages());
+$formLang->fep('deflt = '. $session->lang);
 $formLang->fe('check', 'localError', 'Errors local to fields', array(0,1));
 $formLang->fep('deflt = '. $errorLocal);
-if($formLang->isSubmit($_POST)){
-	$langCode = $formLang->getField('language');
+if($formLang->processForm($_POST)){
+	$session->lang = $formLang->getField('language');
 	if($formLang->getField('localError') == 1){
 		$errorLocal = true;
 	}
 	else{
 		$errorLocal = false;
 	}
+	session_write_close();
 	SSP_Divert(SSP_Path());
 }
 else{
@@ -84,9 +72,12 @@ else{
 
 
 $form = new SfcForm("testcheckData.php", "TestSaveTable", "testdataform");
-$form->tplf = "testCheckData_". $langCode. ".tpl";
-$form->tda('lang', $langCode);
+$form->tplf = "testCheckData_". $session->lang. ".tpl";
+$form->tda('lang', $session->lang);
 $form->tda('setLanguage', $setLanguage);
+if($errorLocal){
+	$form->tda('localErrors', 1);
+}
 $form->errorsLocal = $errorLocal;
 $form->errorAutoFormDisplay = false;
 
@@ -148,5 +139,5 @@ if($form->processForm($_POST)){
 	}
 }
 else{
-    echo $form->create(true);
+    echo $form->create();
 }

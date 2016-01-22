@@ -1,4 +1,5 @@
 <?php
+namespace w34u\ssp;
 require_once("include.php");
 $session = new Protect();
 ?>
@@ -17,7 +18,7 @@ $session = new Protect();
 *   +44 (0)1273 201344
 *   +44 (0)7833 512221
 *
-*   Project:	    Template routines test
+*   Project:	Template routines test
 *   Routine:	test1upload.php
 *   Created:	05/04/2007
 *   Descrip:	testing for file upload capbility.
@@ -29,14 +30,14 @@ $session = new Protect();
 class testForm{
 	// simple test form class
 
-	function createForm($formData){
+	static function createForm($formData){
 		$form = new Template($formData, "test1upload.tpl", false);
 		$form->encode=false;
 		$form->output();
 		return($form->output);
 	}
 	
-	function previewForm($formData){
+	static function previewForm($formData){
 		$form = new Template($formData, "test1uploadpreview.tpl", false);
 		$form->encode=false;
 		$form->output();
@@ -48,20 +49,20 @@ class testForm{
 	}
 }
 
-$form = new SfcForm("test1upload.php", "TestSave");
-$form->templateRoutine = 'testForm::createForm';
-$form->setPreview("testform::previewForm");
+$form = new SfcForm("test1upload.php", "TestSave", 'fred');
+$form->templateRoutine = '\w34u\ssp\testForm::createForm';
+$form->setPreview("\w34u\ssp\testform::previewForm");
 $form->buildForm = false;
 $form->fe("textarea", "textarea", "Testing text area box", "text area");
 $form->fep("width=50,lines=10");
 $validTypes = array(".jpg", ".gif", ".png");
 
 $form->fe("file", "image1", "upload an image");
-$form->fileObjects["image1"] = new SFC_file($form->elements["image1"], "images/", "images/", $validTypes, "102400", "testForm::modFile");
+$form->fileObjects["image1"] = new SfcFile($form->elements["image1"], "images/", "images/", $validTypes, "102400", "testForm::modFile");
 $form->fileObjects["image1"]->setPreview("preview/", "preview/");
 
 $form->fe("file", "image2", "upload another image");
-$form->fileObjects["image2"] = new SFC_file($form->elements["image2"], "images/", "images/", $validTypes, "102400", "testForm::modFile");
+$form->fileObjects["image2"] = new SfcFile($form->elements["image2"], "images/", "images/", $validTypes, "102400", "testForm::modFile");
 $form->fileObjects["image2"]->setPreview("preview/", "preview/");
 $form->fe("submit", "submit1", "Submit Now");
 

@@ -15,28 +15,24 @@
 *   Rev. Date	03/04/2013
 *   Descrip:	Created.
 */
+namespace w34u\ssp;
 require_once("include.php");
 $session = new Protect();
-require_once($SSP_IncludePath. 'SSP_translate.php');
-require_once($SSP_TranslatePath. 'lang_fr.conf.php');
-require_once($SSP_TranslatePath. 'lang_fr.php');
-require_once($SSP_TranslatePath. 'lang_en.conf.php');
-require_once($SSP_TranslatePath. 'lang_en.php');
 
 if(!isset($_SESSION['SSP_languageCodeForm'])){
 	$_SESSION['SSP_languageCodeForm'] = 'en';
 }
 $langCode =& $_SESSION['SSP_languageCodeForm'];
 
-$lang = new SSP_translate($langCode, $SSP_TranslatePath);
-$detectedLanguage = $lang->detectBrowserLanguage();
-$browserLanguages = $lang->parseBrowserLanguages($_SERVER["HTTP_ACCEPT_LANGUAGE"]);
+$session->lang = $langCode;
+$detectedLanguage = Protect::$tranlator->detectBrowserLanguage();
+$browserLanguages = Protect::$tranlator->parseBrowserLanguages($_SERVER["HTTP_ACCEPT_LANGUAGE"]);
 
 $templateContent = array(
 	'currentLang' => $langCode,
 	'detectedLang' => $detectedLanguage,
 	'browserLanguages' => print_r($browserLanguages, true),
-	'installedLanguages' => print_r($lang->getLanguages(), true)
+	'installedLanguages' => print_r(Protect::$tranlator->getLanguages(), true)
 );
 $template = new Template($templateContent, 'testDetectLanguage.tpl', true);
 $template->output();
