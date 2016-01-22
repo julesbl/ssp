@@ -726,6 +726,12 @@ class SfcForm{
 				}
 			}
         }
+		else{
+			foreach($this->elements as $el){
+				$fieldErrorListName = $el->name. "ErrorList";
+				$this->tda($fieldErrorListName, "");
+			}
+		}
         $this->tDataAdditional["errorList"] = $this->printErrors();
 		if($this->buildForm){
 			if($this->formTitle != ""){
@@ -1287,7 +1293,9 @@ class SfcForm{
 							$text = $attributeValue;
 						}
 						else{
-							$xhtml .= ' '. $attribute. '="'. $attributeValue. '"';
+							if(!is_array($attributeValue)){
+								$xhtml .= ' '. $attribute. '="'. $attributeValue. '"';
+							}
 						}
 					}
 				}
@@ -2448,7 +2456,7 @@ class SfcFile{
 		//	$fileNameRoutine - string - eval'd to produce an addition to the file name to guarantee unique
 		//	$fileNameReplace - string - totally replace the file name with this, keeps the extension
 
-		if(!is_object($el) or strtolower(get_class($el)) != "SfcFe" or $el->type != "file"){
+		if(!is_object($el) or get_class($el) != "w34u\ssp\SfcFe" or $el->type != "file"){
 			trigger_error("SfcFile: need a valid form file form element", E_USER_ERROR);
 		}
 
