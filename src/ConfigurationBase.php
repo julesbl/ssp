@@ -273,7 +273,7 @@ abstract class ConfigurationBase
 	 * SSP log file, any errors produced by query errors go here, see debug section.
 	 * @var string
 	 */
-	public $errorLog = "/usr/local/home/httpd/vhtdocs/w34u.com/logs/SSPerrorLogFile.log";
+	public $errorLog = "/pathtolog/SSPerrorLogFile.log";
 	/**
 	 * Where the message is to be sent 0 - system log, 1 - emailed to admin, 3 - error log path, 4 - SAPI log handler
 	 * @var int

@@ -36,6 +36,7 @@ namespace w34u\ssp;
 
 require('../includeheader.php');
 $SSP_DB = SspDb::getConnection();
+$SSP_Config = Configuration::getConfiguration();
 $values = array();
 
 $query = 'CREATE TABLE '. $SSP_Config->sessionTable. ' (
