@@ -1,42 +1,47 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head>
-
-
-  
-  <meta content="text/html; charset=UTF-8" http-equiv="content-type" /><title>Simple Site Protection Relase Notes</title></head><body>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+	<head>
+  <meta content="text/html; charset=UTF-8" http-equiv="content-type" />
+  <title>Simple Site Protection Relase Notes</title>
+	</head>
+<body>
 <h1>Release Notes</h1>
+<h2>Version 3.0</h2>
+<p>Complete revamp of file names, class names, directory structure and install methods to comply with PSR-1 and PSR-4</p>
+<p>Project now loads using composer:<br />
+composer require w34u/ssp</p>
 <h2>Version 2.7</h2>
 <p>General  documentation improvement, improved session handling and configuration, moved templates to includes directory, improved examples and setup. </p>
 <h2>Version 2.6</h2>
 <p>Multi-lingual and internationalisation functionality now added, improved documentation and testing routines.</p>
 <ul>
-  <li>sspadmin/templates/en/logonpage.tpl</li>
+  <li>sspadmin/templates/en/logonpage.tpl
   <ul>
     <li>Added cookie saved in browser warning to remember me tick box</li>
-  </ul>
-  <li>sspadmin/templates/en/sspgeneraltemplate.tpl</li>
+  </ul></li>
+  <li>sspadmin/templates/en/sspgeneraltemplate.tpl
   <ul>
     <li>Added english language code to html tag</li>
     <li>Conditional template fields for language selection</li>
-  </ul>
-  <li>sspadmin/templates/en/sspsmalltemplate.tpl</li>
+  </ul></li>
+  <li>sspadmin/templates/en/sspsmalltemplate.tpl
   <ul>
 <li>Added english language code to html tag</li><li>Conditional template fields for language selection</li>
-  </ul>
-  <li>sspadmin/templates/fr</li>
+  </ul></li>
+  <li>sspadmin/templates/fr
   <ul>
     <li>French version of all templates</li>
-  </ul>
-  <li>sspadmin/images</li>
+  </ul></li>
+  <li>sspadmin/images
   <ul>
     <li>Added english and french flags for language selection</li>
-  </ul>
+  </ul></li>
   <li>sspadmin/styles/styles.css</li>
   <ul>
     <li>Styling for language selection</li>
-  </ul>
+  </ul></li>
   <li>sspadmin/.htaccess</li>
-  <ul>
+  <ul></li>
     <li>Added to turn off mod rewrite module for this directory</li>
   </ul>
   <li>sspadmin/adminusercreation.php</li>
@@ -487,4 +492,5 @@ small bug fixes and improvements.</li>
 it.<br />
 </p>
 
-</body></html>
+</body>
+</html>
