@@ -109,7 +109,7 @@ $SSP_DB->query($query, $values, 'SSP Database configuration: Creating user misc 
 
 	$session = new Protect();
 	$ssp = new Setup($session);
-	$admin = new SSP_UserAdmin($session, $ssp);
+	$admin = new UserAdmin($session, $ssp);
 	$admin->adminCreate();
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
