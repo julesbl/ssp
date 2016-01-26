@@ -303,16 +303,18 @@ class Translate{
 	 * @return array - languages, most liked first
 	 */
 	public function parseBrowserLanguages($http_accept){
-		$languages = array();
+		$lang = array();
 		if(strlen($http_accept) > 1){
 			# Split possible languages into array
 			$x = explode(",",$http_accept);
 			foreach ($x as $val) {
 			   #check for q-value and create associative array. No q-value means 1 by rule
-			   if(preg_match("/(.*);q=([0-1]{0,1}\.\d{0,4})/i",$val,$matches))
+			   if(preg_match("/(.*);q=([0-1]{0,1}\.\d{0,4})/i",$val,$matches)){
 				  $lang[$matches[1]] = (float)$matches[2];
-			   else
+			   }
+			   else{
 				  $lang[$val] = 1.0;
+			   }
 			}
 			array_multisort($lang, SORT_DESC);
 		}
