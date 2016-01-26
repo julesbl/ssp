@@ -134,6 +134,6 @@ info@w34u.com
 <body>
 	<h2>SSP Database structure succesfully created</h2>
 	<p>Admin User creation succesfull, Username: admin, email: admin@admin.com, password: password1000. Change all these details immediately.</p>
-	<p><a href="<?php echo $SSP_Config->adminDir; ?>">Go to admin</a></p>
+	<p><a href="<?php echo $ssp->cfg->adminDir; ?>">Go to admin</a></p>
 </body>
 </html>
