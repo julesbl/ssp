@@ -18,8 +18,9 @@ assign values to all the properties to do the database connection and secure you
 site.
 3. Add
     "autoload": {
-        "psr-4": { "w34u\\ssp\\": "cfg/" }
-    }, to composer.json so that the configurations load.
+        "psr-4": { "w34u\\\\ssp\\\\": "cfg/" }
+    }, to composer.json so that the configurations load and then run 
+'composer dumpautoload' to refresh the loader.
 
 4. Move vendor/w34u/ssp/cfg/sspadmin to a browser viewable area and ensure 
 sspadmin/includeheader.php requires the composer autoloader in vendor.
