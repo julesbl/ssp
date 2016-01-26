@@ -107,7 +107,7 @@ class SspDb{
 		}
 
 		if(!$this->error){
-			$connected = true;
+			$this->connected = true;
 		}
 	}
 
