@@ -123,6 +123,7 @@ class Configuration extends ConfigurationBase
 	public $magicToken = null;
 	/**
 	 * Path to the templates directory, relative to w34u/ssp/src
+	 * e.g. '/../../../../cfg/templates/'
 	 * @var string
 	 */
 	public $templateDir = null;
@@ -132,6 +133,7 @@ class Configuration extends ConfigurationBase
 	//public $translate = true;
 	/**
 	 * Path to translation directory , relative to w34u/ssp/src
+	 * e.g. '/../../../../cfg/translate/'
 	 * @var string
 	 */
 	public $translatePath = null;
