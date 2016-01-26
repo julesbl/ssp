@@ -563,7 +563,7 @@ class SfcForm{
         	if(strlen(trim($params)) > 0){
 				$parameters = explode(",", $params);
 				foreach($parameters as $entry){
-						if(strlen(trim($entry)) > 0){
+					if(strlen(trim($entry)) > 0){
 						$param = explode("=", $entry);
 						$param[0] = trim($param[0]);
 						$param[1] = trim($param[1]);
@@ -574,7 +574,7 @@ class SfcForm{
 							$param[1] = false;
 						}
 						if(array_key_exists($param[0], $this->elementProperties)){
-							$this->elements[$elementName]->$param[0] = $param[1];
+							$this->elements[$elementName]->{$param[0]} = $param[1];
 						}
 						else{
 							SSP_error("SfcForm::fep $this->name, Form element property $param[0] does not exist in $elementName");

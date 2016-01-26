@@ -62,8 +62,8 @@ class ClassBase{
 				elseif($param[1] == "false"){
 					$param[1] = false;
 				}
-                if(isset($this->$param[0])){
-                  $this->$param[0] = $param[1];
+				if(isset($this->{$param[0]})){
+				  $this->{$param[0]} = $param[1];
 				}
                 else{
                     die("Form element property $param[0] does not exist in object");
