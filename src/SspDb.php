@@ -43,7 +43,9 @@ class SspDb{
 
 	/** @var ADOConnection adodb database connection */
 	public $db;
-	/** @var SSP_Configuration - ssp configuration object */
+	/** 
+	 * ssp configuration object
+	 * @var Configuration */
 	private $cfg;
 	public $result; // adodb result from a query
 	/** @var bool - database is connected */
@@ -552,7 +554,7 @@ class SspDb{
 				echo '</pre></body>';
 			}
 			else{
-				error_log($error, 3, $this->cfg->errorLog);
+				error_log($error, $this->cfg->message_type, $this->cfg->errorLog);
 				foreach($this->cfg->errorAdmins as $toAddress => $toName){
 					ECRIAmailer("SSP SQL error handler", $this->cfg->noReplyEmail, $toName, $toAddress, "SSP SQL error on ". $this->cfg->siteName, $error);
 				}
