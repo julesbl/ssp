@@ -37,6 +37,10 @@ PHP >= 5.5 and up.
 
 adodb/adodb-php >= 5.0
 
+mbstring
+
+mcrypt
+
 ## Attacks hardened against are:
 
   * Sql injection.
