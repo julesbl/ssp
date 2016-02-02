@@ -71,12 +71,21 @@ abstract class LogonBase {
 	public function __construct($session, $tpl = "", $ignoreToken = false){
         
 		$this->session = $session;
-		$this->cfg = $this->session->cfg;
-		$this->db = $this->session->db;
+		$this->cfg = Configuration::getConfiguration();
+		$this->db = SspDb::getConnection();
 		$this->rememberMe = $this->cfg->loginRememberMe;
-
+		
+		// define the form to login
 		$form = $this->loginScreenDefine($tpl, $ignoreToken);
-
+		// process the form on submit
+		$this->processForm($form);
+	}
+	
+	/**
+	 * Process the remember me, and generate the errors if needed
+	 * @param SfcForm $form
+	 */
+	protected function processForm($form){
 		$this->rememberMeGet($form);
 
 		if($this->rememberMeLogin){
@@ -149,7 +158,7 @@ abstract class LogonBase {
 	 * @param bool $ignoreToken - dont use the timeout token
 	 * @return SfcForm - form to be used to login
 	 */
-	private function loginScreenDefine($tpl, $ignoreToken){
+	protected function loginScreenDefine($tpl, $ignoreToken){
 		// defines the login form
 
 		$useMainTemplate = is_object($tpl);
@@ -197,7 +206,7 @@ abstract class LogonBase {
 	 * @param w34u\ssp\SfcForm $form
 	 * @return bool - true on existing user
 	 */
-	private function loginFormCheck(&$form){
+	protected function loginFormCheck(&$form){
 		$passwordOk=false;
 
         if($this->cfg->loginType==0){
@@ -404,5 +413,5 @@ abstract class LogonBase {
 		}
 	}
 }
-/* End of file SSP_LogonBase.php */
-/* Location: ./sspincludes/SSP_LogonBase.php */
+/* End of file LogonBase.php */
+/* Location: ./src/LogonBase.php */
