@@ -305,7 +305,12 @@ class SfcForm{
     // data for form creation and processing
     public $elements = array(); // array of form elements of SfcFe defining the form.
     public $currentElement = ""; // current element name
-    public $errorElement = "Duplicate element name %s in this form for data table %s";
+	/**
+	 * Current element object
+	 * @var SfcFe
+	 */
+	public $currentElelementObject = null;
+	public $errorElement = "Duplicate element name %s in this form for data table %s";
     public $elementSelections = array(); // array of arrays with data for element dropdowns etc.
     public $data = array(); // data from query, post or get array to populate the form
     public $fileObjects = array(); // file objects for file uploads
@@ -539,7 +544,7 @@ class SfcForm{
         if(!isset($this->elements[$name])){
             // if element does not exist already create it
             $this->currentElement = $name;
-            $this->elements[$name] = new SfcFe($type, $name, $description, $data);
+            $this->currentElelementObject = $this->elements[$name] = new SfcFe($type, $name, $description, $data);
         }
         else{
             SSP_error("SfcForm ". $this->name. ":". sprintf($this->t($this->errorElement), $name, $this->dataTable));
