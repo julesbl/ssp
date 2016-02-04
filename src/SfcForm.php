@@ -2433,6 +2433,7 @@ class SfcFile{
 	public $fileName; // name of file to be saved
 	public $fileNameOld; // name of old file from db or submit with preview
 	public $fileNameRoutine=""; // procedure to generate the unique part of the file name
+	private $routineObject = null;
 	public $fileNameReplace=""; // totally replace the file name with this, keep extension
 	public $validTypes; // array of valid file types
 	public $maxSize; // maximum file size allowed
@@ -2449,7 +2450,7 @@ class SfcFile{
 	public $error = false; // error during file upload
 	public $errorText = ""; // error result
 
-	function __construct($el, $targetDir, $targetView, $validTypes, $maxSize, $fileNameRoutine="",$fileNameReplace=""){
+	function __construct($el, $targetDir, $targetView, $validTypes, $maxSize, $fileNameRoutine="", $routineObject = null, $fileNameReplace=""){
 		// constructor
 		//
 		// parameters
@@ -2483,6 +2484,9 @@ class SfcFile{
 		$this->maxSize = $maxSize;
 		if($fileNameRoutine != ""){
 			$this->fileNameRoutine = $fileNameRoutine;
+		}
+		if(is_object($routineObject)){
+			$this->routineObject = $routineObject;
 		}
 		if($fileNameReplace != ""){
 			$this->fileNameReplace = $fileNameReplace;
@@ -2521,7 +2525,12 @@ class SfcFile{
 				if(array_search($this->fileNameExtension, $this->validTypes) !== false){
 					// valid file type uploaded
 					if($this->fileNameRoutine != ""){
-						$this->fileName = $this->fileNameRest. call_user_func($this->fileNameRoutine) . $this->fileNameExtension;
+						if(is_object($this->routineObject)){
+							$this->fileName = $this->fileNameRest. call_user_func([$this->routineObject, $this->fileNameRoutine]) . $this->fileNameExtension;
+						}
+						else{
+							$this->fileName = $this->fileNameRest. call_user_func($this->fileNameRoutine) . $this->fileNameExtension;
+						}
 					}
 					elseif($this->fileNameReplace != ""){
 						$this->fileName = $this->fileNameReplace . $this->fileNameExtension;
