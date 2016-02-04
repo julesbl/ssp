@@ -177,7 +177,7 @@ abstract class ProtectBase{
         global $loginContent;
 		
 		if($config === false){
-			$this->config = new ProtectConfig();
+			$this->config = new \w34u\ssp\ProtectConfig();
 		}
 		else{
 			$this->config = $config;
@@ -859,55 +859,6 @@ abstract class ProtectBase{
 	}
 }
 
-class ProtectConfig{
-	/**
-	 * Do not prevent page cacheing
-	 * @var bool 
-	 */
-	public $pageCaching = true;
-	/**
-	 * Set page expiry in seconds, 0 - no expiry
-	 * @var int
-	 */
-	public $pageValid = 0;
-	/**
-	 * If true will not divert to login on fail
-	 * @var bool
-	 */
-	public $noLoginDivert = false;
-	/**
-	 * text returned on session fail but no login divert
-	 * @var string
-	 */
-	public $noLoginDivertText = 'fail';
-	/**
-	 * Force SSL path, ensure that an ssl path is being used
-	 * @var bool
-	 */
-	public $forceSSLPath = false;
-	/**
-	 * on true the rolling cookie will not be updated
-	 * @var bool
-	 */
-	public $noCookieUpdate = false;
-	/**
-	 * Array of strings specifying which pages should not be included in the history
-	 * @var array
-	 */
-	public $noHistoryPages = array();
-	/**
-	 * Debuging enabled
-	 * @var bool
-	 */
-	public $debug = false;
-	
-	/**
-	 * Add to pages not to be included in the history
-	 * @param string $page - full of partial path to page
-	 */
-	public function addNoHistory($page){
-		$this->noHistoryPages[] = $page;
-	}
-}
+
 /* End of file ProtectBase.php */
 /* Location: ./src/ProtectBase.php */
