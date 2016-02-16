@@ -864,7 +864,7 @@ abstract class ConfigurationBase
 	
 	/**
 	 * Get the, and if neccessary, create the configuration
-	 * @return SSP_Configuration
+	 * @return \w34u\ssp\Configuration
 	 */
 	public static function getConfiguration(){
 		if(self::$cfg === null){

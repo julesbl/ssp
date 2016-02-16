@@ -288,7 +288,7 @@ function SSP_Path($withParams=false, $forceSSLPath=false){
     if(false and $withParams and isset($_SERVER['QUERY_STRING']) and trim($_SERVER['QUERY_STRING']) != ""){
         $script .= "?".$_SERVER['QUERY_STRING'];
     }
-    $host = $_SERVER['HTTP_HOST'];
+    $host = $SSP_Config->url;
 	$isSslResult = isset($_SERVER['HTTPS']);
 	if($isSslResult){
 		$sslResult = $_SERVER['HTTPS'];
