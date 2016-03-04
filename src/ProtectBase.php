@@ -677,7 +677,7 @@ abstract class ProtectBase{
 			$id = $_COOKIE[$this->cfg->loginRememberMeCookie];
 			// delete remeber me cookie if it exists
 			setcookie($this->cfg->loginRememberMeCookie,
-							"", time()-172800, "/", $this->cfg->cookieDomain, $this->cfg->randomCookieSSL);
+							"", time()-172800, "/", $this->cfg->cookieDomain, $this->cfg->useSSL);
 			$values = array("id" => $id);
 			$this->db->delete($this->cfg->tableRememberMe, $values, "SSP Logoff: removing remember me entry");
 		}

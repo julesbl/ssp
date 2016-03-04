@@ -368,11 +368,6 @@ abstract class ConfigurationBase
 	 */
 	public $randomCookie = null;
 	/**
-	 * Use SSL for random cookie
-	 * @var bool
-	 */
-	public $randomCookieSSL = false;
-	/**
 	 * User levels for logins
 	 * users "public" and "admin" must always exist for the
 	 * routines to function, you can have user types with priorities higher
