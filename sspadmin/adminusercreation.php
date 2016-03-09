@@ -45,7 +45,7 @@ $ssp = new Setup($session, true);
 
 $admin = new UserAdmin($session, $ssp, "", $session->userId);
 
-$userId = $admin->userCreate(true);
+$userId = $admin->userCreate();
 if($userId === true){
 	$tpl = $ssp->tpl(array('title' => 'User created', 'content' => '<h1>New user created</h1>'));
 	echo $tpl->output();

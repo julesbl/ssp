@@ -99,23 +99,14 @@ abstract class UserAdminBase{
 
 	/**
 	 * Create a new user
-	 * @param bool $admin - true if creating user an admin
-	 * @param bool $signupOptions - show additional sign up options
 	 * @return bool - returns true on success
 	 */
-	public function userCreate($admin=false, $signupOptions = false){
+	public function userCreate(){
 		// Creates the entries in the primary logon table
 		// returns the user ID on success
 		//
 		// Parameters
 		//  $admin - bool - full admin creation option
-
-        if($this->cfg->confirmType==0 or $this->cfg->confirmType==3 or $admin){
-        	$needPassword = true;
-        }
-        else{
-        	$needPassword = false;
-        }
 
         $form = new SfcForm(SSP_Path(), $this->cfg->userTable, "userCreate");
 		$form->errorAutoFormDisplay = false;
@@ -140,45 +131,34 @@ abstract class UserAdminBase{
             $form->fe("text", "name", "User name");
             $form->fep("width=15,required=true,dataType=password, dbField=UserName");
 		}
-		if($needPassword){
-			$form->fe("check", "askUser", "Ask user for password (don't have to enter one)", array(0,1));
-			$form->fep('sql=false');
+		$form->fe("check", "askUser", "Ask user for password (don't have to enter one)", array(0,1));
+		$form->fep('sql=false');
 
-			$form->fe("password", "password", "Password");
-			$form->fep("width=15, dataType=password, dbField=UserPassword");
-			
-			$form->fe("password", "password2", "Enter password again");
-			$form->fep("width=15,sql=false,dataType=password");
-		}
+		$form->fe("password", "password", "Password");
+		$form->fep("width=15, dataType=password, dbField=UserPassword");
+
+		$form->fe("password", "password2", "Enter password again");
+		$form->fep("width=15,sql=false,dataType=password");
         if($this->cfg->fixedIpAddress){
             $form->fe("text", "ip","IP address");
             $form->fep("width=35,dataType=real, dbField=UserIp");
         }
 		
-        if($admin){
-            // allow flags to be set by admin
-            $form->fe("select", "UserAccess", "User Access rights", $this->cfg->userAccessTypeDropdown);
-			$form->fep("dataType=password");
-            $checkData = array("0", "1");
-			$fep = "dataType=bin";
-            $form->fe("check", "UserDisabled", "User Disabled", $checkData);
-			$form->fep($fep);
-            $form->fe("check", "UserPending", "User Pending program enable", $checkData);
-			$form->fep($fep);
-            $form->fe("check", "UserAdminPending", "User waiting admin vetting", $checkData);
-			$form->fep($fep);
-            $form->fe("check", "CreationFinished", "User creation finished", $checkData);
-			$form->fep($fep. ",deflt=true");
-            $form->fe("check", "UserWaiting", "Waiting for user to act on email", $checkData);
-			$form->fep($fep);
-        }
-        else{
-        	if($this->cfg->userHasSignUpOptions and $signupOptions){
-				// user has a set of options to sign up
-        		$form->fe("select", "signUpLevel", "Type of membership", $this->cfg->userAccessSignUpDropdown);
-				$form->fep("dataType=int, sql=false");
-        	}
-        }
+		// allow flags to be set by admin
+		$form->fe("select", "UserAccess", "User Access rights", $this->cfg->userAccessTypeDropdown);
+		$form->fep("dataType=password");
+		$checkData = array("0", "1");
+		$fep = "dataType=bin";
+		$form->fe("check", "UserDisabled", "User Disabled", $checkData);
+		$form->fep($fep);
+		$form->fe("check", "UserPending", "User Pending program enable", $checkData);
+		$form->fep($fep);
+		$form->fe("check", "UserAdminPending", "User waiting admin vetting", $checkData);
+		$form->fep($fep);
+		$form->fe("check", "CreationFinished", "User creation finished", $checkData);
+		$form->fep($fep. ",deflt=true");
+		$form->fe("check", "UserWaiting", "Waiting for user to act on email", $checkData);
+		$form->fep($fep);
 
         $form->fe("submit", "submit", "Create user");
 		$form->addHidden("command", $this->command);
@@ -202,28 +182,6 @@ abstract class UserAdminBase{
 						$form->setField("password",  $this->session->cryptPassword($form->getField("password")));
 					}
 
-					if(!$admin){
-						// user access level and other configs
-						if($this->cfg->userHasSignUpOptions and $signupOptions){
-							if(isset($this->cfg->userAccessSignUpLevels[$form->getField("signUpLevel")])){
-								$add["UserAccess"] = $this->cfg->userAccessSignUpLevels[$form->getField("signUpLevel")];
-							}
-						}
-						else{
-							$add["UserAccess"]=$this->cfg->userDefault;
-						}
-						$add["CreationFinished"] = 1;
-						if($this->cfg->adminCheck){
-							$add["UserAdminPending"]=1;
-						}
-						if($this->cfg->confirmType != 0){
-							$add["UserWaiting"]=1;
-						}
-						if($this->cfg->furtherProgram){
-							$add["UserPending"]=1;
-						}
-					}
-
 					$form->alsoAdd=$add;
 					$query = $form->querySave();
 					$this->db->insert($this->cfg->userTable, $form->saveFields, "SSP Admin User Creation: Creating new user ");
@@ -233,7 +191,7 @@ abstract class UserAdminBase{
 						'FamilyName' => $form->getField('FamilyName'),
 					);
 					$this->db->insert($this->cfg->userMiscTable, $data, "SSP Admin User Creation: Creating new user misc data");
-					if(!$admin or $form->getField('askUser') !== '0'){
+					if($form->getField('askUser') != '0'){
 						// send email if new user entering password
 						$this->userJoinEmail($userId);
 					}
@@ -295,7 +253,6 @@ abstract class UserAdminBase{
 		}
 		return($error);
 	}
-
 
     /**
 	 * Creates an admin user if non exists
