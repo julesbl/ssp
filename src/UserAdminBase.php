@@ -178,7 +178,7 @@ abstract class UserAdminBase{
 					$add["UserId"] = $userId;
 					$add["UserDateCreated"] = time();
 					
-					if($needPassword){
+					if($form->getField('askUser') == 0){
 						$form->setField("password",  $this->session->cryptPassword($form->getField("password")));
 					}
 
