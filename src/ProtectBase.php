@@ -240,8 +240,7 @@ abstract class ProtectBase{
         }
         
 
-        $logonPath = $this->cfg->logonScript;
-        // get all session information for valid sessions
+         // get all session information for valid sessions
 		$query = sprintf("select * from %s where %s = ? and %s = ?",
 				$this->cfg->sessionTable,
 				$this->db->qt("SessionId"),
@@ -367,8 +366,27 @@ abstract class ProtectBase{
         else{
 			$this->log("User not logged in");
         }
+		
+		// handle user faults
+		$this->userFaultHandling($pageAccess, $userFault, $needHigherLogin, $queryResultCacheing);
 
+		// final setup of page
+		$this->finalSetup($userInfo);
+		
+		// restore query cacheing mode
+		$this->db->cache = $queryResultCacheing;
+	}
+	
+	/**
+	 * Handle user faults
+	 * @param int $pageAccess - page access level
+	 * @param boolean $userFault - user fault
+	 * @param boolean $needHigherLogin - need a higher login
+	 * @param boolean $queryResultCacheing - query caching on or off
+	 */
+	private function userFaultHandling($pageAccess, $userFault, $needHigherLogin, $queryResultCacheing){
         // user fault detected in current session other than needing a higher login
+		$logonPath = $this->cfg->logonScript;
 		$logonDivertContent = array(
 			"pageTitle" => $this->t("Diverting to logon"), 
 			"linkText" => $this->t("Click here to login if divert does not happen within 5 seconds")
@@ -423,7 +441,13 @@ abstract class ProtectBase{
             $this->killLogin();
             $this->loggedIn = false;
         }
-
+	}
+	
+	/**
+	 * Do final user setup and page config
+	 * @param object $userInfo - user login info from database
+	 */
+	private function finalSetup($userInfo){
         // set up final properties
         $this->sessionToken = session_ID();
         if($this->loggedIn){
@@ -450,9 +474,6 @@ abstract class ProtectBase{
         if($this->config->pageValid > 0){
             header("Expires: ".gmstrftime("%a, %d %b %Y %H:%M:%S",gmmktime()+ $this->config->pageValid)." GMT");
         }
-		
-		// restore query cacheing mode
-		$this->db->cache = $queryResultCacheing;
 	}
 	
 	/**
