@@ -262,6 +262,7 @@ abstract class ProtectBase{
         // process user information if logged in.
         $userFault = false;
         $needHigherLogin = false;
+		$userInfo = null;
         if(!$newSession and trim($sessionInfo->UserId) != ""){
 			$where = array("UserId" => $sessionInfo->UserId);
 			$userInfo = $this->db->get($this->cfg->userTable, $where, "SSP Session: getting login data");
