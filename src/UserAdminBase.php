@@ -213,7 +213,7 @@ abstract class UserAdminBase{
 	 * @param SfcForm $form - user creation form
 	 * @return bool - returns true on failure 
 	 */
-	private function userCreateCheck(&$form){
+	protected function userCreateCheck(&$form){
     	// Checks the user creation form for the passwords being the same
 
         $error = false;
