@@ -758,7 +758,7 @@ abstract class ConfigurationBase
 			// basic language setup
 			// start debug mode
 			if($this->translateDebug){
-				SSP_translate::debug();
+				Translate::debug();
 			}
 			// configure language translation object
 			$SSP_lang = new Translate($this->lang, $this->translateLangs, __DIR__. $this->translatePath);

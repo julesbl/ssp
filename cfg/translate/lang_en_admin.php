@@ -79,7 +79,7 @@ w34u\ssp\Translate::addToLanguage('en', array(
 	'Next' => 'Next',
 	'Save' => 'Save',
 	// change password form
-	'Your orriginal Password' => 'Your orriginal Password',
+	'Your orriginal Password' => 'Your original Password',
 	'New password' => 'New password',
 	'Enter new password again' => 'Enter new password again',
 	'Both passwords must be the same' => 'Both passwords must be the same',
