@@ -1,5 +1,4 @@
 /vendor/
 /test.php
 /cfg/Configuration.php
-/composer.lock
 /sspadmin/devinclude.php
