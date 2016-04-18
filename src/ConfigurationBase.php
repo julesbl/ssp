@@ -217,47 +217,47 @@ abstract class ConfigurationBase
 	 * name of logon script in admin
 	 * @var string
 	 */
-	public $logonScript = "logon.php";
+	public $logonScript = "sspadmin/logon.php";
 	/**
 	 * Name of logoff script
 	 * @var string
 	 */
-	public $logoffScript = "logoff.php";
+	public $logoffScript = "sspadmin/logoff.php";
 	/**
 	 * Password recovery script
 	 * @var string
 	 */
-	public $passwordRecover = "passwordrecover.php";
+	public $passwordRecover = "sspadmin/passwordrecover.php";
 	/**
 	 * password recovery password entry
 	 * @var string
 	 */
-	public $newPassword = "newpassword.php";
+	public $newPassword = "sspadmin/newpassword.php";
 	/**
 	 * user self admin script
 	 * @var string
 	 */
-	public $userAdminScript = "useradmin.php";
+	public $userAdminScript = "sspadmin/useradmin.php";
 	/**
 	 * administrator admin
 	 * @var string
 	 */
-	public $totalAdminScript = "index.php";
+	public $totalAdminScript = "sspadmin/index.php";
 	/**
 	 * script to create user
 	 * @var string
 	 */
-	public $userCreation = "usercreation.php";
+	public $userCreation = "sspadmin/usercreation.php";
 	/**
 	 * user confirming, linked to by email
 	 * @var string
 	 */
-	public $userConfirm = "userconfirm.php";
+	public $userConfirm = "sspadmin/userconfirm.php";
 	/**
 	 * routine to list users
 	 * @var string
 	 */
-	public $userLister = "index.php";
+	public $userLister = "sspadmin/index.php";
 	/**
 	 * root of site including HTTP or HTTPS
 	 * change
@@ -718,19 +718,21 @@ abstract class ConfigurationBase
 		if($this->useSSL){
 			// absolute path for ssl
 			$this->adminDir = $this->pathSiteHttps. $this->adminDir;
+			$path = $this->pathSiteHttps;
 		}
 		else{
 			$this->adminDir = $this->pathSite. $this->adminDir;
+			$path = $this->pathSite;
 		}
-		$this->logonScript = $this->adminDir. $this->logonScript;
-		$this->logoffScript = $this->adminDir. $this->logoffScript;
-		$this->passwordRecover = $this->adminDir. $this->passwordRecover;
-		$this->newPassword = $this->adminDir. $this->newPassword;
-		$this->userAdminScript = $this->adminDir. $this->userAdminScript;
-		$this->totalAdminScript = $this->adminDir. $this->totalAdminScript;
-		$this->userCreation = $this->adminDir. $this->userCreation;
-		$this->userConfirm = $this->adminDir. $this->userConfirm;
-		$this->userLister = $this->adminDir. $this->userLister;
+		$this->logonScript = $path. $this->logonScript;
+		$this->logoffScript = $path. $this->logoffScript;
+		$this->passwordRecover = $path. $this->passwordRecover;
+		$this->newPassword = $path. $this->newPassword;
+		$this->userAdminScript = $path. $this->userAdminScript;
+		$this->totalAdminScript = $path. $this->totalAdminScript;
+		$this->userCreation = $path. $this->userCreation;
+		$this->userConfirm = $path. $this->userConfirm;
+		$this->userLister = $path. $this->userLister;
 
 		// configure debug
 		if($this->checkDebugIp){
@@ -814,6 +816,10 @@ abstract class ConfigurationBase
 		// specifies the domain to set in session_cookie.
 		ini_set("session.cookie_domain", $this->cookieDomain);
 		
+		if($this->useSSL){
+			ini_set("session.cookie_secure", 1);
+			ini_set('session.cookie_httponly', 1);
+		}
 	}
 	
 	/**
