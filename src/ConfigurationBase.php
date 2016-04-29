@@ -618,6 +618,11 @@ abstract class ConfigurationBase
 	
 	// Debug settings
 	/**
+	 * display backtrace as part of error
+	 * @var boolean
+	 */
+	public $errorDisplayBacktrace = false;
+	/**
 	 * display login debug info.
 	 * @var bool
 	 */

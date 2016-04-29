@@ -513,26 +513,28 @@ class SspDb{
 			if(trim($_SERVER['QUERY_STRING']) != ""){
 				$error .= sprintf("\nQuery string: %s\n", $_SERVER['QUERY_STRING']);
 			}
-			$error .= "Debug backtrace\n";
-			$backtrace = debug_backtrace();
-			foreach($backtrace as $routine){
-				if(!isset($routine['file'])){
-					// probably call_user_func
-					$error .= "call_user_func\n";
-				}
-				else{
-					$error .= "Line ". $routine['line']. " of ". $routine['file']. "\n";
-					if(isset($routine['function'])){
-						$error .= " In function ". $routine['function']. "\n";
-						if(isset($routine['args']) and is_Array($routine['args'])){
-							$error .= "  Arguments ";
-							foreach($routine['args'] as $arg => $argValue){
-								if(is_array($argValue) or is_object($argValue)){
-									$argValue = serialize($argValue);
+			if($this->cfg->errorDisplayBacktrace){
+				$error .= "Debug backtrace\n";
+				$backtrace = debug_backtrace();
+				foreach($backtrace as $routine){
+					if(!isset($routine['file'])){
+						// probably call_user_func
+						$error .= "call_user_func\n";
+					}
+					else{
+						$error .= "Line ". $routine['line']. " of ". $routine['file']. "\n";
+						if(isset($routine['function'])){
+							$error .= " In function ". $routine['function']. "\n";
+							if(isset($routine['args']) and is_Array($routine['args'])){
+								$error .= "  Arguments ";
+								foreach($routine['args'] as $arg => $argValue){
+									if(is_array($argValue) or is_object($argValue)){
+										$argValue = serialize($argValue);
+									}
+									$error .= $arg. " = '". $argValue. "' ";
 								}
-								$error .= $arg. " = '". $argValue. "' ";
+								$error .= "\n";
 							}
-							$error .= "\n";
 						}
 					}
 				}
