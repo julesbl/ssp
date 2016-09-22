@@ -5,7 +5,8 @@
 	"keywords": ["security","auth", "authenticate"],
     "require": {
         "adodb/adodb-php": "^5.0",
-		"php": "^5.5 || ^7.0"
+		"php": "^5.5 || ^7.0",
+        "ruckusing/ruckusing-migrations": "^1.1"
     },
 	"autoload": {
 		"psr-4": {
