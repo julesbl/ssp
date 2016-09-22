@@ -1,0 +1,85 @@
+CREATE TABLE `SSP_Session` (
+  `SessionId` char(32) NOT NULL,
+  `UserId` char(32) NOT NULL,
+  `SessionTime` int(11) NOT NULL DEFAULT '0',
+  `SessionName` varchar(30) NOT NULL DEFAULT '',
+  `SessionIp` varchar(40) NOT NULL DEFAULT '',
+  `SessionUserIp` varchar(40) NOT NULL DEFAULT '',
+  `SessionCheckIp` tinyint(4) NOT NULL DEFAULT '0',
+  `SessionRandom` int(11) NOT NULL DEFAULT '0',
+  `SessionData` blob NOT NULL,
+  PRIMARY KEY (`SessionId`),
+  KEY `SessionTime` (`SessionTime`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+CREATE TABLE `SSP_Token` (
+  `token` char(32) NOT NULL DEFAULT '',
+  `time` int(11) NOT NULL DEFAULT '0',
+  `id` varchar(50) NOT NULL,
+  PRIMARY KEY (`token`),
+  KEY `time` (`time`),
+  KEY `id` (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+CREATE TABLE `SSP_UserLogon` (
+  `UserId` varchar(32) NOT NULL DEFAULT '',
+  `UserEmail` varchar(255) DEFAULT NULL,
+  `UserName` varchar(50) DEFAULT NULL,
+  `UserPassword` varchar(255) NOT NULL DEFAULT '',
+  `UserIp` varchar(30) NOT NULL DEFAULT '',
+  `UserIpCheck` tinyint(4) NOT NULL DEFAULT '0',
+  `UserAccess` varchar(20) NOT NULL DEFAULT 'public',
+  `lang` varchar(10) NOT NULL,
+  `country` varchar(10) NOT NULL,
+  `UserDateLogon` int(11) NOT NULL DEFAULT '0',
+  `UserDateLastLogon` int(11) NOT NULL DEFAULT '0',
+  `UserDateCreated` int(11) NOT NULL DEFAULT '0',
+  `UserDisabled` tinyint(4) NOT NULL DEFAULT '0',
+  `UserPending` tinyint(4) NOT NULL DEFAULT '0',
+  `UserAdminPending` tinyint(4) NOT NULL DEFAULT '0',
+  `CreationFinished` tinyint(4) NOT NULL DEFAULT '0',
+  `UserWaiting` tinyint(4) NOT NULL DEFAULT '0',
+  `UserInvisible` tinyint(4) NOT NULL DEFAULT '0',
+  `remoteAccess` tinyint(1) NOT NULL,
+  PRIMARY KEY (`UserId`),
+  UNIQUE KEY `UserName` (`UserName`),
+  KEY `UserPassword` (`UserPassword`),
+  KEY `UserEmail` (`UserEmail`),
+  KEY `UserDisabled` (`UserDisabled`,`UserPending`,`UserAdminPending`,`CreationFinished`,`UserWaiting`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+CREATE TABLE `SSP_UserMisc` (
+  `UserId` varchar(32) NOT NULL DEFAULT '',
+  `Title` varchar(15) NOT NULL DEFAULT '',
+  `FirstName` varchar(20) NOT NULL DEFAULT '',
+  `Initials` varchar(5) NOT NULL DEFAULT '',
+  `FamilyName` varchar(30) NOT NULL DEFAULT '',
+  `Address` varchar(255) NOT NULL DEFAULT '',
+  `TownCity` varchar(30) NOT NULL DEFAULT '',
+  `PostCode` varchar(10) NOT NULL DEFAULT '',
+  `County` varchar(20) NOT NULL DEFAULT '',
+  `Country` varchar(5) NOT NULL DEFAULT '',
+  PRIMARY KEY (`UserId`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+CREATE TABLE `SSP_UserResponse` (
+  `token` char(32) NOT NULL DEFAULT '',
+  `time` int(11) NOT NULL DEFAULT '0',
+  `UserId` char(32) NOT NULL DEFAULT '',
+  PRIMARY KEY (`token`),
+  KEY `time` (`time`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='Tokens for waiting for a user response';
+
+CREATE TABLE `schema_migrations` (
+  `version` varchar(255) DEFAULT NULL,
+  UNIQUE KEY `idx_schema_migrations_version` (`version`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `ssp_remember_me` (
+  `id` char(32) NOT NULL,
+  `user_id` char(32) NOT NULL,
+  `date_expires` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `date_expires` (`date_expires`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+

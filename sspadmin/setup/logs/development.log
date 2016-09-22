@@ -1,0 +1,11 @@
+Sep 22 16:38:46 [info] CREATE TABLE `schema_migrations` (
+`version` varchar(255))  DEFAULT CHARSET=utf8;
+Sep 22 16:38:46 [info] CREATE UNIQUE INDEX `idx_schema_migrations_version` ON `schema_migrations`(`version`)
+Sep 22 16:40:09 [info] SELECT version FROM schema_migrations
+Sep 22 16:41:03 [info] SHOW CREATE TABLE `SSP_Session`
+Sep 22 16:41:03 [info] SHOW CREATE TABLE `SSP_Token`
+Sep 22 16:41:03 [info] SHOW CREATE TABLE `SSP_UserLogon`
+Sep 22 16:41:03 [info] SHOW CREATE TABLE `SSP_UserMisc`
+Sep 22 16:41:03 [info] SHOW CREATE TABLE `SSP_UserResponse`
+Sep 22 16:41:03 [info] SHOW CREATE TABLE `schema_migrations`
+Sep 22 16:41:03 [info] SHOW CREATE TABLE `ssp_remember_me`

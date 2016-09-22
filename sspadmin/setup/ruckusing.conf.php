@@ -18,9 +18,9 @@ return array(
             'type' => 'mysql',
             'host' => 'localhost',
             'port' => 3306,
-            'database' => 'ruckusing_migrations',
-            'user' => 'root',
-            'password' => '',
+            'database' => 'ssp_db_v3_1',
+            'user' => 'julesb2356',
+            'password' => 'pringlesAreG$009',
             //'charset' => 'utf8',
             //'directory' => 'custom_name',
             //'socket' => '/var/run/mysqld/mysqld.sock'
@@ -58,5 +58,5 @@ return array(
     'migrations_dir' => array('default' => RUCKUSING_WORKING_BASE . '/migrations'),
     'db_dir' => RUCKUSING_WORKING_BASE . DIRECTORY_SEPARATOR . 'db',
     'log_dir' => RUCKUSING_WORKING_BASE . DIRECTORY_SEPARATOR . 'logs',
-    'ruckusing_base' => dirname(__FILE__) . DIRECTORY_SEPARATOR . 'vendor/ruckusing/ruckusing-migrations'
+    'ruckusing_base' => dirname(__FILE__) . DIRECTORY_SEPARATOR . '/../../vendor/ruckusing/ruckusing-migrations'
 );
