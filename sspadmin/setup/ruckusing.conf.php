@@ -12,15 +12,20 @@ Valid types (adapters) are Postgres & MySQL:
 'type' must be one of: 'pgsql' or 'mysql' or 'sqlite'
 
 */
+if(file_exists(__DIR__. '/../devinclude.php')){
+	require __DIR__. '/../devinclude.php';
+}
+
+$ssp_config = new \w34u\ssp\Configuration();
 return array(
     'db' => array(
         'development' => array(
             'type' => 'mysql',
-            'host' => 'localhost',
+            'host' => $ssp_config->dsnHostName,
             'port' => 3306,
-            'database' => 'ssp_db_v3_1',
-            'user' => 'julesb2356',
-            'password' => 'pringlesAreG$009',
+            'database' => $ssp_config->dsnDatabaseName,
+            'user' => $ssp_config->dsnUser,
+            'password' => $ssp_config->dsnPassword,
             //'charset' => 'utf8',
             //'directory' => 'custom_name',
             //'socket' => '/var/run/mysqld/mysqld.sock'

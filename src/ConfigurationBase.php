@@ -65,16 +65,6 @@ abstract class ConfigurationBase
 		"0.0.0.0" => "w34u"
 	);
 
-	// database configuration
-	// adodb DSN, see adodb documentation
-	// Change this for your database!!!!!
-	/** 
-	 * database connection string
-	 * e.g. mysqli://username:password@hostname/databasename?persist
-	 * @var string  */
-	public $dsn = null;
-	
-	// The next set of database parameters get used if the dsn is left blank
 	/** 
 	 * database drivers to be used
 	 * @var string  */
@@ -82,23 +72,30 @@ abstract class ConfigurationBase
 	/** 
 	 * database user
 	 * @var string  */
-	public $dsnUser = '';
+	public $dsnUser = null;
 	/** 
 	 * password for the database
 	 * @var string  */
-	public $dsnPassword = '';
+	public $dsnPassword = null;
 	/** 
 	 * host name
 	 * @var string  */
-	public $dsnHostName = '';
+	public $dsnHostName = null;
 	/** 
 	 * database name
 	 * @var string  */
-	public $dsnDatabaseName = '';
+	public $dsnDatabaseName = null;
 	/** 
 	 * options for the dsn
 	 * @var array of string  */
 	public $dsnOptions = array('persist=1');
+	
+	/** 
+	 * database connection string
+	 * e.g. mysqli://username:password@hostname/databasename?persist
+	 * @var string  */
+	public $dsn = null;
+	
 	/** 
 	 * connection encoding
 	 * @var string  */
@@ -701,7 +698,7 @@ abstract class ConfigurationBase
 	 * @var string
 	 */
 	private static $checkProperties = array(
-		'dsn', 'siteName', 'adminName', 'adminEmail', 'noReplyName', 'noReplyEmail', 'url', 'cookieDomain', 'siteRoot', 'sessVarName',
+		'dsnDatabaseName', 'siteName', 'adminName', 'adminEmail', 'noReplyName', 'noReplyEmail', 'url', 'cookieDomain', 'siteRoot', 'sessVarName',
 		'randomCookie', 'loginRememberMeCookie', 'magicUser', 'encryptionString', 'errorAdmins',
 		'magicToken', 'templateDir'
 	);
@@ -709,10 +706,10 @@ abstract class ConfigurationBase
 	// constructor for configuration class
 	public function __construct() {
 		
-		$this->checkProperties();
-		
 		$this->generateDSN();
 
+		$this->checkProperties();
+		
 	   // build paths to scripts
 		$this->pathSite = "http://". $this->url. "/";
 		$this->pathSiteHttps = "https://". $this->url. "/";
@@ -837,7 +834,7 @@ abstract class ConfigurationBase
 				$paramOk = false;
 				trigger_error('Property '. $property.
 				' of the configuration object has not been assigned a value, see '.
-				implode(', ', self::$checkProperties). ' on line 691 of ConfigurationBase', E_USER_ERROR);
+				implode(', ', self::$checkProperties). ' on line 703 of ConfigurationBase', E_USER_ERROR);
 			}
 		}
 		if($this->translate){
@@ -859,7 +856,7 @@ abstract class ConfigurationBase
 	 * esternal system or have special characters within them.
 	 */
 	private function generateDSN(){
-		if(trim($this->dsn) === ""){
+		if($this->dsn === null){
 			$dsn = $this->dsnDatabaseDriver. '://'. $this->dsnUser. ':'. $this->dsnPassword. '@'. $this->dsnHostName. '/'. $this->dsnDatabaseName;
 			if(count($this->dsnOptions)){
 				$dsn .= '?'. implode('&', $this->dsnOptions);

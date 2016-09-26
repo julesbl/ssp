@@ -40,7 +40,6 @@
 *   Descrip:	Composer implemented.
 */
 namespace w34u\ssp;
-error_reporting(E_ALL);
 require 'includeheader.php';
 
 $session= new Protect("admin");

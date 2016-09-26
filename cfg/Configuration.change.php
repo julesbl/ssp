@@ -39,10 +39,25 @@ class Configuration extends ConfigurationBase
 	 */
 	
 	/** 
-	 * database connection string
-	 * e.g. mysqli://username:password@hostname/databasename?persist
+	 * database user
 	 * @var string  */
-	public $dsn = null;
+	public $dsnUser = null;
+	/** 
+	 * password for the database
+	 * @var string  */
+	public $dsnPassword = null;
+	/** 
+	 * host name
+	 * @var string  */
+	public $dsnHostName = null;
+	/** 
+	 * database name
+	 * @var string  */
+	public $dsnDatabaseName = null;
+	/** 
+	 * options for the dsn
+	 * @var array of string  */
+	public $dsnOptions = array('persist=1');
 	/** 
 	 * name of site, used in error logging etc.
 	 * @var string  */
