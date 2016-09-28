@@ -28,7 +28,7 @@ $content = array(
     "forthMultiple" => "Forth multiple replace"
     );
 
-$page = new Template($content, "test4.tpl", $display);
+$page = new \w34u\ssp\Template($content, "test4.tpl", $display);
 
 $page->includeTill("include2");
 if($display){

@@ -27,7 +27,7 @@ $content = array(
     "forthMultiple" => "Forth multiple replace"
     );
 
-$page = new Template($content, "test3.tpl", $display);
+$page = new \w34u\ssp\Template($content, "test3.tpl", $display);
 
 $page->includeTill("include2");
 if($display){
@@ -36,7 +36,7 @@ if($display){
 else{
     $page->output .= '<p>Include 2 replaced</p>';
 }
-$page->includeTill("end");
+$page->includeTill();
 
 if(!$display){
     echo $page->output;

@@ -3,13 +3,12 @@
 *   Site by w34u
 *   http://www.w34u.com
 *   info@w34u.com
-*   +44 (0)1273 201344
 *   +44 (0)7833 512221
 *
-*   Project:	    Template routines test
-*   Routine:	test2.php
+*   Project:	Simple site protection
+*   Routine:	returnLined.php
 *   Created:	30/05/2006
-*   Descrip:	Checking conditional if code.
+*   Descrip:	Replace tags.
 *
 *   Revision:	a
 *   Rev. Date	30/05/2006
@@ -29,7 +28,7 @@ $content = array(
 	"blank" => "",
     );
 
-$page = new Template($content, "returnLines.tpl", $display);
+$page = new \w34u\ssp\Template($content, "returnLines.tpl", $display);
 $page->numberReturnLines = 2;
 
 $page->includeTill("include2");

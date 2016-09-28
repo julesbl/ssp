@@ -19,7 +19,7 @@ require_once("include.php");
 
 $display = false;
 $title = "Test 2";
-$page = new Template($title, "test2.tpl", $display);
+$page = new \w34u\ssp\Template($title, "test2.tpl", $display);
 
 $page->includeTill("include1");
 if($display){
