@@ -12,9 +12,6 @@ Valid types (adapters) are Postgres & MySQL:
 'type' must be one of: 'pgsql' or 'mysql' or 'sqlite'
 
 */
-if(file_exists(__DIR__. '/../devinclude.php')){
-	require __DIR__. '/../devinclude.php';
-}
 
 $ssp_config = new \w34u\ssp\Configuration();
 return array(
