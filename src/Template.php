@@ -44,6 +44,10 @@
  *   Revision:	e
  *   Rev. Date	13/01/2016
  *   Descrip:	Changed to psr-4.
+ *
+ *   Revision:	f
+ *   Rev. Date	29/09/2016
+ *   Descrip:	Improved commenting and broke up the massive processing routine.
  */
 
 namespace w34u\ssp;
@@ -341,7 +345,7 @@ class Template {
 	 */
 	private function processLine($value, $lable) {
 		$this->valuePos = 0;
-		while (!$this->exitLoop and ! $this->skipOutput and ! ($this->valuePos >= mb_strlen($value)) and $braceOpen = mb_strpos(" " . $value, '{', $this->valuePos)) {
+		while (!$this->exitLoop and !$this->skipOutput and !($this->valuePos >= mb_strlen($value)) and $braceOpen = mb_strpos(" " . $value, '{', $this->valuePos)) {
 
 			// see if there is possibly a tag on the line by checking for the close bracket
 			if ($braceClose = mb_strpos($value, '}', $braceOpen)) {
