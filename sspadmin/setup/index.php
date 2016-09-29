@@ -11,7 +11,9 @@ if (isset($db_config['ruckusing_base'])) {
 }
 
 require_once RUCKUSING_BASE . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'config.inc.php';
-
-$main = new Ruckusing_FrameworkRunner($db_config, null);
-
-$main->execute();
+$params = [
+	'index.php',
+	'db:migrate'
+];
+$main = new Ruckusing_FrameworkRunner($db_config, $params);
+echo $main->execute();

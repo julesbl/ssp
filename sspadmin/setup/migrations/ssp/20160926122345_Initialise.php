@@ -1,29 +1,9 @@
 <?php
-namespace w34u\ssp;
-class Initialise extends \Ruckusing_Migration_Base {
+class Initialise extends Ruckusing_Migration_Base {
 	
-	/**
-	 * SSP Configuration
-	 * @var \w34u\ssp\Configuration 
-	 */
-	private $cfg;
-	/**
-	 * Database connection
-	 * @var \w34u\ssp\SspDB
-	 */
-	private $db;
-
-
-	public function __construct($ad) {
-		parent::__construct($ad);
-		$this->cfg = \w34u\ssp\Configuration::getConfiguration();
-		$this->db = \w34u\ssp\SspDb::getConnection();
-	}
-
 	public function up() {
-		$values = array();
-		
-		$query = "CREATE TABLE `". $this->cfg->sessionTable. "` (
+		$cfg = \w34u\ssp\Configuration::getConfiguration();
+		$query = "CREATE TABLE `". $cfg->sessionTable. "` (
 		  `SessionId` char(32) NOT NULL default '',
 		  `UserId` char(32) NOT NULL default '',
 		  `SessionTime` int(11) NOT NULL default '0',
@@ -35,20 +15,20 @@ class Initialise extends \Ruckusing_Migration_Base {
 		  `SessionData` blob NOT NULL,
 		  PRIMARY KEY  (`SessionId`),
 		  KEY `SessionTime` (`SessionTime`)
-		) CHARACTER SET ". $this->cfg->connectionEncoding. " COLLATE ". $this->cfg->tableCollation;
-		$this->db->query($query, $values, "SSP Database configuration: Creating session table");
+		) CHARACTER SET ". $cfg->connectionEncoding. " COLLATE ". $cfg->tableCollation;
+		$this->query($query);
 
-		$query = "CREATE TABLE `". $this->cfg->tokenTable. "` (
+		$query = "CREATE TABLE `". $cfg->tokenTable. "` (
 		  `token` char(32) NOT NULL default '',
 		  `time` int(11) NOT NULL default '0',
 		  `id` varchar(50) NOT NULL default '',
 		  PRIMARY KEY  (`token`),
 		  KEY `time` (`time`),
 		  KEY `id` (`id`)
-		) CHARACTER SET ". $this->cfg->connectionEncoding. " COLLATE ". $this->cfg->tableCollation;
-		$this->db->query($query, $values, "SSP Database configuration: Creating token table");
+		) CHARACTER SET ". $cfg->connectionEncoding. " COLLATE ". $cfg->tableCollation;
+		$this->query($query);
 
-		$query = "CREATE TABLE `". $this->cfg->userTable. "` (
+		$query = "CREATE TABLE `". $cfg->userTable. "` (
 		  `UserId` char(32) NOT NULL default '',
 		  `UserEmail` varchar(255) NOT NULL default '',
 		  `UserName` varchar(50) default NULL,
@@ -72,10 +52,10 @@ class Initialise extends \Ruckusing_Migration_Base {
 		  UNIQUE KEY `UserName` (`UserName`),
 		  KEY `UserPassword` (`UserPassword`),
 		  KEY `UserDisabled` (`UserDisabled`,`UserPending`,`UserAdminPending`,`CreationFinished`,`UserWaiting`)
-		) CHARACTER SET ". $this->cfg->connectionEncoding. " COLLATE ". $this->cfg->tableCollation;
-		$this->db->query($query, $values, "SSP Database configuration: Creating login table");
+		) CHARACTER SET ". $cfg->connectionEncoding. " COLLATE ". $cfg->tableCollation;
+		$this->query($query);
 
-		$query = "CREATE TABLE `". $this->cfg->userMiscTable. "` (
+		$query = "CREATE TABLE `". $cfg->userMiscTable. "` (
 		  `UserId` char(32) NOT NULL default '',
 		  `Title` varchar(15) NOT NULL default '',
 		  `FirstName` varchar(20) NOT NULL default '',
@@ -87,37 +67,37 @@ class Initialise extends \Ruckusing_Migration_Base {
 		  `County` varchar(20) NOT NULL default '',
 		  `Country` varchar(5) NOT NULL default '',
 		  PRIMARY KEY  (`UserId`)
-		) CHARACTER SET ". $this->cfg->connectionEncoding. " COLLATE ". $this->cfg->tableCollation;
-		$this->db->query($query, $values, "SSP Database configuration: Creating user misc data table");
+		) CHARACTER SET ". $cfg->connectionEncoding. " COLLATE ". $cfg->tableCollation;
+		$this->query($query);
 
-		$query = "CREATE TABLE `". $this->cfg->responseTable. "` (
+		$query = "CREATE TABLE `". $cfg->responseTable. "` (
 		  `token` char(32) NOT NULL default '',
 		  `time` int(11) NOT NULL default '0',
 		  `UserId` char(32) NOT NULL default '',
 		  PRIMARY KEY  (`token`),
 		  KEY `time` (`time`)
-		) CHARACTER SET ". $this->cfg->connectionEncoding. " COLLATE ". $this->cfg->tableCollation;
-		$this->db->query($query, $values, "SSP Database configuration: Creating user misc data table");
+		) CHARACTER SET ". $cfg->connectionEncoding. " COLLATE ". $cfg->tableCollation;
+		$this->query($query);
 
-		$query = "CREATE TABLE `". $this->cfg->tableRememberMe. "` (
+		$query = "CREATE TABLE `". $cfg->tableRememberMe. "` (
 		  `id` char(32) NOT NULL default '',
 		  `user_id` char(32) NOT NULL default '',
 		  `date_expires` int(11) NOT NULL default '0',
 		  PRIMARY KEY  (`id`),
 		  KEY `date_expires` (`date_expires`)
-		) CHARACTER SET ". $this->cfg->connectionEncoding. " COLLATE ". $this->cfg->tableCollation;
-		$this->db->query($query, $values, "SSP Database configuration: Creating remember me table");
+		) CHARACTER SET ". $cfg->connectionEncoding. " COLLATE ". $cfg->tableCollation;
+		$this->query($query);
 	}
 
 //up()
 
 	public function down() {
-		$this->drop_table($this->cfg->sessionTable);
-		$this->drop_table($this->cfg->tokenTable);
-		$this->drop_table($this->cfg->userTable);
-		$this->drop_table($this->cfg->userMiscTable);
-		$this->drop_table($this->cfg->responseTable);
-		$this->drop_table($this->cfg->tableRememberMe);
+		$this->drop_table($cfg->sessionTable);
+		$this->drop_table($cfg->tokenTable);
+		$this->drop_table($cfg->userTable);
+		$this->drop_table($cfg->userMiscTable);
+		$this->drop_table($cfg->responseTable);
+		$this->drop_table($cfg->tableRememberMe);
 	}
 
 //down()

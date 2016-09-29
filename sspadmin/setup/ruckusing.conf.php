@@ -24,7 +24,7 @@ return array(
             'user' => $ssp_config->dsnUser,
             'password' => $ssp_config->dsnPassword,
             //'charset' => 'utf8',
-            //'directory' => 'custom_name',
+            'directory' => 'ssp',
             //'socket' => '/var/run/mysqld/mysqld.sock'
         ),
         'pg_test' => array(
