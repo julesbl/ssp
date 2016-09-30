@@ -83,8 +83,8 @@ abstract class CheckDataBase{
 							'alphanumeric characters, CR, TAB, \', ", +, -, _ space comma () / ! [] and ?',
 							".'\"+\-_\s,\/:%()!?\[\]\{\}\p{Ll}\p{Lm}\p{Lo}\p{Lt}\p{Lu}\p{Nd}\p{Pd}");
 		$this->addDataCheck("password",
-							'0 to 9, a to z, A to Z',
-							"0-9a-zA-Z");
+							'0 to 9, a to z, A to Z and other 7 bit ascii chars like # $ etc.',
+							"\\x20-\\x7E\_");
 		$this->addDataCheck("date",
 							'0 to 9, / space comma, a to z, A to Z',
 							"0-9a-zA-Z\/ ,");
