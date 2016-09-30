@@ -33,8 +33,8 @@ namespace w34u\ssp;
 class Logon extends LogonBase{
 	/**
 	 * Login base class constructor
-	 * @param SSP_Protectg $session - session object
-	 * @param Template $tpl - template in which to wrap the form
+	 * @param w34u\ssp\Protect $session - session object
+	 * @param w34u\ssp\Template $tpl - template in which to wrap the form
 	 * @param bool $ignoreToken - dont use a token on the login form
 	 * @param bool $createForm - create the login form
 	 */
@@ -52,7 +52,7 @@ class Logon extends LogonBase{
 	public function userLoginCheck($userInfo){
 		// stub for user defined login check
 
-		return(true);
+		return true ;
 	}
 
 	public function loginSuccessDisplay($userId, $returnPath){
@@ -64,15 +64,7 @@ class Logon extends LogonBase{
 			"returnPath" => $returnPath,
 			"siteRoot" => $this->cfg->siteRoot
 			);
-		// Merge user data into page content so it can be displayed
-		$where = array("UserId"=>$userId);
-		$userInfo = $this->db->get($this->cfg->userTable, $where, 'Logon Success: get user data');
-		$userMisc = $this->db->get($this->cfg->userMiscTable, $where, 'Logon Success: get misc user data');
-		$userMiscArr = get_object_vars($userMisc);
-		$userInfoArr = get_object_vars($userInfo);
-		// $logonSuccessContent = array_merge($logonSuccessContent, $userMiscArr, $userInfoArr);
-		// display logged in page, posibly divert to previous page.
-		return($logonSuccessContent);
+		return $logonSuccessContent;
 	}
 }
 

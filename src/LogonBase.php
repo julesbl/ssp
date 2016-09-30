@@ -38,14 +38,28 @@ namespace w34u\ssp;
 abstract class LogonBase {
 	// Class to handle user logons
 
-	public $errorDesc; // Description of the error that produce the failure
-	public $error = false; // error reported during attempted login
+	/**
+	 * Description of the error that produce the failure
+	 * @var string 
+	 */
+	public $errorDesc;
+	/**
+	 * error reported during attempted login
+	 * @var bool
+	 */
+	public $error = false;
 
-	/** @var SSP_Configuration ssp config var  */
+	/** 
+	 * ssp config var
+	 * @var w34u\ssp\Configuration   */
 	public $cfg; // configuration
-	/** @var SSP_DB database object */
+	/** 
+	 * 
+	 * @var w34u\ssp\SspDB database object */
 	public $db; // database object
-	/** @var SSP_Protect session object */
+	/** 
+	 *  session object
+	 * @var w34u\ssp\Protect */
 	public $session;
 	/**
 	 * Form output
@@ -54,18 +68,24 @@ abstract class LogonBase {
 	public $output = "";
 
 	// remember me stuff
-	/** @var bool do remeber me on login form */
+	/** 
+	 * do remeber me on login form
+	 * @var bool  */
 	private $rememberMe = false;
-	/** @var bool valid remember me user login */
+	/** 
+	 * valid remember me user login
+	 * @var bool  */
 	private $rememberMeLogin = false;
-	/** @var bool request to save a cookie to remember me */
+	/** 
+	 * request to save a cookie to remember me
+	 * @var bool  */
 	private $rememberMeSave = false;
 
 
 	/**
 	 * Login base class constructor
-	 * @param SSP_Protect $session - session object
-	 * @param Template $tpl - template in which to wrap the form
+	 * @param w34u\ssp\Protect $session - session object
+	 * @param w34u\ssp\Template $tpl - template in which to wrap the form
 	 * @param bool $ignoreToken - dont use a token on the login form
 	 */
 	public function __construct($session, $tpl = "", $ignoreToken = false){
