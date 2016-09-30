@@ -217,7 +217,7 @@ class UserLister{
 	function displayFilterForm(){
 		// display form to update filter values
 
-		$form = new SfcForm($this->cfg->userLister, "noTable", "sspFilter");
+		$form = new sfc\Form($this->cfg->userLister, "noTable", "sspFilter");
 		$form->tda("tpl", $this->tpl(array("title"=>"Modify search criteria")));
 		$form->tda("tplf", "userListerSearchForm.tpl");
 		$form->templateRoutine = "\w34u\ssp\UserLister::formFilterCreate";

@@ -26,7 +26,7 @@ require_once("include.php");
 *   Rev. Date	08/08/2006
 *   Descrip:	Created.
 */
-class testForm{
+class TestForm{
 	// simple test form class
 	static function test($form){
 		if(strlen($form->getField("testtext"))<3){
@@ -42,10 +42,10 @@ class testForm{
 	}
 }
 
-$form = new SfcForm("test2.php", "TestSaveTable", "test2form");
-$form->formCheck = '\w34u\ssp\testForm::test';
+$form = new sfc\Form("test2.php", "TestSaveTable", "test2form");
+$form->formCheck = '\w34u\ssp\TestForm::test';
 $form->tplf = "test2.tpl";
-$form->setPreview("\w34u\ssp\testform::previewForm");
+$form->setPreview("\w34u\ssp\Testform::previewForm");
 
 $form->fe("text", "testtext", "Testing input box", "test input");
 $params = "dataType = text, elClass = boxClass, maxLength = 100, accessKey=a,tabIndex=10,style=border-width:10px, ldir=ltr,lang=en,width=100,required=true, minChar=3";

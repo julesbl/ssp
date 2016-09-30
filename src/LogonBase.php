@@ -83,7 +83,7 @@ abstract class LogonBase {
 	
 	/**
 	 * Process the remember me, and generate the errors if needed
-	 * @param SfcForm $form
+	 * @param sfc\Form $form
 	 */
 	protected function processForm($form){
 		$this->rememberMeGet($form);
@@ -156,14 +156,14 @@ abstract class LogonBase {
 	 * Creates the login form
 	 * @param Template $tpl - template in which to wrap the form
 	 * @param bool $ignoreToken - dont use the timeout token
-	 * @return SfcForm - form to be used to login
+	 * @return sfc\Form - form to be used to login
 	 */
 	protected function loginScreenDefine($tpl, $ignoreToken){
 		// defines the login form
 
 		$useMainTemplate = is_object($tpl);
 
-		$form = new SfcForm($this->cfg->logonScript, "noTable", "loginForm");
+		$form = new sfc\Form($this->cfg->logonScript, "noTable", "loginForm");
 		$form->errorAutoFormDisplay = false;
 		// disable checking of token for embedded login forms
 		if($ignoreToken){
@@ -203,7 +203,7 @@ abstract class LogonBase {
 	
 	/**
 	 * Check the data returned by the login form is for an existing user
-	 * @param w34u\ssp\SfcForm $form
+	 * @param w34u\ssp\sfc\Form $form
 	 * @return bool - true on existing user
 	 */
 	protected function loginFormCheck(&$form){
@@ -374,7 +374,7 @@ abstract class LogonBase {
 
 	/**
 	 * Get remember me info and place user info into the form if found
-	 * @param SfcForm $form form object
+	 * @param sfc\Form $form form object
 	 */
 	private function rememberMeGet(&$form){
 		if($this->rememberMe){

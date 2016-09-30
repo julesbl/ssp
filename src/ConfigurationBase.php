@@ -768,7 +768,7 @@ abstract class ConfigurationBase
 			$SSP_lang = new Translate($this->lang, $this->translateLangs, __DIR__. $this->translatePath);
 
 			CheckData::addTranslation($SSP_lang);
-			SfcForm::addTranslation($SSP_lang);
+			sfc\Form::addTranslation($SSP_lang);
 			Protect::addTranslation($SSP_lang);
 		}
 

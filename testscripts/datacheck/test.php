@@ -20,7 +20,7 @@ require("include.php");
 $session = new Protect();
 $dataCheck = new CheckData();
 
-$formLang = new SfcForm(SSP_Path(), "noTable", "languageform");
+$formLang = new sfc\Form(SSP_Path(), "noTable", "languageform");
 $formLang->tplf = "testDatatypeLanguage.tpl";
 $formLang->formSubmitVar = 'testLanguagechange';
 $formLang->fe('select', 'language', 'Language', Protect::$tranlator->getLanguages());
@@ -35,7 +35,7 @@ else{
 	$setLanguage = $formLang->create();
 }
 
-$form = new SfcForm(SSP_Path(), "noTable", "testDatatype");
+$form = new sfc\Form(SSP_Path(), "noTable", "testDatatype");
 $form->tplf = "testDatatype.tpl";
 $form->tda('lang', $session->lang);
 $form->tda('setLanguage', $setLanguage);

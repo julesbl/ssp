@@ -27,7 +27,7 @@ $session = new Protect();
 *   Rev. Date	05/04/2007
 *   Descrip:	Created.
 */
-class testForm{
+class TestForm{
 	// simple test form class
 
 	static function createForm($formData){
@@ -44,25 +44,25 @@ class testForm{
 		return($form->output);
 	}
 	
-	function modFile($fileName){
-		return($fileName. "10");
+	static function modFile(){
+		return("10");
 	}
 }
 
-$form = new SfcForm("test1upload.php", "TestSave", 'fred');
-$form->templateRoutine = '\w34u\ssp\testForm::createForm';
-$form->setPreview("\w34u\ssp\testform::previewForm");
+$form = new sfc\Form("test1upload.php", "TestSave", 'fred');
+$form->templateRoutine = '\w34u\ssp\TestForm::createForm';
+$form->setPreview("\w34u\ssp\Testform::previewForm");
 $form->buildForm = false;
 $form->fe("textarea", "textarea", "Testing text area box", "text area");
 $form->fep("width=50,lines=10");
 $validTypes = array(".jpg", ".gif", ".png");
 
 $form->fe("file", "image1", "upload an image");
-$form->fileObjects["image1"] = new SfcFile($form->elements["image1"], "images/", "images/", $validTypes, "102400", "testForm::modFile");
+$form->fileObjects["image1"] = new sfc\File($form->elements["image1"], "images/", "images/", $validTypes, "102400", "\w34u\ssp\TestForm::modFile");
 $form->fileObjects["image1"]->setPreview("preview/", "preview/");
 
 $form->fe("file", "image2", "upload another image");
-$form->fileObjects["image2"] = new SfcFile($form->elements["image2"], "images/", "images/", $validTypes, "102400", "testForm::modFile");
+$form->fileObjects["image2"] = new sfc\File($form->elements["image2"], "images/", "images/", $validTypes, "102400", "\w34u\ssp\TestForm::modFile");
 $form->fileObjects["image2"]->setPreview("preview/", "preview/");
 $form->fe("submit", "submit1", "Submit Now");
 

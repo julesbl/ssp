@@ -18,7 +18,7 @@
 namespace w34u\ssp;
 require("include.php");
 
-$form = new SfcForm('', 'noTable', 'testform');
+$form = new sfc\Form('', 'noTable', 'testform');
 $form->tplf = "testSelectRadio.tpl";
 // data for selects and radio
 $selectBasic = array(
@@ -30,8 +30,8 @@ $form->fe("select", 'simpleSelect', "Simple Selection", $selectBasic);
 $selectComplex = array(
 	1 => "option 1",
 	2 => array("text" => "option 2", "class" => "option2Class"),
-	3 => new SfcSelectOptions('Option 3'),
-	4 => new SfcSelectOptions('Optgroup 4', 'optgroup', array(
+	3 => new sfc\SelectOptions('Option 3'),
+	4 => new sfc\SelectOptions('Optgroup 4', 'optgroup', array(
 		41 => "Option 41",
 		42 => "Option 42",
 		43 => "Option 43",

@@ -108,7 +108,7 @@ abstract class UserAdminBase{
 		// Parameters
 		//  $admin - bool - full admin creation option
 
-        $form = new SfcForm(SSP_Path(), $this->cfg->userTable, "userCreate");
+        $form = new sfc\Form(SSP_Path(), $this->cfg->userTable, "userCreate");
 		$form->errorAutoFormDisplay = false;
 		$form->addPlaceholder = $this->addPlaceholder;
         $form->tpl = $this->tpl(array("title" => "New user"), true);
@@ -210,7 +210,7 @@ abstract class UserAdminBase{
 
     /**
 	 * Check user information supplied for creation, e.g. duplicate emails, usernames, passwords not the same
-	 * @param SfcForm $form - user creation form
+	 * @param sfc\Form $form - user creation form
 	 * @return bool - returns true on failure 
 	 */
 	protected function userCreateCheck(&$form){
@@ -334,7 +334,7 @@ abstract class UserAdminBase{
 	 * @return bool - true on success
 	 */
 	function sendJoinupEmail(){
-        $form = new SfcForm(SSP_Path(), "noTable", "joinUpEmail");
+        $form = new sfc\Form(SSP_Path(), "noTable", "joinUpEmail");
         $form->tpl = $this->tpl(array("title" => "Send joining email"));
         $form->tplf = "sendjoinupemail.tpl";
         $form->fe("submit", "submit", "Send joinup email to this user?");
@@ -462,7 +462,7 @@ abstract class UserAdminBase{
         	$id = $this->id;
         }
 
-        $form = new SfcForm(SSP_Path(), $this->cfg->userTable, "changePassword");
+        $form = new sfc\Form(SSP_Path(), $this->cfg->userTable, "changePassword");
 		$form->errorAutoFormDisplay = false;
 		$form->addPlaceholder = $this->addPlaceholder;
 		$form->tpl = $this->tpl(array("title" => "Change password"));
@@ -526,7 +526,7 @@ abstract class UserAdminBase{
 
 	/**
 	 * Check both the change password form
-	 * @param SfcForm $form - form object to check
+	 * @param sfc\Form $form - form object to check
 	 * @return bool - true on error
 	 */
 	private function changePasswordCheck(&$form){
@@ -556,7 +556,7 @@ abstract class UserAdminBase{
 	 * @return bool/string - true on success else outputs the form
 	 */
 	function changeEmail($requirePassword, $reDisplay=false){
-        $form = new SfcForm(SSP_Path(), $this->cfg->userTable, "changeEmail");
+        $form = new sfc\Form(SSP_Path(), $this->cfg->userTable, "changeEmail");
 		$form->errorAutoFormDisplay = false;
 		$form->addPlaceholder = $this->addPlaceholder;
         $form->tpl = $this->tpl(array("title" => "Change email"));
@@ -612,7 +612,7 @@ abstract class UserAdminBase{
 
 	/**
 	 * Check email form
-	 * @param SfcForm $form - form object
+	 * @param sfc\Form $form - form object
 	 * @return bool - true on success
 	 */
 	private function changeEmailCheck(&$form){
@@ -645,7 +645,7 @@ abstract class UserAdminBase{
 	 */
 	function changeAdmin(){
 		$checkData = array('0','1');
-		$form = new SfcForm(SSP_Path(), $this->cfg->userTable, "changeAdmin");
+		$form = new sfc\Form(SSP_Path(), $this->cfg->userTable, "changeAdmin");
         $form->tpl = $this->tpl(array("title" => "Change advanced information"));
 		$form->addPlaceholder = $this->addPlaceholder;
         $form->tplf = "changeadmin.tpl";
@@ -735,7 +735,7 @@ abstract class UserAdminBase{
 	 * @return bool - true on success
 	 */
 	function emailUser($userIdTo, $userIdFrom){
-        $form= new SfcForm(SSP_Path(), "noTable", "emailUser");
+        $form= new sfc\Form(SSP_Path(), "noTable", "emailUser");
         $form->tpl = $this->tpl(array("title" => "Email member"));
         $form->tplf = "sendemailtomember.tpl";
 		$form->fe("text", "subject", "Subject");
@@ -799,7 +799,7 @@ abstract class UserAdminBase{
         // returns true on succesful sending of the email
 
         // recovery form
-        $form = new SfcForm(SSP_Path(), "noTable", "startPasswordRecovery");
+        $form = new sfc\Form(SSP_Path(), "noTable", "startPasswordRecovery");
 		$form->tplf = "passwordrecover.tpl";
 		$form->tpl = $this->tpl(array("title" => "Password recovery"));
 		$form->errorAutoFormDisplay = false;

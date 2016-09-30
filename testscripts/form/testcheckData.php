@@ -48,7 +48,7 @@ if(!isset($_SESSION['SSP_errorLocal'])){
 }
 $errorLocal =& $_SESSION['SSP_errorLocal'];
 
-$formLang = new SfcForm(SSP_Path(), "noTable", "languageform");
+$formLang = new sfc\Form(SSP_Path(), "noTable", "languageform");
 $formLang->tplf = "testDatatypeLanguage.tpl";
 $formLang->formSubmitVar = 'testLanguagechange';
 $formLang->fe('select', 'language', 'Language', Protect::$tranlator->getLanguages());
@@ -71,7 +71,7 @@ else{
 }
 
 
-$form = new SfcForm("testcheckData.php", "TestSaveTable", "testdataform");
+$form = new sfc\Form("testcheckData.php", "TestSaveTable", "testdataform");
 $form->tplf = "testCheckData_". $session->lang. ".tpl";
 $form->tda('lang', $session->lang);
 $form->tda('setLanguage', $setLanguage);

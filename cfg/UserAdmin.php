@@ -93,7 +93,7 @@ class UserAdmin extends UserAdminBase{
             $needPassword = false;
         }
 
-        $form = new SfcForm(SSP_Path(), $this->cfg->userTable, "userJoin");
+        $form = new sfc\Form(SSP_Path(), $this->cfg->userTable, "userJoin");
         $form->tpl = $this->tpl(array("title" => "Join SSP"), true);
         if($this->subTpl != ""){
             $form->tplf = $this->subTpl;
@@ -228,7 +228,7 @@ class UserAdmin extends UserAdminBase{
     */ 
     public function userMisc($creating=false, $reDisplay=false){
         // Form elements
-        $form= new SfcForm(SSP_Path(), $this->cfg->userMiscTable, "userMisc");
+        $form= new sfc\Form(SSP_Path(), $this->cfg->userMiscTable, "userMisc");
         $form->errorAutoFormDisplay = false;
         $mainContent = array();
         if($creating){

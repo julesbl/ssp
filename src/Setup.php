@@ -119,7 +119,7 @@ class Setup{
 					'{languageDropdown}',
 					'{formHidden}',
 					'</form>');
-			$form = new SfcForm(SSP_Path(true), 'notable', 'languageSelect');
+			$form = new sfc\Form(SSP_Path(true), 'notable', 'languageSelect');
 			$form->translateDisable = true;
 			$form->checkToken = false;
 			$form->errorAutoFormDisplay = false;
