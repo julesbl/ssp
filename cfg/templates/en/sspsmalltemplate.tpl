@@ -14,7 +14,7 @@ info@w34u.com
 <meta name="resource-type" content="document" />
 <meta name="Description" content="" />
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<link rel="stylesheet" type="text/css" href="styles/styles.css" />
+<link rel="stylesheet" type="text/css" href="/sspadmin/styles/styles.css" />
 {:if:styles}
 <style type="text/css">
 {styles}
@@ -31,10 +31,12 @@ info@w34u.com
 		{:endif:languageSelectForm}
     </div>
     <table id="body">
-        <td id="content">
-			{:ne:content}
-            {content}
-        </td>
+		<tr>
+			<td id="content">
+				{:ne:content}
+				{content}
+			</td>
+		</tr>
     </table>
 <div id="footerBackground">
 <table id="footer" border="0" cellpadding="0" align="center">
