@@ -40,8 +40,36 @@
 *   Descrip:	Composer implemented.
 */
 namespace w34u\ssp;
-require 'includeheader.php';
 
+use Psr\Http\Message\RequestInterface as Request;
+use Psr\Http\Message\ResponseInterface as Response;
+
+require 'includeheader.php';
+$container = new \Slim\Container;
+$container['session'] = function($container) {
+	return new Protect("", false, false);
+};
+$app = new \Slim\App($container);
+$app->get('/', function ($request, $response) {
+	return $response->getBody()->write('Hello World');
+});
+
+$app->group('/user', function() use ($app) {
+	$app->get('/logon', function(Request $request, Response $response){
+		$session = $this->session;
+		$ssp = new Setup($session);
+
+		$contentMain = array();
+		$ssp->pageTitleAdd('Logon');
+		$tpl = $ssp->tpl($contentMain, "sspsmalltemplate.tpl", false);
+
+		$login = new Logon($session, $tpl);
+		$response->getBody()->write($login->output);
+		return $response;
+	});
+});
+$app->run();
+/**
 $session= new Protect("admin");
 
 // check for command
@@ -75,5 +103,4 @@ else{
 	// else go to lister
 	echo $lister->lister();
 }
-
-?>
+*/
