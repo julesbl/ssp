@@ -29,7 +29,9 @@
 */
 
 namespace w34u\ssp;
-
+/**
+ * Check validity of data
+ */
 class CheckData extends CheckDataBase{
 }
 
