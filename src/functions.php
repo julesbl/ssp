@@ -183,7 +183,6 @@ function SSP_paddIp($ipNumber){
 
 /**
  * Trims the ip number down to the required accuracy for checking
- * @global SSP_Configure $SSP_Config
  * @param string $ipNumber
  * @return string
  */
@@ -232,7 +231,7 @@ function SSP_Token($id){
 	$SSP_DB = SspDb::getConnection();;
 
     // generate the token
-    $token=md5(uniqid($SSP_Config->magicToken,true));
+    $token = md5(uniqid($SSP_Config->magicToken,true));
 
     // insert token into database
     $values = array(
@@ -248,10 +247,8 @@ function SSP_Token($id){
 
 /**
  * Checks that the token supplied by the form is valid
- * @global SSP_Configure $SSP_Config
- * @global SSP_DB $SSP_DB
- * @param string $token
- * @param string $id
+ * @param string $token - token to be checked
+ * @param string $id - id of form from which the token comes
  * @return bool - true on match
  */
 function SSP_TokenCheck($token, $id){
@@ -260,14 +257,20 @@ function SSP_TokenCheck($token, $id){
 
     $tokenOk = false;
 
+	// check is hex token
+	$check = new \w34u\ssp\CheckData();
+	if($check->check('hex', $token) !== 0){
+		return false;
+	}
+	
     SSP_CleanToken();
 
     // Form token field exists
-    $where = array("token"=>$token, "id"=>$id);
+    $where = array("token" => $token, "id" => $id);
     $SSP_DB->delete($SSP_Config->tokenTable, $where, "SSP Functions: Deleting token");
     if($SSP_DB->affectedRows()){
         // token found and deleted
-        $tokenOk=true;
+        $tokenOk = true;
     }
     return($tokenOk);
 }
