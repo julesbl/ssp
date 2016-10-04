@@ -52,7 +52,7 @@ class Protect extends ProtectBase{
 
 		$logoff = new Template($content, "logoff.tpl");
 		$tpl->setData("content", $logoff->output());
-		echo $tpl->output();
+		return $tpl->output();
 	}
 }
 

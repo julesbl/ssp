@@ -53,23 +53,24 @@ class UserAdmin extends UserAdminBase{
         if($this->generateMenus and !$noMenusAndInfo){
             $menu = new MenuGen();
             $path = $this->cfg->userAdminScript;
-            $menu->add($path. "?command=chInfo", $this->session->t("Change Info"), ($this->command=="chInfo"));
+			$url = $_SERVER['REQUEST_URI'];
+            $menu->add($path. "/chInfo", $this->session->t("Change Info"), strpos($url, "chInfo") !== false);
             $menu->sv("title={$this->session->t('Change user information')}");
-            $menu->add($path. "?command=chPswd", $this->session->t("Change Password"), ($this->command=="chPswd"));
+            $menu->add($path. "/chPswd", $this->session->t("Change Password"), strpos($url, "chPswd") !== false);
             $menu->sv("title={$this->session->t('Change user password')}");
-            $menu->add($path. "?command=chEmail", $this->session->t("Change Email"), ($this->command=="chEmail"));
+            $menu->add($path. "/chEmail", $this->session->t("Change Email"), strpos($url, "chEmail") !== false);
             $menu->sv("title={$this->session->t('Change user email')}");
-            $menu->add($path. "?command=info", $this->session->t("Basic Info"), ($this->command=="info"));
+            $menu->add($path. "/info/". $this->id, $this->session->t("Basic Info"), strpos($url, "info") !== false);
             $menu->sv("title={$this->session->t('Show basic information')}");
             $menu->add("", "");
             if($this->admin){
-                $menu->add($path. "?command=advInfo", $this->session->t("Advanced Info"), ($this->command=="advInfo"));
+                $menu->add($path. "/advInfo", $this->session->t("Advanced Info"), strpos($url, "advInfo") !== false);
                 $menu->sv("title={$this->session->t('Show advanced information')}");
-                $menu->add($path. "?command=chAdv", $this->session->t("Change Advanced"), ($this->command=="chAdv"));
+                $menu->add($path. "/chAdv", $this->session->t("Change Advanced"), strpos($url, "chAdv") !== false);
                 $menu->sv("title={$this->session->t('Change advanced information')}");
-                $menu->add($path. "?command=joinEmail", $this->session->t("Send Joining Email"), ($this->command=="joinEmail"));
+                $menu->add($path. "/joinEmail", $this->session->t("Send Joining Email"), strpos($url, "joinEmail") !== false);
                 $menu->sv("title={$this->session->t('Send a joinup email to the user')}");
-                $menu->add($path. "?command=email", $this->session->t("Email Member"), ($this->command=="email"));
+                $menu->add($path. "/email", $this->session->t("Email Member"), strpos($url, "email") !== false);
                 $menu->sv("title={$this->session->t('Email the member')}");
                 $menu->add("", "");
             }
@@ -95,6 +96,7 @@ class UserAdmin extends UserAdminBase{
 
         $form = new sfc\Form(SSP_Path(), $this->cfg->userTable, "userJoin");
         $form->tpl = $this->tpl(array("title" => "Join SSP"), true);
+		$form->errorAutoFormDisplay = false;
         if($this->subTpl != ""){
             $form->tplf = $this->subTpl;
         }
@@ -124,14 +126,13 @@ class UserAdmin extends UserAdminBase{
             $form->fe("select", "signUpLevel", "Type of membership", $this->cfg->userAccessSignUpDropdown);
             $form->fep("dataType=int, sql=false");
         }
-        $form->addHidden("command", $this->command);
         $form->tda("loginPath", $this->cfg->logonScript);
 
         if($form->processForm($_POST)){
             if(!$form->error){
                 $form->setField("email", strtolower($form->getField("email")));
                 if($this->userCreateCheck($form)){
-                    echo $form->create(true);
+                    return $form->create(true);
                 }
                 else{
                     $loginData = array();
@@ -171,12 +172,15 @@ class UserAdmin extends UserAdminBase{
                     $this->db->insert($this->cfg->userMiscTable, $miscData, "Inserting new member misc data");
                     $this->id = $userId;
                     $this->userFinish();
-                    $this->welcomeScreen();
+                    return $this->welcomeScreen();
                 }
             }
+			else{
+				return $form->create(true);
+			}
         }
         else{
-            echo $form->create();
+            return $form->create();
         }
     }
 
@@ -266,7 +270,6 @@ class UserAdmin extends UserAdminBase{
         else{
             $form->fe("submit", "submit", "Save");
         }
-        $form->addHidden("command", $this->command);
 
         $return = '';
         if($form->processForm($_POST)){

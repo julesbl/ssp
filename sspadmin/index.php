@@ -38,33 +38,211 @@
 *   Revision:	d
 *   Rev. Date	14/01/2016
 *   Descrip:	Composer implemented.
+*
+*   Revision:	e
+*   Rev. Date	4/10/2016
+*   Descrip:	Rebuilt admin using slim.
 */
 namespace w34u\ssp;
 
-use Psr\Http\Message\RequestInterface as Request;
-use Psr\Http\Message\ResponseInterface as Response;
+use Slim\Http\Response as Response;
+use Slim\Http\Request as Request;
 
 require 'includeheader.php';
 $container = new \Slim\Container;
 $container['session'] = function($container) {
-	return new Protect("", false, false);
+	return new Protect();
 };
+$container['ssp'] = function($container){
+	return new Setup($container['session']);
+};
+/**
+ * Divert to login if not admin
+ * @param Protect $session
+ */
+function ssp_logon($session){
+	if(!$session->admin){
+		SSP_Divert($session->cfg->logonScript);
+	}
+};
+
 $app = new \Slim\App($container);
-$app->get('/', function ($request, $response) {
-	return $response->getBody()->write('Hello World');
+// home page
+$app->any('/', function (Request $request, Response $response) {
+	/* @var $session Protect */
+	$session = $this->session;
+	ssp_logon($session);
+	$ssp = $this->ssp;
+	$lister = new UserLister($ssp);
+	return $response->getBody()->write($lister->lister());
+});
+// delete a user
+$app->any('/delete/{userId}', function (Request $request, Response $response) {
+	/* @var $session Protect */
+	$session = $this->session;
+	ssp_logon($session);
+	$ssp = $this->ssp;
+	$userId = $request->getAttribute('userId', '');
+	$lister = new UserLister($ssp);
+	return $response->getBody()->write($lister->deleteUser($userId));
+});
+// change filter
+$app->any('/filterChange', function (Request $request, Response $response) {
+	/* @var $session Protect */
+	$session = $this->session;
+	ssp_logon($session);
+	$ssp = $this->ssp;
+	$lister = new UserLister($ssp);
+	return $response->getBody()->write($lister->displayFilterForm());
+});
+// Change filter to admin pending
+$app->get('/filterAdminPending', function (Request $request, Response $response) {
+	/* @var $session Protect */
+	$session = $this->session;
+	ssp_logon($session);
+	$ssp = $this->ssp;
+	$lister = new UserLister($ssp);
+	$lister->filter->displayAdminPending();
+	return $response->getBody()->write($lister->lister());
+});
+// Change filter to default listing
+$app->get('/filterNormal', function (Request $request, Response $response) {
+	/* @var $session Protect */
+	$session = $this->session;
+	ssp_logon($session);
+	$ssp = $this->ssp;
+	$lister = new UserLister($ssp);
+	$lister->filter->newSearch();
+	return $response->getBody()->write($lister->lister());
+});
+// Admin user creation
+$app->any('/adminusercreation', function (Request $request, Response $response) {
+	/* @var $session Protect */
+	$session = $this->session;
+	ssp_logon($session);
+	$ssp = $this->ssp;
+	
+	$admin = new UserAdmin($session, $ssp, "", $session->userId);
+	$result = $admin->userCreate();
+	if($result === true){
+		$tpl = $ssp->tpl(array('title' => 'User created', 'content' => '<h1>New user created</h1>'));
+		return $response->getBody()->write($tpl->output());
+	}
+	else{
+		return $response->getBody()->write($result);
+	}
 });
 
-$app->group('/user', function() use ($app) {
-	$app->get('/logon', function(Request $request, Response $response){
+/**
+ * User admin
+ */
+$app->group('/useradmin', function() use ($app) {
+	// basic user information
+	$app->get('/info/{userId}', function(Request $request, Response $response){
 		$session = $this->session;
-		$ssp = new Setup($session);
+		$ssp = $this->ssp;
+		$userId = $request->getAttribute('userId');
+		$admin = new UserAdmin($session, $ssp, $userId);
+		return $response->getBody()->write($admin->displayMisc());
+	});
+	// change basic user information
+	$app->any('/chInfo', function(Request $request, Response $response){
+		$session = $this->session;
+		$ssp = $this->ssp;
+		$userId = $request->getAttribute('userId');
+		$admin = new UserAdmin($session, $ssp, $userId);
+		return $response->getBody()->write($admin->userMisc(false, true));
+	});
+})->add(function(Request $request, Response $response, $next){
+	/* @var $session Protect */
+	$session = $this->session;
+	ssp_logon($session);
+	if(!isset($_SESSION["adminUserId"])){
+		$_SESSION["adminUserId"] = "";
+	}
+	$userId =& $_SESSION["adminUserId"];
+	$route = $request->getAttribute('route');
+	$arguments = $route->getArguments();
+	if(isset($arguments['userId'])){
+		$userId = $arguments['userId'];
+	}
+	$request = $request->withAttribute('userId', $userId);
+	$response = $next($request, $response);
+	return $response;
+});
 
+/**
+ * Basic user functions such as login
+ */
+$app->group('/user', function() use ($app) {
+	// user login
+	$app->any('/logon', function(Request $request, Response $response){
+		$session = $this->session;
+		$ssp = $this->ssp;
 		$contentMain = array();
 		$ssp->pageTitleAdd('Logon');
 		$tpl = $ssp->tpl($contentMain, "sspsmalltemplate.tpl", false);
 
 		$login = new Logon($session, $tpl);
 		$response->getBody()->write($login->output);
+		return $response;
+	});
+	// user logoff
+	$app->get('/logoff', function(Request $request, Response $response){
+		$session = $this->session;
+		$ssp = $this->ssp;
+		
+		$contentMain = array();
+		$contentMain["title"] = "Logoff";
+		$tpl = $ssp->tpl($contentMain, "sspsmalltemplate.tpl", false);
+
+		$response->getBody()->write($session->logoff($tpl, true));
+		return $response;
+	});
+	// start password recovery
+	$app->any('/passwordrecover', function(Request $request, Response $response){
+		$session = $this->session;
+		$ssp = $this->ssp;
+		
+		$ssp->pageTitleAdd('Password recovery');
+		$admin = new UserAdmin($session, $ssp, "", "", "sspsmalltemplate.tpl", false);
+		$response->getBody()->write($admin->startPasswordRecovery());
+		
+		return $response;
+	});
+	// finish user password recovery by clicking on email link
+	$app->any('/newpassword/{token}', function(Request $request, Response $response){
+		$session = $this->session;
+		$ssp = $this->ssp;
+		
+		$ssp->pageTitleAdd("Password recovery, enter new password");
+		$admin = new UserAdmin($session, $ssp, "", "", "sspsmalltemplate.tpl", false);
+		$token = $request->getAttribute('token', '');
+		$response->getBody()->write($admin->finishPasswordRecovery($token));
+		
+		return $response;
+	});
+	// user confirmation on joinup
+	$app->any('/userconfirm/{token}', function(Request $request, Response $response){
+		$session = $this->session;
+		$ssp = $this->ssp;
+		
+		$ssp->pageTitleAdd("User Confirmation of membership");
+		$token = $request->getAttribute('confirmToken', '');
+		$admin = new UserAdmin($session, $ssp, "", '', "sspsmalltemplate.tpl", false);
+		$response->getBody()->write($admin->userConfirm($token));
+		
+		return $response;
+	});
+	// user joinup script
+	$app->any('/usercreation', function(Request $request, Response $response){
+		$session = $this->session;
+		$ssp = $this->ssp;
+		
+		$ssp->pageTitleAdd("Join the site");
+		$admin = new UserAdmin($session, $ssp, "", "", "sspsmalltemplate.tpl");
+		$response->getBody()->write($admin->userJoin());
+		
 		return $response;
 	});
 });

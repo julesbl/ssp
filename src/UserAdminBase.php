@@ -58,7 +58,6 @@ abstract class UserAdminBase{
 	var $db; // database object
 	/** @var Setup SSP setup object */
 	var $ssp;
-	var $command = ""; // command used to call the routine
 	var $subTpl = ""; // alternative sub template for routines
 	/** @var bool user is admin */
 	var $admin = false;
@@ -74,10 +73,9 @@ abstract class UserAdminBase{
 	 * Constructor
 	 * @param SSP_Protect $session - session object
 	 * @param Setup $ssp
-	 * @param string $command
 	 * @param string $id 
 	 */
-	public function __construct($session, $ssp, $command="", $id="", $templateFile="", $generateMenus = true){
+	public function __construct($session, $ssp, $id="", $templateFile="", $generateMenus = true){
 		// constructor for the user admin object
 
 		$this->cfg = Configuration::getConfiguration();
@@ -91,7 +89,6 @@ abstract class UserAdminBase{
 		}
 		$this->session = $session;
 		$this->ssp = $ssp;
-		$this->command = $command;
 		$this->admin = $this->session->admin;
 		$this->templateFile = $templateFile;
 		$this->generateMenus = $generateMenus;
@@ -161,7 +158,6 @@ abstract class UserAdminBase{
 		$form->fep($fep);
 
         $form->fe("submit", "submit", "Create user");
-		$form->addHidden("command", $this->command);
 
         // Check for form submission
         $result = '';
@@ -338,7 +334,6 @@ abstract class UserAdminBase{
         $form->tpl = $this->tpl(array("title" => "Send joining email"));
         $form->tplf = "sendjoinupemail.tpl";
         $form->fe("submit", "submit", "Send joinup email to this user?");
-        $form->addHidden('command', $this->command);
 
 		$return = false;
 		if($form->processForm($_POST)){
@@ -391,7 +386,7 @@ abstract class UserAdminBase{
         $content = array_merge($content, get_object_vars($userData));
         $page = new Template($content, "welcomescreen.tpl");
 		$tpl = $this->tpl(array("content" => $page->output()));
-		echo $tpl->output();
+		return $tpl->output();
     }
 
     /**
@@ -485,7 +480,6 @@ abstract class UserAdminBase{
         $form->fe("password", "password2", "Enter new password again");
 		$form->fep("required=true,width=30,load=false,sql=false,dataType=password, minChar=". $this->cfg->minPassword);
 
-		$form->addHidden('command', $this->command);
 
         $return = '';
 
@@ -577,7 +571,6 @@ abstract class UserAdminBase{
 		$form->fep("required=true,width=30,dataType=email, dbField=UserEmail");
 
 		$form->fe("submit", "submit", "Save new email");
-		$form->addHidden("command", $this->command);
 
 		$return = '';
 		if($form->processForm($_POST)){
@@ -658,7 +651,6 @@ abstract class UserAdminBase{
         $form->fe("check", "UserAdminPending", "User waiting admin vetting", $checkData);
         $form->fe("check", "CreationFinished", "User creation finished", $checkData);
         $form->fe("check", "UserWaiting", "Waiting for user to act on email", $checkData);
-		$form->addHidden("command", $this->command);
 
 		$result = "";
 		if($form->processForm($_POST)){
@@ -743,7 +735,6 @@ abstract class UserAdminBase{
 		$form->fe("textarea", "message", "Message");
 		$form->fep("required=true, width=40, lines=10");
 		$form->fe("submit", "submit", "Send Email");
-		$form->addHidden("command", $this->command);
 
 
 		$return = false;

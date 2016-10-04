@@ -214,47 +214,47 @@ abstract class ConfigurationBase
 	 * name of logon script in admin
 	 * @var string
 	 */
-	public $logonScript = "sspadmin/logon.php";
+	public $logonScript = "sspadmin/user/logon";
 	/**
 	 * Name of logoff script
 	 * @var string
 	 */
-	public $logoffScript = "sspadmin/logoff.php";
+	public $logoffScript = "sspadmin/user/logoff";
 	/**
 	 * Password recovery script
 	 * @var string
 	 */
-	public $passwordRecover = "sspadmin/passwordrecover.php";
+	public $passwordRecover = "sspadmin/user/passwordrecover";
 	/**
 	 * password recovery password entry
 	 * @var string
 	 */
-	public $newPassword = "sspadmin/newpassword.php";
+	public $newPassword = "sspadmin/user/newpassword";
 	/**
 	 * user self admin script
 	 * @var string
 	 */
-	public $userAdminScript = "sspadmin/useradmin.php";
+	public $userAdminScript = "sspadmin/useradmin";
 	/**
 	 * administrator admin
 	 * @var string
 	 */
-	public $totalAdminScript = "sspadmin/index.php";
+	public $totalAdminScript = "sspadmin";
 	/**
 	 * script to create user
 	 * @var string
 	 */
-	public $userCreation = "sspadmin/usercreation.php";
+	public $userCreation = "sspadmin/usercreation";
 	/**
 	 * user confirming, linked to by email
 	 * @var string
 	 */
-	public $userConfirm = "sspadmin/userconfirm.php";
+	public $userConfirm = "sspadmin/user/userconfirm";
 	/**
 	 * routine to list users
 	 * @var string
 	 */
-	public $userLister = "sspadmin/index.php";
+	public $userLister = "sspadmin";
 	/**
 	 * root of site including HTTP or HTTPS
 	 * change
@@ -778,7 +778,7 @@ abstract class ConfigurationBase
 		ProtectBase::addNoHistoryPage($this->passwordRecover);
 		ProtectBase::addNoHistoryPage($this->userConfirm);
 		ProtectBase::addNoHistoryPage($this->newPassword);
-		ProtectBase::addNoHistoryPage($this->userConfirm);
+		ProtectBase::addNoHistoryPage($this->userCreation);
 
 		/**
 		* Set up PHP initialisation parameters

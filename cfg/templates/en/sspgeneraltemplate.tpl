@@ -13,7 +13,7 @@
 <meta name="Description" content="" />
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <!-- <link rel="shortcut icon" href="/path/to/logo.ico" type="image/x-icon" /> -->
-<link rel="stylesheet" href="/sspadmin/sspadmin/styles/styles.css" />
+<link rel="stylesheet" href="/sspadmin/styles/styles.css" />
 {:if:styles}
 <style type="text/css">
 {styles}

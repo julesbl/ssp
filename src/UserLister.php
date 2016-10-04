@@ -55,11 +55,6 @@ class UserLister{
 	 */
 	private $session;
 	/**
-	 * commad used to invoke the routine
-	 * @var string
-	 */
-	private $command = "";
-	/**
 	 * configuration object
 	 * @var Configuration
 	 */
@@ -73,20 +68,18 @@ class UserLister{
 	/**
 	 * Constructor
 	 * @param Setup $ssp - Setup object
-	 * @param string $command - latest command
 	 */
-	public function __construct($ssp, $command){
+	public function __construct($ssp){
 		// constructor
 
 		$this->ssp = $ssp;
 		$this->session = $ssp->session;
-		$this->command = $command;
 		$this->cfg = $ssp->cfg;
 		$this->db = $ssp->db;
 
 		// check for and create the filter
 		if(!isset($_SESSION["SSP_MemberFilter"])){
-			$_SESSION["SSP_MemberFilter"]= new MemberFilter($this->cfg->defaultAlpha, $this->cfg);
+			$_SESSION["SSP_MemberFilter"]= new MemberFilter($this->cfg->defaultAlpha);
 		}
 		$this->filter =& $_SESSION["SSP_MemberFilter"];
 	}
@@ -214,10 +207,14 @@ class UserLister{
         return($result);
     }
 	
-	function displayFilterForm(){
+	/**
+	 * Display the filter form to change the list
+	 * @return string - html to be displayed
+	 */
+	public function displayFilterForm(){
 		// display form to update filter values
 
-		$form = new sfc\Form($this->cfg->userLister, "noTable", "sspFilter");
+		$form = new sfc\Form($this->cfg->userLister. '/filterChange', "noTable", "sspFilter");
 		$form->tda("tpl", $this->tpl(array("title"=>"Modify search criteria")));
 		$form->tda("tplf", "userListerSearchForm.tpl");
 		$form->templateRoutine = "\w34u\ssp\UserLister::formFilterCreate";
@@ -251,7 +248,6 @@ class UserLister{
 		$form->fep("dataType=int, deflt=". $this->filter->userWaiting);
 		$form->fe("submit", "submit", "Search Now");
 		$form->fe("submit", "newSearch", "Reset Search Criteria");
-		$form->addHidden("command", $this->command);
 
 		if($form->processForm($_POST)){
 			if(!$form->error){
@@ -263,12 +259,12 @@ class UserLister{
 				if(array_key_exists("addField", $form->data)){
 					// add a new search field
 					$this->filter->addField();
-					SSP_Divert($this->cfg->userLister. "?command=filterChange");
+					SSP_Divert($this->cfg->userLister);
 				}
 				elseif(array_key_exists("newSearch", $form->data)){
 					// clears the form and search parameters
 					$this->filter->newSearch();
-					SSP_Divert($this->cfg->userLister. "?command=filterChange");
+					SSP_Divert($this->cfg->userLister);
 				}
 				else{
 					// show list with new search
@@ -276,9 +272,12 @@ class UserLister{
 					SSP_Divert($this->cfg->userLister);
 				}
 			}
+			else{
+				return $form->create(true);
+			}
 		}
 		else{
-			echo $form->create();
+			return $form->create();
 		}
 	}
 
@@ -335,7 +334,11 @@ class UserLister{
         return($string);
     }
 
-	function lister(){
+	/**
+	 * Display a list of users
+	 * @return string - html for list
+	 */
+	public function lister(){
 		// display list of users
 
 		if(!isset($_SESSION["SSP_ListerSave"])){
@@ -353,7 +356,7 @@ class UserLister{
 
 		$this->db->query($queryInfo->sql, $queryInfo->values, "User Lister: Getting list of users");
 
-		$list = new Lister($listerSave, $this->db, $this->cfg->userLister, 0, "&command=$this->command");
+		$list = new Lister($listerSave, $this->db, $this->cfg->userLister, 0);
 		$list->setLineFunction('listerLine', $this);
 
 		$contentPage = array();
@@ -373,6 +376,11 @@ class UserLister{
 		return $tpl->output();
 	}
 
+	/**
+	 * Process a line from the list
+	 * @param array $line - line content
+	 * @return array - processed line content
+	 */
 	public function listerLine($line){
 		if($line["FirstName"] == "" and $line["FamilyName"] == ""){
 			$line["FirstName"] = "no name";
@@ -395,7 +403,13 @@ class UserLister{
 	 * @param type $userId
 	 * @return string
 	 */
-    function deleteUser($userId){
+    public function deleteUser($userId){
+		// check for valid user id, ie. hex
+		$check = new \w34u\ssp\CheckData();
+		if($check->check('hex', $userId) !== 0){
+			SSP_Divert($this->cfg->totalAdminScript);;
+		}
+
     	// delete a user, not the current
 		if(strcasecmp($userId, $this->session->userId) != 0){
 			if(isset($_POST["deleteUser"])){
@@ -409,11 +423,10 @@ class UserLister{
 			}
 			else{
 				// prompt to delete user
-				$where = array("UserId"=>$userId);
+				$where = array("UserId" => $userId);
 				$user = $this->db->get($this->cfg->userMiscTable, $where, "SSP Admin: Getting data to prompt for user delete");
 				if($user){
 					$content = get_object_vars($user);
-					$content["command"] = $this->command;
 					$content["path"] = SSP_Path();
 					$page = new Template($content, "userListerDeletePrompt.tpl", false);
 					$mainContent = array();
@@ -430,11 +443,11 @@ class UserLister{
     }
 
 	/**
-	 *
+	 * Configue the main template
 	 * @param array $contentMain - template content data
 	 * @return Template 
 	 */
-	function tpl($contentMain){
+	public function tpl($contentMain){
 		// configure main template
 		$this->ssp->pageTitleAdd("User admin");
 		if(isset($contentMain["title"])){
@@ -442,13 +455,13 @@ class UserLister{
 		}
 
 		$menu = new MenuGen();
-		$menu->add($this->cfg->userLister.'?command=filterChange', $this->session->t("Modify Search"), $this->command=="filterChange");
+		$menu->add($this->cfg->userLister.'/filterChange', $this->session->t("Modify Search"));
 		if($this->cfg->adminCheck){
 			if(!($this->filter->userAdminPending == 1 and $this->filter->creationFinished == 1)){
-				$menu->add($this->cfg->userLister.'?command=filterAdminPending', $this->session->t("List Admin Pending"));
+				$menu->add($this->cfg->userLister.'/filterAdminPending', $this->session->t("List Admin Pending"));
 			}
 		}
-		$menu->add($this->cfg->userLister.'?command=filterNormal', $this->session->t("Defualt Listing"));
+		$menu->add($this->cfg->userLister.'/filterNormal', $this->session->t("Defualt Listing"));
 		$menu->add('userlisterhelp.php', $this->session->t("Help"));
 		$menu->sv("target=help");
 		$contentMain["menu"] = $menu->cMenu();

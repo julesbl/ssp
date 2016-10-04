@@ -9,4 +9,4 @@ Il est important que vous suiviez les étapes du mail aussitôt que possible ava
 User name: {UserName}
 {:endif:UserName}
 
-{link}
+{link}/token={token}

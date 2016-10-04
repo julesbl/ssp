@@ -128,11 +128,11 @@ abstract class ProtectBase{
 
 	/** 
 	 * config object
-	 * @var SSP_Configuration  */
+	 * @var Configuration  */
 	public $cfg;
 	/** 
 	 * database object
-	 * @var SSP_DB  */
+	 * @var SspDB  */
 	public $db;
 	/**
 	 * Local configuration
@@ -713,7 +713,7 @@ abstract class ProtectBase{
 		$this->miscInfo = NULL;
 
 		if($showLogoffScreen){
-			$this->displayLogOffScreen($tpl, $userId, $returnPage);
+			return $this->displayLogOffScreen($tpl, $userId, $returnPage);
 		}
     }
 

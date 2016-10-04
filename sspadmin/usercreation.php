@@ -46,5 +46,5 @@ $ssp = new Setup($session, true);
 
 $admin = new UserAdmin($session, $ssp, "", "", "sspsmalltemplate.tpl");
 
-$admin->userJoin();
+echo $admin->userJoin();
 ?>

@@ -44,9 +44,6 @@ namespace w34u\ssp;
 class MemberFilter{
     // Filter SSP members for listing
 
-    var $tables; // sql tables selected from
-    var $where; // sql where condition
-    var $order; // sql order condition
     var $alpha = "all"; // condition for alphabetical listing eg. a, b etc.
     var $alphaField = ""; // field on which the alphabetical condition is applied.
     var $filterFields = ""; // filters applied to fields array
@@ -64,18 +61,14 @@ class MemberFilter{
 	var $listAlpha = "all a b c d e f g h i j k l m n o p q r s t u v w x y z";
 	public $listAlphaAll = 'all';
 
-	var $cfg; // configuration object
-
-    function __construct($alphaField, $cfg){
-        // contstructor
-        //
-        // params
-        //  $alphaField - string - filed used for alpha filtering, also the first filter field in the filters
+	/**
+	 * Constructor
+	 * @param string $alphaField - field used for filtering names
+	 */
+    public function __construct($alphaField){
         $this->alphaField = $alphaField;
         $this->filterFields[0] = $alphaField;
         $this->filterValues[0] = "";
-
-        $this->cfg = $cfg;
     }
 
 	function newSearch(){
