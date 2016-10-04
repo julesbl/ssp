@@ -406,7 +406,12 @@ function SSP_CheckResponseToken($token){
     $SSP_Config = Configuration::getConfiguration();
 	$SSP_DB = SspDb::getConnection();;
 
-    $tokenOk=false;
+    $tokenOk = false;
+	
+	$check = new \w34u\ssp\CheckData();
+	if($check->check('hex', $token) !== 0){
+		return false;
+	}
 
     // Form token field exists
 	$where = array("token"=>$token);
