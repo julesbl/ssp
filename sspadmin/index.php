@@ -54,7 +54,7 @@ $container['session'] = function($container) {
 	return new Protect();
 };
 $container['ssp'] = function($container){
-	return new Setup($container['session']);
+	return new Setup($container['session'], true);
 };
 /**
  * Divert to login if not admin
@@ -138,7 +138,7 @@ $app->any('/adminusercreation', function (Request $request, Response $response) 
  */
 $app->group('/useradmin', function() use ($app) {
 	// basic user information
-	$app->get('/info/{userId}', function(Request $request, Response $response){
+	$app->any('/info/{userId}', function(Request $request, Response $response){
 		$session = $this->session;
 		$ssp = $this->ssp;
 		$userId = $request->getAttribute('userId');
@@ -153,6 +153,24 @@ $app->group('/useradmin', function() use ($app) {
 		$admin = new UserAdmin($session, $ssp, $userId);
 		return $response->getBody()->write($admin->userMisc(false, true));
 	});
+	// change password
+	$app->any('/chPswd', function(Request $request, Response $response){
+		$session = $this->session;
+		$ssp = $this->ssp;
+		$userId = $request->getAttribute('userId');
+		$needPassword = $request->getAttribute('needPassword');
+		$admin = new UserAdmin($session, $ssp, $userId);
+		return $response->getBody()->write($admin->changePassword("", $needPassword, true));
+	});
+	// change email
+	$app->any('/chEmail', function(Request $request, Response $response){
+		$session = $this->session;
+		$ssp = $this->ssp;
+		$userId = $request->getAttribute('userId');
+		$needPassword = $request->getAttribute('needPassword');
+		$admin = new UserAdmin($session, $ssp, $userId);
+		return $response->getBody()->write($admin->changeEmail($needPassword, true));
+	});
 })->add(function(Request $request, Response $response, $next){
 	/* @var $session Protect */
 	$session = $this->session;
@@ -166,7 +184,10 @@ $app->group('/useradmin', function() use ($app) {
 	if(isset($arguments['userId'])){
 		$userId = $arguments['userId'];
 	}
+	$needPassword = ($session->userId === $userId);
+	
 	$request = $request->withAttribute('userId', $userId);
+	$request = $request->withAttribute('needPassword', $needPassword);
 	$response = $next($request, $response);
 	return $response;
 });

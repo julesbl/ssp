@@ -128,7 +128,7 @@ class Setup{
 			$languages = $this->session->getLanguages();
 			$dropdownInformation = array();
 			foreach ($languages as $lang => $languageInfo){
-				$dropdownInformation[$lang] = array('text' => $languageInfo['description'], 'dir' => $languageInfo['dir'], 'class' => 'lang_'. $lang, 'style' => 'background-image: url(images/flag_'. $lang. '.png);');
+				$dropdownInformation[$lang] = array('text' => $languageInfo['description'], 'dir' => $languageInfo['dir'], 'class' => 'lang_'. $lang, 'style' => 'background-image: url(/sspadmin/images/flag_'. $lang. '.png);');
 			}
 			$form->fe('select', 'languageDropdown', '', $dropdownInformation);
 			$form->fep('deflt = '. Protect::$tranlator->getLanguage());
@@ -155,7 +155,7 @@ class Setup{
 			}
 			$url = $_SERVER['REQUEST_URI'];
 			$menu = new MenuGen();
-			$menu->add($this->cfg->adminDir. 'useradmin/' .$this->session->userId, $this->session->t("My Details"), strpos($url,"useradmin") !== false);
+			$menu->add($this->cfg->adminDir. 'useradmin/info/' .$this->session->userId, $this->session->t("My Details"), strpos($url,"useradmin") !== false);
 			$menu->add($this->cfg->adminDir.'/adminusercreation', $this->session->t("New User"), strpos($url,"adminusercreation") !== false);
 			$menu->add($this->cfg->userLister, $this->session->t("List Users"), ($url === "/sspadmin/"));
 			$menu->add($this->cfg->siteRoot, $this->session->t("Home"));
