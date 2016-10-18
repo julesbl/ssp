@@ -700,33 +700,9 @@ function SSP_error($error, $errorType = E_USER_WARNING, $triggerError=true){
 	$SSP_Config = Configuration::getConfiguration();
 	if($SSP_Config->errorDisplayBacktrace){
 		$error .= "\nDebug backtrace\n";
-		$backtrace = debug_backtrace();
-		foreach($backtrace as $routine){
-			if(!isset($routine['file'])){
-				// probably call_user_func
-				$error .= "call_user_func\n";
-			}
-			else{
-				$error .= "Line ". $routine['line']. " of ". $routine['file']. "\n";
-				if(isset($routine['function'])){
-					$error .= " In function ". $routine['function']. "\n";
-					if(isset($routine['args']) and is_array($routine['args'])){
-						foreach($routine['args'] as $arg){
-							if(is_object($arg)){
-								$argString[] = htmlentities(serialize($arg));
-							}
-							elseif(is_array($arg)){
-								$argString[] = htmlentities(serialize($arg));
-							}
-							else{
-								$argString[] = $arg;
-							}
-						}
-						$error .= "  Arguments '". implode("', '", $argString). "'\n";
-					}
-				}
-			}
-		}
+		ob_start();
+		debug_print_backtrace();
+		$error .= ob_get_clean();
 	}
 	if($triggerError){
 		trigger_error($error, $errorType);
