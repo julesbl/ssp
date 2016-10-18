@@ -49,10 +49,17 @@ use Slim\Http\Response as Response;
 use Slim\Http\Request as Request;
 
 require 'includeheader.php';
-$container = new \Slim\Container;
+$setup = [
+	'settings' => [
+		'displayErrorDetails' => true,
+		],
+];
+$container = new \Slim\Container($setup);
+// load protected session as service
 $container['session'] = function($container) {
 	return new Protect();
 };
+// load ssp admin setup as a service
 $container['ssp'] = function($container){
 	return new Setup($container['session'], true);
 };
@@ -96,7 +103,7 @@ $app->any('/filterChange', function (Request $request, Response $response) {
 	return $response->getBody()->write($lister->displayFilterForm());
 });
 // Change filter to admin pending
-$app->get('/filterAdminPending', function (Request $request, Response $response) {
+$app->any('/filterAdminPending', function (Request $request, Response $response) {
 	/* @var $session Protect */
 	$session = $this->session;
 	ssp_logon($session);
@@ -106,7 +113,7 @@ $app->get('/filterAdminPending', function (Request $request, Response $response)
 	return $response->getBody()->write($lister->lister());
 });
 // Change filter to default listing
-$app->get('/filterNormal', function (Request $request, Response $response) {
+$app->any('/filterNormal', function (Request $request, Response $response) {
 	/* @var $session Protect */
 	$session = $this->session;
 	ssp_logon($session);
@@ -122,7 +129,7 @@ $app->any('/adminusercreation', function (Request $request, Response $response) 
 	ssp_logon($session);
 	$ssp = $this->ssp;
 	
-	$admin = new UserAdmin($session, $ssp, "", $session->userId);
+	$admin = new UserAdmin($session, $ssp, $session->userId);
 	$result = $admin->userCreate();
 	if($result === true){
 		$tpl = $ssp->tpl(array('title' => 'User created', 'content' => '<h1>New user created</h1>'));
@@ -171,7 +178,40 @@ $app->group('/useradmin', function() use ($app) {
 		$admin = new UserAdmin($session, $ssp, $userId);
 		return $response->getBody()->write($admin->changeEmail($needPassword, true));
 	});
+	// change advanced user information
+	$app->any('/chAdv', function(Request $request, Response $response){
+		$session = $this->session;
+		$ssp = $this->ssp;
+		$userId = $request->getAttribute('userId');
+		$admin = new UserAdmin($session, $ssp, $userId);
+		return $response->getBody()->write($admin->changeAdmin());
+	});
+	// display advanced user information
+	$app->any('/advInfo', function(Request $request, Response $response){
+		$session = $this->session;
+		$ssp = $this->ssp;
+		$userId = $request->getAttribute('userId');
+		$admin = new UserAdmin($session, $ssp, $userId);
+		return $response->getBody()->write($admin->displayAdminInfo());
+	});
+	// send a join email
+	$app->any('/joinEmail', function(Request $request, Response $response){
+		$session = $this->session;
+		$ssp = $this->ssp;
+		$userId = $request->getAttribute('userId');
+		$admin = new UserAdmin($session, $ssp, $userId);
+		return $response->getBody()->write($admin->sendJoinupEmail());
+	});
+	// send an email to a user
+	$app->any('/email', function(Request $request, Response $response){
+		$session = $this->session;
+		$ssp = $this->ssp;
+		$userId = $request->getAttribute('userId');
+		$admin = new UserAdmin($session, $ssp, $userId);
+		return $response->getBody()->write($admin->emailUser($userId, $session->userId));
+	});
 })->add(function(Request $request, Response $response, $next){
+	// Set up user admin for a particular user
 	/* @var $session Protect */
 	$session = $this->session;
 	ssp_logon($session);
@@ -209,7 +249,7 @@ $app->group('/user', function() use ($app) {
 		return $response;
 	});
 	// user logoff
-	$app->get('/logoff', function(Request $request, Response $response){
+	$app->any('/logoff', function(Request $request, Response $response){
 		$session = $this->session;
 		$ssp = $this->ssp;
 		
@@ -268,38 +308,3 @@ $app->group('/user', function() use ($app) {
 	});
 });
 $app->run();
-/**
-$session= new Protect("admin");
-
-// check for command
-$command = SSP_getParam("command", "list");
-
-$ssp = new Setup($session, true);
-
-$lister = new UserLister($ssp, $command);
-
-if($command == "filterAdminPending"){
-	// show admin pending users
-	$lister->filter->displayAdminPending();
-}
-if($command == "filterNormal"){
-	// show normal search
-	$lister->filter->newSearch();
-}
-
-
-if($command == "filterChange"){
-	// change search criteria
-	$lister->displayFilterForm();
-}
-
-elseif($command=="delete"){
-	// delete a user
-	$userId = SSP_getParam("userId", "");
-	echo $lister->deleteUser($userId);
-}
-else{
-	// else go to lister
-	echo $lister->lister();
-}
-*/

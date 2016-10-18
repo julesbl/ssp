@@ -46,26 +46,49 @@
 
 namespace w34u\ssp;
 
+// User administration class
 abstract class UserAdminBase{
-	// User administration class
 
-	var $id = ""; // users id
-	/** @var SSP_Protect session object */
-	var $session; // session object
-	/** @var SSP_Configuration SSP configuration object */
-	var $cfg; // configuration object
-	/** @var SSP_DB SSP database object */
-	var $db; // database object
-	/** @var Setup SSP setup object */
-	var $ssp;
-	var $subTpl = ""; // alternative sub template for routines
-	/** @var bool user is admin */
-	var $admin = false;
-	/** @var string alternative template than main one */
-	var $templateFile = "";
-	/** @var bool generate menus for template */
-	var $generateMenus = true;
-	/** Add placeholder to admin forms
+	/**
+	 * users id
+	 * @var string 
+	 */
+	protected $id = "";
+	/** 
+	 * session object
+	 * @var SSP_Protect  */
+	protected $session;
+	/** 
+	 * SSP configuration object
+	 * @var SSP_Configuration  */
+	protected $cfg;
+	/** 
+	 * database object
+	 * @var SSP_DB SSP  */
+	protected $db;
+	/** 
+	 * SSP setup object
+	 * @var Setup  */
+	protected $ssp;
+	/**
+	 * Alternative sub template for routines
+	 * @var string
+	 */
+	public $subTpl = "";
+	/** 
+	 * user is admin
+	 * @var bool  */
+	public $admin = false;
+	/** 
+	 * alternative template than main on
+	 * @var string e */
+	public $templateFile = "";
+	/** 
+	 * generate menus for template
+	 * @var bool  */
+	public $generateMenus = true;
+	/** 
+	 * Add placeholder to admin forms
 	 * @var bool  */
 	public $addPlaceholder;
 
@@ -99,12 +122,6 @@ abstract class UserAdminBase{
 	 * @return bool - returns true on success
 	 */
 	public function userCreate(){
-		// Creates the entries in the primary logon table
-		// returns the user ID on success
-		//
-		// Parameters
-		//  $admin - bool - full admin creation option
-
         $form = new sfc\Form(SSP_Path(), $this->cfg->userTable, "userCreate");
 		$form->errorAutoFormDisplay = false;
 		$form->addPlaceholder = $this->addPlaceholder;
@@ -333,21 +350,22 @@ abstract class UserAdminBase{
         $form = new sfc\Form(SSP_Path(), "noTable", "joinUpEmail");
         $form->tpl = $this->tpl(array("title" => "Send joining email"));
         $form->tplf = "sendjoinupemail.tpl";
+		$form->errorAutoFormDisplay = false;
         $form->fe("submit", "submit", "Send joinup email to this user?");
 
-		$return = false;
 		if($form->processForm($_POST)){
 			if(!$form->error){
 				$this->userJoinEmail($this->id);
 				$form->tda("saved");
-				echo $form->create();
-				$return = true;
+				return $form->create();
+			}
+			else{
+				return $form->create(true);
 			}
 		}
 		else{
-			echo $form->create();
+			return $form->create();
 		}
-		return($return);
 	}
 
 	/**
@@ -724,20 +742,18 @@ abstract class UserAdminBase{
 	 * Send and email to the user
 	 * @param string $userIdTo - to users id
 	 * @param string $userIdFrom - user from id
-	 * @return bool - true on success
+	 * @return string - form output
 	 */
 	function emailUser($userIdTo, $userIdFrom){
         $form= new sfc\Form(SSP_Path(), "noTable", "emailUser");
         $form->tpl = $this->tpl(array("title" => "Email member"));
         $form->tplf = "sendemailtomember.tpl";
+		$form->errorAutoFormDisplay = false;
 		$form->fe("text", "subject", "Subject");
 		$form->fep("required=true");
 		$form->fe("textarea", "message", "Message");
 		$form->fep("required=true, width=40, lines=10");
 		$form->fe("submit", "submit", "Send Email");
-
-
-		$return = false;
 		if($form->processForm($_POST)){
 			if(!$form->error){
 				// get to email
@@ -769,14 +785,15 @@ abstract class UserAdminBase{
 				$email = new Email($this->cfg);
 				$email->generalEmail($content, "emailmember.tpl", $this->session->userEmail, ($rowFrom->FirstName. " ". $rowFrom->FamilyName), $emailTo, ($rowTo->FirstName. " ". $rowTo->FamilyName));
 				$form->tda("saved");
-				echo $form->create(true);
-				$return = true;
+				return $form->create(true);
 	        }
+			else{
+				return $form->create(true);
+			}
         }
         else{
-        	echo $form->create();
+        	return $form->create();
          }
-         return($return);
     }
 
     /**

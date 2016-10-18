@@ -249,14 +249,14 @@ class Template {
 			// set up array for many string replaces
 			$this->replaces = get_object_vars($replaces);
 		} else {
-			trigger_error("SSP_Template: Invalid template replacement data for " . $this->templatePath, E_USER_ERROR);
+			SSP_error("Template: Invalid template replacement data for " . $this->templatePath, E_USER_ERROR);
 		}
 
 		if (!$templateArraySupplied) {
 			// load template and find length
 			$this->templateArray = file($this->templatePath);
 			if ($this->templateArray === false) {
-				trigger_error("SSP_Template: Failed to open " . $this->templatePath, E_USER_ERROR);
+				SSP_error("Template: Failed to open " . $this->templatePath, E_USER_ERROR);
 			}
 		} else {
 			$this->templateArray = $templateFile;
@@ -281,7 +281,7 @@ class Template {
 
 		if (!$foundfile) {
 			// abort output if no template found
-			trigger_error("SSP_Template: Template $templateFile does not exist in the following directories " . join(', ', self::$paths), E_USER_ERROR);
+			SSP_error("Template: Template $templateFile does not exist in the following directories " . join(', ', self::$paths), E_USER_ERROR);
 		}
 		$this->templateName = $path;
 		return($path);
@@ -601,7 +601,7 @@ class Template {
 				$this->replaces = array_merge($this->replaces, get_object_vars($replaces));
 			}
 		} else {
-			echo "SSP_Template: Invalid template replacement data for " . $this->templatePath;
+			SSP_error("Template: Invalid template replacement data for " . $this->templatePath, E_USER_ERROR);
 			exit();
 		}
 		$this->contentPosition = 0;

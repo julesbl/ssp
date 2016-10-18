@@ -44,7 +44,7 @@ w34u\ssp\Translate::addToLanguage('fr', array(
 	'User information' => 'Informations pour utilisateur',
 	'New user' => 'Nouvel utilisateur',
 	// Menu at the top of admin
-	'My Details' => 'Mes détails',
+	'User Details' => 'Utilisateur détails',
 	'New User' => 'Nouvel utilisateur',
 	'List Users' => 'Liste des utilisateurs',
 	'Home' => 'Page principale',
