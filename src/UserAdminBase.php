@@ -204,7 +204,7 @@ abstract class UserAdminBase{
 						'FamilyName' => $form->getField('FamilyName'),
 					);
 					$this->db->insert($this->cfg->userMiscTable, $data, "SSP Admin User Creation: Creating new user misc data");
-					if($form->getField('askUser') != '0'){
+					if($form->getField('askUser') != 0){
 						// send email if new user entering password
 						$this->userJoinEmail($userId);
 					}

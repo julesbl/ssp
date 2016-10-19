@@ -72,6 +72,9 @@ w34u\ssp\Translate::addToLanguage('fr', array(
 	'Your email' => 'Votre email',
 	'Your password' => 'Votre mot de passe',
 	'Enter password again' => 'Ressaisissez votre mot de passe',
+	// user confirmation
+	"User Confirm Failure<br />Invalid User" => "User Confirm Failure<br />Invalid User",
+	"User Confirm Failure<br />Invalid token" => "User Confirm Failure<br />Invalid token",
 ));
 /* End of file lang_fr.php */
 /* Location: /translate/ */

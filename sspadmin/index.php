@@ -284,13 +284,13 @@ $app->group('/user', function() use ($app) {
 		return $response;
 	});
 	// user confirmation on joinup
-	$app->any('/userconfirm/{token}', function(Request $request, Response $response){
+	$app->any('/userconfirm/{confirmToken}', function(Request $request, Response $response){
 		$session = $this->session;
 		$ssp = $this->ssp;
 		
 		$ssp->pageTitleAdd("User Confirmation of membership");
 		$token = $request->getAttribute('confirmToken', '');
-		$admin = new UserAdmin($session, $ssp, "", '', "sspsmalltemplate.tpl", false);
+		$admin = new UserAdmin($session, $ssp, "", "sspsmalltemplate.tpl", false);
 		$response->getBody()->write($admin->userConfirm($token));
 		
 		return $response;
