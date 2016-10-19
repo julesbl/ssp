@@ -133,7 +133,7 @@ class UserLister{
 		}
 
         // alphabetical filtering
-        if(strcmp($this->filter->alpha, $this->session->t($this->filter->listAlphaAll)) !== 0){
+        if(strcmp($this->filter->alpha, 'all') !== 0){
             $where[]= $this->db->qt($this->filter->alphaField)." like ? ";
 			$sqlValues[] = $this->filter->alpha. "%";
         }
@@ -319,16 +319,26 @@ class UserLister{
 	 */
     public function alphaFilter($selClass="here", $alphaClass="alphaFilter", $par=""){
         $letters = explode(" ", $this->session->t($this->filter->listAlpha));
+		$all = $this->session->t('all');
         $string = '<ul class="'. $alphaClass. '">';
 
         foreach($letters as $letter){
             if(strcmp($letter, $this->filter->alpha) === 0){
                 $selection = ' class="'. $selClass. '"';
             }
+			elseif(strcmp('all', $this->filter->alpha) === 0 and strcmp($all, $letter) === 0){
+				$selection = ' class="'. $selClass. '"';
+			}
             else{
                 $selection = '';
             }
-            $string.='<li'. $selection. '><a href="'.$this->cfg->userLister. '?alpha='. $letter. $par. '">'. $letter. '</a></li>';
+			if(strcmp($all, $letter) === 0){
+				$letterParam = 'all';
+			}
+			else{
+				$letterParam = $letter;
+			}
+            $string.='<li'. $selection. '><a href="'.$this->cfg->userLister. '?alpha='. $letterParam. $par. '">'. $letter. '</a></li>';
         }
         $string .= '</ul>';
         return($string);
