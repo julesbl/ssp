@@ -157,7 +157,7 @@ class Setup{
 			$menu = new MenuGen();
 			$menu->add($this->cfg->adminDir. 'useradmin/info/' .$this->session->userId, $this->session->t("User Details"), strpos($url,"useradmin") !== false);
 			$menu->add($this->cfg->adminDir.'adminusercreation', $this->session->t("New User"), strpos($url,"adminusercreation") !== false);
-			$menu->add($this->cfg->userLister, $this->session->t("List Users"), ($url === "/sspadmin/"));
+			$menu->add($this->cfg->userLister, $this->session->t("List Users"), ($url === "/sspadmin/" or $url === '/sspadmin/filterChange' or $url === '/sspadmin/filterNormal' or $url === '/sspadmin/filterAdminPending'));
 			$menu->add($this->cfg->siteRoot, $this->session->t("Home"));
 			$menu->add($this->cfg->logoffScript, $this->session->t("Log off"));
 			$contentMain["mainMenu"] = $menu->cMenu();

@@ -463,15 +463,15 @@ class UserLister{
 		if(isset($contentMain["title"])){
 			$this->ssp->pageTitleAdd($contentMain["title"]);
 		}
-
+		$url = $_SERVER['REQUEST_URI'];
 		$menu = new MenuGen();
-		$menu->add($this->cfg->userLister.'/filterChange', $this->session->t("Modify Search"));
+		$menu->add($this->cfg->userLister.'/filterChange', $this->session->t("Modify Search"), ($url === '/sspadmin/filterChange'));
 		if($this->cfg->adminCheck){
 			if(!($this->filter->userAdminPending == 1 and $this->filter->creationFinished == 1)){
-				$menu->add($this->cfg->userLister.'/filterAdminPending', $this->session->t("List Admin Pending"));
+				$menu->add($this->cfg->userLister.'/filterAdminPending', $this->session->t("List Admin Pending"), ($url === '/sspadmin/filterAdminPending'));
 			}
 		}
-		$menu->add($this->cfg->userLister.'/filterNormal', $this->session->t("Defualt Listing"));
+		$menu->add($this->cfg->userLister.'/filterNormal', $this->session->t("Defualt Listing"), ($url === '/sspadmin/filterNormal'));
 		$menu->add('userlisterhelp.php', $this->session->t("Help"));
 		$menu->sv("target=help");
 		$contentMain["menu"] = $menu->cMenu();
