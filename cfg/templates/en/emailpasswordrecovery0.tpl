@@ -8,4 +8,4 @@ You have to do this fairly quickly or the recovery link will become invalid.
 User name: {UserName}
 {:endif:UserName}
 
-{link}/token={token}
+{link}/{token}

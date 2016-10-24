@@ -373,27 +373,23 @@ abstract class UserAdminBase{
 
 	/**
 	 * Finishes off user configuration after user joins
+	 * @param string $userId - new users id
 	 */
-	function userFinish(){
-		// sets up flags for the finished user entry and sends the email
-        // if required.
-		//
-		// parameter
-		//	$userId - user to flag as finished
-        //  $adminCheck - bool - sned admin check email if configured
-
-		// Set creation finished flag
-        $fields = array("CreationFinished" => "1", "UserPending" => "0");
-        $this->updateUser($fields, "SSP Admin: Setting user creation finish flags");
-
+	protected function userFinish($userId){
         // if admin has to check the user send an email to admin to inform them of a new one
         if($this->cfg->adminCheck){
             // send email
-			$email = new Email($this->cfg);
-			$email->noReplyEmail($content, "emailadminmemberjoined.tpl", $this->cfg->adminEmail, $this->cfg->adminName);
+			$email = new Email();
+			$content = [
+				'viewLink' => $this->cfg->userAdminScript. '/info/'. $userId,
+			];
+			$result = $email->noReplyEmail($content, "emailadminmemberjoined.tpl", $this->cfg->adminEmail, $this->cfg->adminName);
+			if($result === false){
+				SSP_error('SSP Admin: failed to admin '. $this->cfg->adminEmail, E_USER_ERROR);
+			}
         }
         // Send joining email
-        $this->userJoinEmail();
+        $this->userJoinEmail($userId);
     }
 
     /**
@@ -906,7 +902,9 @@ abstract class UserAdminBase{
 				if($result === true){
 					// Password change succesfull
 					unset($_SESSION["SSP_getPassword"], $_SESSION["SSP_getPassworduserId"]);
-					return $this->response("New password succesfully entered");
+					$tpl = new Template(['home_link' => $this->cfg->siteRoot], 'passwordrecoverycomplete.tpl');
+					$tplm = $this->tpl(['content' => $tpl->output()], true);
+					return $tplm->output();
 				}
 				else{
 					return $result;

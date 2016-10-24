@@ -266,7 +266,7 @@ $app->group('/user', function() use ($app) {
 		$ssp = $this->ssp;
 		
 		$ssp->pageTitleAdd('Password recovery');
-		$admin = new UserAdmin($session, $ssp, "", "", "sspsmalltemplate.tpl", false);
+		$admin = new UserAdmin($session, $ssp, "", "sspsmalltemplate.tpl", false);
 		$response->getBody()->write($admin->startPasswordRecovery());
 		
 		return $response;
@@ -277,7 +277,7 @@ $app->group('/user', function() use ($app) {
 		$ssp = $this->ssp;
 		
 		$ssp->pageTitleAdd("Password recovery, enter new password");
-		$admin = new UserAdmin($session, $ssp, "", "", "sspsmalltemplate.tpl", false);
+		$admin = new UserAdmin($session, $ssp, "", "sspsmalltemplate.tpl", false);
 		$token = $request->getAttribute('token', '');
 		$response->getBody()->write($admin->finishPasswordRecovery($token));
 		
@@ -301,7 +301,7 @@ $app->group('/user', function() use ($app) {
 		$ssp = $this->ssp;
 		
 		$ssp->pageTitleAdd("Join the site");
-		$admin = new UserAdmin($session, $ssp, "", "", "sspsmalltemplate.tpl");
+		$admin = new UserAdmin($session, $ssp, "", "sspsmalltemplate.tpl", false);
 		$response->getBody()->write($admin->userJoin());
 		
 		return $response;

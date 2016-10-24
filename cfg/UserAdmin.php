@@ -148,20 +148,20 @@ class UserAdmin extends UserAdminBase{
                             $loginData["UserAccess"] = $this->cfg->userAccessSignUpLevels[$form->getField("signUpLevel")];
                         }
                         else{
-                            $loginData["UserAccess"]=$this->cfg->userDefault;
+                            $loginData["UserAccess"] = $this->cfg->userDefault;
                         }
                     }
                     else{
-                        $loginData["UserAccess"]=$this->cfg->userDefault;
+                        $loginData["UserAccess"] = $this->cfg->userDefault;
                     }
                     if($this->cfg->adminCheck){
-                        $loginData["UserAdminPending"]=1;
+                        $loginData["UserAdminPending"] = 1;
                     }
                     if($this->cfg->confirmType != 0){
-                        $loginData["UserWaiting"]=1;
+                        $loginData["UserWaiting"] = 1;
                     }
                     if($this->cfg->furtherProgram){
-                        $loginData["UserPending"]=1;
+                        $loginData["UserPending"] = 1;
                     }
                     // create login record
                     $this->db->insert($this->cfg->userTable, $loginData, "Inserting new member login data");
@@ -171,7 +171,7 @@ class UserAdmin extends UserAdminBase{
                     $miscData["FamilyName"] = $form->getField("lastName");
                     $this->db->insert($this->cfg->userMiscTable, $miscData, "Inserting new member misc data");
                     $this->id = $userId;
-                    $this->userFinish();
+                    $this->userFinish($userId);
                     return $this->welcomeScreen();
                 }
             }
