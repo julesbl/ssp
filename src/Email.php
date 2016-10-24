@@ -36,20 +36,33 @@ namespace w34u\ssp;
 
 class Email{
 	
-	/** @var SSP_Configuration - configuration object */
-	var $cfg;
-	/** @var string - email template name */
-	var $emailTemplate = "emailTemplateMain.tpl";
-	/** @var string charcter set to be  */
-	var $charset = "UTF-8";
+	/** 
+	 * configuration object
+	 * @var \w34u\ssp\Configuration
+	 */
+	private $cfg;
+	/** 
+	 *  email template name
+	 * @var string
+	 */
+	public $emailTemplate = "emailTemplateMain.tpl";
+	/** 
+	 *  charcter set to be
+	 * @var string
+	 */
+	private $charset = "UTF-8";
+	/**
+	 * Name of function to send and email
+	 * @var string
+	 */
+	private static $emailRoutine = '\w34u\ssp\SSP_SendMail';
 
 	/**
 	 * Constructor
-	 * @param SSP_Configuration $cfg - configuration object
 	 */
-	public function __construct($cfg){
-		$this->cfg = $cfg;
-		$this->charset = $cfg->siteEncoding;
+	public function __construct(){
+		$this->cfg = \w34u\ssp\Configuration::getConfiguration();
+		$this->charset = $this->cfg->siteEncoding;
 	}
 	
 	/**
@@ -76,7 +89,7 @@ class Email{
 		$tpl->encode = false;
 		$tpl->numberReturnLines = 1; // remove comment from the top
 		$message = $tpl->output();
-		$result = ECRIAmailer($fromName, $fromEmail, $toName, $toEmail, $subject, $message, $this->charset);
+		$result = $this->ECRIAmailer($fromName, $fromEmail, $toName, $toEmail, $subject, $message, $this->charset);
 		return($result);
 	}
 	
@@ -105,6 +118,44 @@ class Email{
 		$result = $this->generalEmail($emailContent, $emailTpl, 
 					$this->cfg->noReplyEmail, $this->cfg->noReplyName, $toEmail, $toName);
 		return($result);
+	}
+
+	/**
+	 * Send an email with checks for injection
+	 * @param string $fromName
+	 * @param string $fromAddress
+	 * @param string $toName
+	 * @param string $toAddress
+	 * @param string $subject
+	 * @param string $message
+	 * @return bool 
+	 */
+	private function ECRIAmailer($fromName, $fromAddress, $toName, $toAddress, $subject, $message, $charset="utf-8"){
+		// Copyright 2005 ECRIA LLC, http://www.ECRIA.com
+		// Please use or modify for any purpose but leave this notice unchanged.
+		$headers  = "MIME-Version: 1.0\n";
+		$headers .= "Content-type: text/plain; charset={$charset}\n";
+		$headers .= "X-Priority: 3\n";
+		$headers .= "X-MSMail-Priority: Normal\n";
+		$headers .= "X-Mailer: php/". phpversion(). "\n";
+		$headers .= "From: \"". $fromName. "\" <". $fromAddress. ">\n";
+		$headers .= 'Reply-To: ' .$fromAddress . "\n";
+		$toAddressExtended = '"'. $toName. '" <'. $toAddress. '>';
+		// check for spam
+		if (stristr($message,'Content-Type:') || stristr($message,'bcc:')) {
+			return(false);
+		}
+		else{
+			return call_user_func(self::$emailRoutine, $toAddressExtended, $subject, $message, $headers);
+		}
+	}
+	
+	/**
+	 * Change email routine used to send email
+	 * @param string $emailRoutine - email routine to send email
+	 */
+	public static function setEmailFunction($emailRoutine){
+		self::$emailRoutine = $emailRoutine;
 	}
 }
 /* End of file Email.php */

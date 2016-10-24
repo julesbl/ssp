@@ -31,13 +31,12 @@
 
 namespace w34u\ssp;
 
+/*
+ * The properties named in checkProperties need to be
+ * defined for the system to work
+ */
 class Configuration extends ConfigurationBase
 {
-	/*
-	 * The properties named in checkProperties need to be
-	 * defined for the system to work
-	 */
-	
 	/** 
 	 * database user
 	 * @var string  */

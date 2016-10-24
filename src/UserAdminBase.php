@@ -339,7 +339,10 @@ abstract class UserAdminBase{
         }
         // send email
 		$email = new Email($this->cfg);
-		$email->noReplyEmail($content, "emailmemberjoining.tpl", $emailAddress->UserEmail, $userData->FirstName. ' '. $userData->FamilyName);
+		$result = $email->noReplyEmail($content, "emailmemberjoining.tpl", $emailAddress->UserEmail, $userData->FirstName. ' '. $userData->FamilyName);
+		if($result === false){
+			SSP_error('SSP Admin: failed to send join email to user '. $emailAddress->UserEmail, E_USER_ERROR);
+		}
      }
 
 	/**
@@ -783,7 +786,10 @@ abstract class UserAdminBase{
 				$content["firstName"] = $rowFrom->FirstName;
 				$content["familyName"] = $rowFrom->FamilyName;
 				$email = new Email($this->cfg);
-				$email->generalEmail($content, "emailmember.tpl", $this->session->userEmail, ($rowFrom->FirstName. " ". $rowFrom->FamilyName), $emailTo, ($rowTo->FirstName. " ". $rowTo->FamilyName));
+				$result = $email->generalEmail($content, "emailmember.tpl", $this->session->userEmail, ($rowFrom->FirstName. " ". $rowFrom->FamilyName), $emailTo, ($rowTo->FirstName. " ". $rowTo->FamilyName));
+				if($result === false){
+					SSP_error('SSP Admin: failed to send email to user '. $emailTo, E_USER_ERROR);
+				}
 				$form->tda("saved");
 				return $form->create(true);
 	        }

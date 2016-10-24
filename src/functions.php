@@ -329,48 +329,16 @@ function SSP_Domain(){
 }
 
 /**
- * Do Multiple emails
- * @param string $fromName
- * @param string $fromAddress
- * @param string $targets
- * @param string $subject
- * @param string $message
+ * Send and email
+ * @param string $toAddress - where to send it to
+ * @param string $subject - subject of email
+ * @param string $message - message to be sent
+ * @param string $headers - email headers
+ * @return bool - true on success
  */
-function SSP_multiEmail($fromName, $fromAddress, $targets, $subject, $message){
-	foreach($targets as $toAddress => $toName){
-		ECRIAmailer($fromName, $fromAddress, $toName, $toAddress, $subject, $message);
-	}
+function SSP_SendMail($toAddress, $subject, $message, $headers){
+	return mail($toAddress, $subject, $message, $headers);
 }
-
-/**
- * Send an email with checks for injection
- * @param string $fromName
- * @param string $fromAddress
- * @param string $toName
- * @param string $toAddress
- * @param string $subject
- * @param string $message
- * @return bool 
- */
-function ECRIAmailer($fromName, $fromAddress, $toName, $toAddress, $subject, $message, $charset="utf-8"){
-    // Copyright 2005 ECRIA LLC, http://www.ECRIA.com
-    // Please use or modify for any purpose but leave this notice unchanged.
-    $headers  = "MIME-Version: 1.0\n";
-    $headers .= "Content-type: text/plain; charset={$charset}\n";
-    $headers .= "X-Priority: 3\n";
-    $headers .= "X-MSMail-Priority: Normal\n";
-    $headers .= "X-Mailer: php/". phpversion(). "\n";
-    $headers .= "From: \"".$fromName."\" <".$fromAddress.">\n";
-    $headers .= 'Reply-To: ' .$fromAddress . "\n";
-	// check for spam
-    if (stristr($message,'Content-Type:') || stristr($message,'bcc:')) {
-		return(false);
-	}
-	else{
-		return mail($toAddress, $subject, $message, $headers);
-	}
-}
-
 /**
  * 
  * @global SSP_Configure $SSP_Config
