@@ -200,6 +200,8 @@ abstract class ConfigurationBase
 	 * @var string
 	 */
 	public $cookiePath = "/";
+	
+	// Admin paths setup
 	/**
 	 * path to admin directory for applications, end with /
 	 * @var string
@@ -244,7 +246,7 @@ abstract class ConfigurationBase
 	 * script to create user
 	 * @var string
 	 */
-	public $userCreation = "sspadmin/usercreation";
+	public $userCreation = "sspadmin/user/usercreation";
 	/**
 	 * user confirming, linked to by email
 	 * @var string
