@@ -9,7 +9,7 @@
 *   Project:	SSP Form
 *   Routine:	File.php
 *   Created:	30-Sep-2016
-*   Descrip:	Upload files to a server.
+*   Descrip:	class to upload files to the server, One object per file upload field in form->fileObjects array.
 *
 *   Revision:	a
 *   Rev. Date	30-Sep-2016
@@ -18,45 +18,122 @@
 namespace w34u\ssp\sfc;
 
 class File{
-	// class to upload files to the server
-	// One object per file upload field in form->fileObjects array.
-
-	public $elName; // form element name
-
-	public $targetDir; // directory wher the file will be saved
-	public $targetView; // path to view an image
-	public $fileName; // name of file to be saved
-	public $fileNameOld; // name of old file from db or submit with preview
-	public $fileNameRoutine=""; // procedure to generate the unique part of the file name
+	/**
+	 * file upload form element name
+	 * @var string
+	 */
+	public $elName;
+	/**
+	 * directory wher the file will be saved
+	 * @var string
+	 */
+	public $targetDir;
+	/**
+	 * path to view an image
+	 * @var string
+	 */
+	public $targetView;
+	/**
+	 * name of file to be saved
+	 * @var string
+	 */
+	public $fileName;
+	/**
+	 * name of old file from db or submit with preview
+	 * @var string
+	 */
+	public $fileNameOld;
+	/**
+	 * procedure to generate the unique part of the file name
+	 * @var string
+	 */
+	public $fileNameRoutine = "";
+	/**
+	 * Object to which the filename routine belongs
+	 * @var object 
+	 */
 	private $routineObject = null;
-	public $fileNameReplace=""; // totally replace the file name with this, keep extension
-	public $validTypes; // array of valid file types
-	public $maxSize; // maximum file size allowed
+	/**
+	 * totally replace the file name with this, keep extension
+	 * @var string
+	 */
+	public $fileNameReplace = "";
+	/**
+	 * array of valid file types
+	 * @var array
+	 */
+	public $validTypes;
+	/**
+	 * maximum file size allowed in kbytes
+	 * @var int
+	 */
+	public $maxSize;
 
-	public $preview = false; // preview upload
-	public $previewDir; // directory used for preview
-	public $previewView; // path to view image in preview directory
-	public $fileInPreview = false; // file is in preview directory
+	// preview params
+	/**
+	 * preview upload
+	 * @var bool
+	 */
+	public $preview = false;
+	/**
+	 * directory used for preview
+	 * @var string
+	 */
+	public $previewDir;
+	/**
+	 * path to view image in preview directory
+	 * @var string
+	 */
+	public $previewView;
+	/**
+	 * file is in preview directory
+	 * @var bool
+	 */
+	public $fileInPreview = false;
 
-	public $fileUploaded = false; // valid file upload on this submit
-	public $fileInfo; // on a file upload file information
-	public $fileNameExtension; // extension of file uploaded
-	public $fileNameRest; // rest of file name without extension
-	public $error = false; // error during file upload
-	public $errorText = ""; // error result
+	/**
+	 * valid file upload on this submit
+	 * @var bool
+	 */
+	public $fileUploaded = false;
+	/**
+	 * on a file upload file information
+	 * @var array
+	 */
+	public $fileInfo;
+	/**
+	 * extension of file uploaded
+	 * @var string
+	 */
+	public $fileNameExtension;
+	/**
+	 * rest of file name without extension
+	 * @var string
+	 */
+	public $fileNameRest;
+	/**
+	 * error during file upload
+	 * @var bool
+	 */
+	public $error = false;
+	/**
+	 * error result
+	 * @var string
+	 */
+	public $errorText = "";
 
+	/**
+	 * Constructor
+	 * @param string $el - file upload form element name
+	 * @param string $targetDir - where the file is going to go on succesfull upload
+	 * @param string $targetView - path to view the uploaded file
+	 * @param array $validTypes - valid file types for this upload
+	 * @param int $maxSize - maximum number of kBytes allowed
+	 * @param string $fileNameRoutine - eval'd to produce an addition to the file name to guarantee unique
+	 * @param object $routineObject - Object to which the filename routine belongs
+	 * @param string $fileNameReplace - totally replace the file name with this, keeps the extension
+	 */
 	public function __construct($el, $targetDir, $targetView, $validTypes, $maxSize, $fileNameRoutine="", $routineObject = null, $fileNameReplace=""){
-		// constructor
-		//
-		// parameters
-		//	$el - file upload form element
-		//	$targetDir - string - path to the upload directory
-		//	$targetView - string - path to view the uploaded file
-		//	$validTypes - array - valid file types for this upload
-		//	$maxSize - integer - maximum number of kBytes allowed
-		//	$fileNameRoutine - string - eval'd to produce an addition to the file name to guarantee unique
-		//	$fileNameReplace - string - totally replace the file name with this, keeps the extension
-
 		if(!is_object($el) or get_class($el) != "w34u\ssp\sfc\Fe" or $el->type != "file"){
 			trigger_error("File: need a valid form file form element", E_USER_ERROR);
 		}

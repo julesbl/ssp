@@ -9,7 +9,7 @@
 *   Project:	SSP Form
 *   Routine:	Hidden.php
 *   Created:	30-Sep-2016
-*   Descrip:	Class for hidden fields.
+*   Descrip:	Element for hidden fields added to the form as the sfc\Form::hiddenFields array
 *
 *   Revision:	a
 *   Rev. Date	30-Sep-2016
@@ -18,11 +18,26 @@
 namespace w34u\ssp\sfc;
 
 class Hidden{
-    // Element for hidden fields added to the form as the sfc\Form::hiddenFields array
-    public $name; // name of field
-    public $data; // data to be sored in hidden field
-    public $dataType = "text"; // type of data to be stored, see SFC_FE for more information
-    public $elClass = ""; // class assigned to the hidden element
+	/**
+	 * name of field
+	 * @var string
+	 */
+    public $name;
+	/**
+	 * data to be stored in hidden field
+	 * @var string 
+	 */
+    public $data;
+	/**
+	 * type of data to be stored, see SFC_FE for more information
+	 * @var string
+	 */
+    public $dataType = "text";
+	/**
+	 * class assigned to the hidden element
+	 * @var type 
+	 */
+    public $elClass = "";
 
     function __construct($name, $data, $dataType = "", $elClass=""){
         // constructor

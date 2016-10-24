@@ -18,7 +18,7 @@
 namespace w34u\ssp\sfc;
 
 /**
- * Error object returned by error routines
+ * Error object returned by data checking routines 
  */
 class Error{
 	/** @var string primary error string */

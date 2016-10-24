@@ -177,6 +177,22 @@ class Form {
 	 */
 	public $tokenDataCheckError = 'Token data type incorrect, possible hack attempt, data:%s:';
 	/**
+	 * Function to generate form submission tokens
+	 * @var string
+	 */
+	private static $tokenMaker = '\w34u\ssp\SSP_Token';
+	/**
+	 * Function to check token submitted by the form
+	 * @var string
+	 */
+	private static $tokenChecker = '\w34u\ssp\SSP_TokenCheck';
+	/**
+	 * Data type of token submitted
+	 * @var string
+	 */
+	private static $tokenDataType = 'hex';
+
+	/**
 	 * format used for dates
 	 * @var string
 	 */
@@ -299,107 +315,330 @@ class Form {
 	);
 	
 	// data for sql generation
-	public $dataTable = ""; // name of data table associated with the form
-	public $whereCondition = ""; // condition to retrieve or update the data with ? replacement fields
-	public $whereValues = array(); // array of values for where condition replaceable filelds
-	public $alsoAdd = array(); // array of data to be added to insert or update query, not added to form
-	public $resultQuery; // string - resulting query from form with ? parameters.
-	public $resultData = array(); // array - array of data to use in replacement parameters
-	public $saveFields = array(); // fields and values to be saved from the form
-	public $selectFields = array(); // array of fields to be selected for the form
-	public $ignorElements = " submit reset image button startrow endrow colrow"; // elements to be ignored when creating queries and checking data
-	public $quote = false; // quote fieled names
+	/**
+	 * name of data table associated with the form - used if generating sql
+	 * @var string 
+	 */
+	public $dataTable = "";
+	/**
+	 * condition to retrieve or update the data with ? replacement fields
+	 * @var string 
+	 */
+	public $whereCondition = "";
+	/**
+	 * array of values for where condition replaceable filelds
+	 * @var string
+	 */
+	public $whereValues = array();
+	/**
+	 * array of data to be added to insert or update query, not added to form
+	 * @var array 
+	 */
+	public $alsoAdd = array();
+	/**
+	 * resulting query from form with ? parameters.
+	 * @var string
+	 */
+	public $resultQuery;
+	/**
+	 * array of data to use in replacement parameters
+	 * @var array
+	 */
+	public $resultData = array();
+	/**
+	 * fields and values to be saved from the form
+	 * @var array
+	 */
+	public $saveFields = array();
+	/**
+	 * array of fields to be selected for the form
+	 * @var string
+	 */
+	public $selectFields = array();
+	/**
+	 * elements to be ignored when creating queries and checking data
+	 * @var string
+	 */
+	public $ignorElements = " submit reset image button startrow endrow colrow";
+	/**
+	 * quote field names
+	 * @var bool
+	 */
+	public $quote = false;
+	/**
+	 * Field quoting character to use at start
+	 * @var string
+	 */
 	public $quoteStart = '"';
+	/**
+	 * Field quoting character to use at end
+	 * @var string
+	 */
 	public $quoteEnd = '"';
+	
 	// paged form configuration
-	public $pageNumber = 0; // page number currently displayed
-	public $noPages = 1; // number of pages in form - not used for now
-	public $pageName = array(0 => "First Page"); // names of pages
+	/**
+	 * page number currently displayed
+	 * @var int
+	 */
+	public $pageNumber = 0;
+	/**
+	 * number of pages in form - not used for now
+	 * @var int
+	 */
+	public $noPages = 1;
+	/**
+	 * names of pages
+	 * @var array
+	 */
+	public $pageName = array(0 => "First Page");
+	
 	// formatting properties
-	public $buildForm = false; // auto generate form using tables, else use template
-	public $templateRoutine = ""; // externally defined template routine, uses eval and passes the form fields as an array. Should return the xhtml for the resulting form.
-	public $tDataAdditional = array(); // additional data for the template
-	public $tData; // array of form fields data for the template routine
-	public $tpl; // general template
-	public $tplElement = "content"; // element in the main template into which the form is put
-	public $tplf = ""; // form template name
-	public $tplp = ""; // preview template name
+	/**
+	 * auto generate form using tables, else use template
+	 * @var bool
+	 */
+	public $buildForm = false;
+	/**
+	 * externally defined template routine, uses eval and passes the form fields as an array. Should return the xhtml for the resulting form.
+	 * @var string
+	 */
+	public $templateRoutine = "";
+	/**
+	 * additional data for the template
+	 * @var array
+	 */
+	public $tDataAdditional = array();
+	/**
+	 * array of form fields data for the template routine
+	 * @var array
+	 */
+	public $tData;
+	/**
+	 * General template enclosing the form, if not defined the form xhtml is returned
+	 * @var w34u\ssp\Template
+	 */
+	public $tpl;
+	/**
+	 * element in the main template into which the form is put
+	 * @var string
+	 */
+	public $tplElement = "content";
+	/**
+	 * form template name
+	 * @var string
+	 */
+	public $tplf = "";
+	/**
+	 * preview template name
+	 * @var string
+	 */
+	public $tplp = "";
 	/**
 	 * generate form using template 
 	 * @var bool
 	 */
 	public $generateForm = true;
-	// preview configuration
-	public $preview = false; // do a preview for the form result
-	public $previewRoutine = ""; // routine used to preview results of the form, uses eval and passes the form fields as an array. Should return the xhtml for the resulting form.
-	public $previewBackName = "previewBack"; // name of back button on preview form
-	public $previewSaveName = "previewSave"; // name of save button on preview form
-	public $previewBack = false; // back pressed on preview form
-	public $previewSave = false; // save pressed on preview form
+	
+	// preview configuration - havnt used this in a long time
+	/**
+	 * do a preview for the form result
+	 * @var bool
+	 */
+	public $preview = false;
+	/**
+	 * routine used to preview results of the form, uses eval and passes the form fields as an array. Should return the xhtml for the resulting form.
+	 * @var string
+	 */
+	public $previewRoutine = "";
+	/**
+	 * name of back button on preview form, routine pick up press
+	 * @var string
+	 */
+	public $previewBackName = "previewBack";
+	/**
+	 * name of save button on preview form, roputine picks up press
+	 * @var string
+	 */
+	public $previewSaveName = "previewSave";
+	/**
+	 * back pressed on preview form
+	 * @var bool
+	 */
+	private $previewBack = false;
+	/**
+	 * save pressed on preview form
+	 * @var bool
+	 */
+	private $previewSave = false;
+	
 	// formatting for form elements
-	public $id = "form"; // id assigned to the form for style sheets etc.
+	/**
+	 * id assigned to the form for style sheets etc., used in generation not templated
+	 * @var string
+	 */
+	public $id = "form";
+	/**
+	 * Form classes, used in generation not templated
+	 * @var string
+	 */
 	public $fclass = "";
-	public $tableTabIndex = 0; // automatic tab index for elements
-	public $tableTabIndexAuto = false; // automatically create a tabindex
-	public $ldir = ""; // language direction, can be ltr or rtl
-	public $lang = ""; // language code for element
-	public $style = ""; // local styling for form
-	public $reqChar = "* %s"; // formatting string to put caracter on required strings
-	public $errorClass = "SFCError"; // Class used on erroring field descriptions.
-	public $hiddenClass = "sfcHidden"; // class to apply to hidden fields
+	/**
+	 * automatic tab index for elements
+	 * @var int
+	 */
+	public $tableTabIndex = 0;
+	/**
+	 * automatically create a tabindex
+	 * @var bool
+	 */
+	public $tableTabIndexAuto = false;
+	/**
+	 * language direction, can be ltr or rtl
+	 * @var string
+	 */
+	public $ldir = "";
+	/**
+	 * language code for element
+	 * @var string
+	 */
+	public $lang = "";
+	/**
+	 * local styling for form - only used in generation not template
+	 * @var string
+	 */
+	public $style = "";
+	/**
+	 * formatting string to put caracter on required strings
+	 * @var string
+	 */
+	public $reqChar = "* %s";
+	/**
+	 * Class used on erroring field descriptions and fields.
+	 * @var string
+	 */
+	public $errorClass = "SFCError";
+	/**
+	 * class to apply to hidden fields
+	 * @var string
+	 */
+	public $hiddenClass = "sfcHidden";
 	/** Add placeholder elements using description
 	 * @var bool  */
 	public $addPlaceholder = false;
-	// parameters for the auto generated form
-	public $formTitle = ""; // Title and text to be printed above the form
-	public $formFooter = ""; // text to be printed after the form
+	
+	// parameters for the auto generated form, used in auto generation
+	/**
+	 * Title and text to be printed above the form
+	 * @var type 
+	 */
+	public $formTitle = "";
+	/**
+	 * text to be printed after the form
+	 * @var string
+	 */
+	public $formFooter = "";
+	/**
+	 * Formatting used for general text
+	 * @var string
+	 */
 	public $genTextFormat = "<p>%s</p>";
-	public $threeCols = false; // put in help text as third column
-	public $startCont = '<table>'; //start of ofrmatting structure
-	public $startRow = '<tr><td>'; // xhtml on beginning of line
-	public $startRowOdd = '<tr class="oddRow"><td>'; // xhtml on beginning of line for odd row
-	public $startRowEven = '<tr class="evenRow"><td>'; // xhtml on beginning of line for even row
-	public $lableRows = false; // lable odd and even rows using startRowOdd and StartRowEven
-	public $rowEven = false; // row is even
-	public $sepCol1 = '</td><td>'; // column seperator between 1 and 2
-	public $sepCol2 = '</td><td>'; // column seperator between 2 and 3 if there is a third column
-	public $endRow = '</td></tr>'; // end of line
+	/**
+	 * put in help text as third column
+	 * @var boolean
+	 */
+	public $threeCols = false;
+	/**
+	 * start of ofrmatting structure
+	 * @var string
+	 */
+	public $startCont = '<table>';
+	/**
+	 * xhtml on beginning of line
+	 * @var string
+	 */
+	public $startRow = '<tr><td>';
+	/**
+	 * xhtml on beginning of line for odd row
+	 * @var string
+	 */
+	public $startRowOdd = '<tr class="oddRow"><td>';
+	/**
+	 * xhtml on beginning of line for even row
+	 * @var string
+	 */
+	public $startRowEven = '<tr class="evenRow"><td>';
+	/**
+	 * lable odd and even rows using startRowOdd and StartRowEven
+	 * @var bool
+	 */
+	public $lableRows = false;
+	/**
+	 * row is even
+	 * @var bool
+	 */
+	public $rowEven = false;
+	/**
+	 * column seperator between 1 and 2
+	 * @var string
+	 */
+	public $sepCol1 = '</td><td>';
+	/**
+	 * column seperator between 2 and 3 if there is a third column
+	 * @var string
+	 */
+	public $sepCol2 = '</td><td>';
+	/**
+	 * end of line
+	 * @var string
+	 */
+	public $endRow = '</td></tr>';
+	/**
+	 * Speration between columns
+	 * @var string
+	 */
 	public $colRow = '</td><td>';
-	public $endCont = '</table>'; // end of formatting structure if used
-	public $elementProperties; // properties available in element class
+	/**
+	 * end of formatting structure if used
+	 * @var string
+	 */
+	public $endCont = '</table>';
+	/**
+	 * properties available in element class
+	 * @var type 
+	 */
+	public $elementProperties;
+	/**
+	 * Debug mode
+	 * @var bool
+	 */
 	public $debug = false;
+	/**
+	 * Debug output information, mainly for file upload
+	 * @var array
+	 */
 	public $debugResults = array();
 
-	/** @var bool attempt to translate the text */
+	/** 
+	 * attempt to translate the text
+	 * @var bool  */
 	private static $translate = false;
 
-	/** @var bool disable translation for this form object */
+	/** 
+	 * disable translation for this form object
+	 * @var bool  */
 	public $translateDisable = false;
 
-	/** @var object translator object use to translate strings */
+	/** 
+	 * translator object use to translate strings
+	 * @var w34u\ssp\Translate  */
 	private static $tranlator;
 
-	/** @var string name of method used in tranlation object */
+	/** 
+	 * name of method used in tranlation object
+	 * @var string  */
 	private static $translateMethod = 't';
-
-	/**
-	 * Function to generate form submission tokens
-	 * @var string
-	 */
-	private static $tokenMaker = '\w34u\ssp\SSP_Token';
-
-	/**
-	 * Function to check token submitted by the form
-	 * @var string
-	 */
-	private static $tokenChecker = '\w34u\ssp\SSP_TokenCheck';
-
-	/**
-	 * Data type of toekn submitted
-	 * @var string
-	 */
-	private static $tokenDataType = 'hex';
-
+	
 	/**
 	 * Form constructor
 	 * @param string $action
@@ -2210,6 +2449,17 @@ class Form {
 		}
 	}
 
+	/**
+	 * Configure form token check routines
+	 * @param string $tokenMaker - function to make tokens
+	 * @param string $tokenChecker - function to check tokens
+	 * @param string $tokenDataType - data type of token
+	 */
+	public static function setTokenRoutines($tokenMaker, $tokenChecker, $tokenDataType){
+		self::$tokenMaker = $tokenMaker;
+		self::$tokenChecker = $tokenChecker;
+		self::$tokenDataType = $tokenDataType;
+	}
 }
 
 /* End of file Form.php */
