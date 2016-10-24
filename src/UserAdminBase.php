@@ -269,12 +269,10 @@ abstract class UserAdminBase{
 
     /**
 	 * Creates an admin user if non exists
-	 * user name: admin
-	 * email: admin@admin.com
-	 * password: password100
+	 * @param array $content - Content from previous routines
 	 * @return bool - true on success
 	 */
-	function adminCreate(){
+	function adminCreate($content){
         // check for any exisiting admin users
         $adminAccess = array_search($this->cfg->adminLevel, $this->cfg->userLevels);
         $where = array("UserAccess" => $adminAccess);

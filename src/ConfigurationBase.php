@@ -54,6 +54,11 @@ abstract class ConfigurationBase
 	 * put site in maintenance mode, just shows a screen
 	 * @var bool  */
 	public $siteInMaintenanceMode = false;
+	/**
+	 * Enable site setup script
+	 * @var bool
+	 */
+	public $enableSetup = true;
 	/** 
 	 * file to be shown if in maintenance mode
 	 * @var string  */
