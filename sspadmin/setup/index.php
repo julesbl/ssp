@@ -2,10 +2,10 @@
 namespace w34u\ssp;
 
 require '../includeheader.php';
-$cfg = \w34u\ssp\ConfigurationBase::getConfiguration();
+$cfg = \w34u\ssp\Configuration::getConfiguration();
 
 if($cfg->enableSetup !== true){
-	exit();
+	exit('Setup disabled, Enable in configuration, ->enableSetup');
 }
 $content = [];
 if(!isset($_POST['SFC_Submit'])){
@@ -24,7 +24,7 @@ if(!isset($_POST['SFC_Submit'])){
 		'index.php',
 		'db:migrate'
 	];
-	$main = new Ruckusing_FrameworkRunner($db_config, $params);
+	$main = new \Ruckusing_FrameworkRunner($db_config, $params);
 	$content['database_creation'] = $main->execute();
 }
 

@@ -37,6 +37,11 @@ namespace w34u\ssp;
  */
 class Configuration extends ConfigurationBase
 {
+	/**
+	 * Enable site setup script
+	 * @var bool
+	 */
+	public $enableSetup = true;
 	/** 
 	 * database user
 	 * @var string  */

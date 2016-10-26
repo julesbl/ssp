@@ -72,7 +72,7 @@ class Form {
 	public $currentElement = "";
 	/**
 	 * Current element object
-	 * @var w34u\ssp\sfc\Fe
+	 * @var Fe
 	 */
 	public $currentElelementObject = null;
 	/**

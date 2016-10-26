@@ -56,15 +56,15 @@ abstract class UserAdminBase{
 	protected $id = "";
 	/** 
 	 * session object
-	 * @var SSP_Protect  */
+	 * @var Protect  */
 	protected $session;
 	/** 
 	 * SSP configuration object
-	 * @var SSP_Configuration  */
+	 * @var Configuration  */
 	protected $cfg;
 	/** 
 	 * database object
-	 * @var SSP_DB SSP  */
+	 * @var SspDB */
 	protected $db;
 	/** 
 	 * SSP setup object
@@ -272,16 +272,55 @@ abstract class UserAdminBase{
 	 * @param array $content - Content from previous routines
 	 * @return bool - true on success
 	 */
-	function adminCreate($content){
+	public function adminCreate($content){
         // check for any exisiting admin users
-        $adminAccess = array_search($this->cfg->adminLevel, $this->cfg->userLevels);
-        $where = array("UserAccess" => $adminAccess);
-		if($this->db->get($this->cfg->userTable, $where, "SSP Admin Creation: Finding any admin users")){
-			die("Admin user(s) already exist!, please delete them before you can run this script");
+		$adminAccess = array_filter($this->cfg->userLevels, function($level){
+			$cfg = \w34u\ssp\Configuration::getConfiguration();
+			if($level >= $cfg->adminLevel){
+				return true;
+			}
+			return false;
+		});
+		$sql = '
+			select
+				UserId
+			from
+				%s
+			where
+				UserAccess in (%s)
+				 ';
+		$sql = sprintf($sql, $this->cfg->userTable, "'". implode("','", array_keys($adminAccess)). "'");
+		$this->db->query($sql, [], "SSP Admin Creation: Finding any admin users");
+		if($this->db->numRows() > 0){
+			$content['admin_creation_status'] = $this->session->t('There are already admin users in the system, please delete these first if attempting to recover access to the system.');
 		}
 		else{
 			// create admin user
-			$userId=md5(uniqid($this->cfg->magicUser,true));
+			$form = new sfc\Form(SSP_Path(), 'none', 'createAdminForm');
+			$form->tplf = 'adminCreateFrom.tpl';
+			$form->errorAutoFormDisplay = false;
+			$form->fe('text', 'email', 'Admin email');
+			$form->currentElelementObject->required = true;
+			$form->currentElelementObject->dataType = 'email';
+			$form->fe('password', 'password1', 'Password');
+			$form->currentElelementObject->required = true;
+			$form->currentElelementObject->dataType = 'password';
+			$form->fe('password', 'password2', 'Repeat the password');
+			$form->currentElelementObject->required = true;
+			$form->currentElelementObject->dataType = 'password';
+			if($form->processForm($_POST)){
+				if(!$form->error){
+					
+				}
+				else{
+					
+				}
+			}
+			else{
+				
+			}
+			
+			$userId = md5(uniqid($this->cfg->magicUser,true));
 			$userEmail = SSP_encrypt('admin@admin.com');
 			$userName = 'admin';
 			$userPassword = $this->session->cryptPassword('password1000');
@@ -303,14 +342,16 @@ abstract class UserAdminBase{
 			$login = new Logon($this->session,"", true, false);
 			$login->userLoginCheck($userInfo);
 		}
-        return(true);
+		$tpl = new Template($content, 'adminCreate.tpl');
+		$mainTpl = $this->tpl(['content' => $tpl->output(), 'title' => 'Site database creation and intialisation'], true);
+        return $mainTpl->output();
     }
 
     /**
 	 * Initialises the user misc table for a user
 	 * @param string $userId - user id
 	 */
-	function userMiscInit($userId){
+	private function userMiscInit($userId){
         $this->id = $userId;
 
         $values["UserId"] = $userId;
@@ -321,7 +362,7 @@ abstract class UserAdminBase{
 	 * Send a joinup email to the current user
 	 * @param string $id User id
 	 */
-	function userJoinEmail($id){
+	public function userJoinEmail($id){
         // get user information
         $fields = array("UserEmail");
         $emailAddress = $this->getUser($fields, "SSP Admin: Getting email for user joining email", $id);
@@ -347,7 +388,7 @@ abstract class UserAdminBase{
 	 * Display screen to ask if a joinup email is required
 	 * @return bool - true on success
 	 */
-	function sendJoinupEmail(){
+	public function sendJoinupEmail(){
         $form = new sfc\Form(SSP_Path(), "noTable", "joinUpEmail");
         $form->tpl = $this->tpl(array("title" => "Send joining email"));
         $form->tplf = "sendjoinupemail.tpl";
@@ -393,7 +434,7 @@ abstract class UserAdminBase{
     /**
 	 * display the welcome screen on successful user join
 	 */
-	function welcomeScreen(){
+	public function welcomeScreen(){
         // creates the user welcome screen after creation
 
 		$content = array("rootPath" => $this->cfg->siteRoot);
@@ -405,11 +446,11 @@ abstract class UserAdminBase{
     }
 
     /**
-	 * Finish user cration when user replies to email
+	 * Finish user creation when user replies to email
 	 * @param string $token - returned token
 	 * @param array $userContent - more content for the template
 	 */
-	function userConfirm($token, $userContent=array()){
+	public function userConfirm($token, $userContent=array()){
 		// set up saving id for password setting
 		if(!isset($_SESSION['SSP_user_confirm_id'])){
 			$_SESSION['SSP_user_confirm_id'] = '';
@@ -464,7 +505,7 @@ abstract class UserAdminBase{
 	 * @param bool $reDisplay - re-display form on success
 	 * @return bool - true on success else returns the form
 	 */
-	function changePassword($userId="", $requirePassword=true, $reDisplay=false){
+	public function changePassword($userId="", $requirePassword=true, $reDisplay=false){
         if($userId != ""){
         	$id = $userId;
         }
@@ -564,7 +605,7 @@ abstract class UserAdminBase{
 	 * @param bool $reDisplay - re-display form on success
 	 * @return bool/string - true on success else outputs the form
 	 */
-	function changeEmail($requirePassword, $reDisplay=false){
+	public function changeEmail($requirePassword, $reDisplay=false){
         $form = new sfc\Form(SSP_Path(), $this->cfg->userTable, "changeEmail");
 		$form->errorAutoFormDisplay = false;
 		$form->addPlaceholder = $this->addPlaceholder;
@@ -651,7 +692,7 @@ abstract class UserAdminBase{
 	 * Change advanced admin configuration
 	 * @return bool - true on success
 	 */
-	function changeAdmin(){
+	public function changeAdmin(){
 		$checkData = array('0','1');
 		$form = new sfc\Form(SSP_Path(), $this->cfg->userTable, "changeAdmin");
         $form->tpl = $this->tpl(array("title" => "Change advanced information"));
@@ -689,7 +730,7 @@ abstract class UserAdminBase{
 	/**
 	 * Display admin information
 	 */
-    function displayAdminInfo(){
+    public function displayAdminInfo(){
         // Displays admin flags and information on a user
 
         $info = get_object_vars($this->getUser("*", "Getting admin data for display"));
@@ -741,7 +782,7 @@ abstract class UserAdminBase{
 	 * @param string $userIdFrom - user from id
 	 * @return string - form output
 	 */
-	function emailUser($userIdTo, $userIdFrom){
+	public function emailUser($userIdTo, $userIdFrom){
         $form= new sfc\Form(SSP_Path(), "noTable", "emailUser");
         $form->tpl = $this->tpl(array("title" => "Email member"));
         $form->tplf = "sendemailtomember.tpl";
@@ -799,14 +840,7 @@ abstract class UserAdminBase{
     /**
 	 * Start recovery of a users password
 	 */
-	function startPasswordRecovery(){
-        // creates a form, issues a token and generates an email to start the recovery process
-        // Parameters
-        //  $data - $_POST or $_GET
-        //
-        // returns true on succesful sending of the email
-
-        // recovery form
+	public function startPasswordRecovery(){
         $form = new sfc\Form(SSP_Path(), "noTable", "startPasswordRecovery");
 		$form->tplf = "passwordrecover.tpl";
 		$form->tpl = $this->tpl(array("title" => "Password recovery"));
@@ -919,14 +953,14 @@ abstract class UserAdminBase{
 		}
 	}
 
-    function updateUser($fields, $errorString, $id=""){
-        // Updates fields in the user table to the required value
-        // Returns true or PEAR error
-        //
-        //  Parameters
-        //  $fields - array - fieldName => value
-        //  $userId - string - Users id
-
+	/**
+	 * Updates fields in the user table to the required value
+	 * @param array $fields - fields and values to be updated
+	 * @param string $errorString - error string used if it fails
+	 * @param string $id - user id if different from internal
+	 * @return bool
+	 */
+    protected function updateUser(array $fields, $errorString, $id=""){
         if($id==""){
         	$where["UserId"] = $this->id;
         }
@@ -937,14 +971,14 @@ abstract class UserAdminBase{
         return(true);
     }
 
-    function getUser($fields, $errorString, $id=""){
-        // Gets the specifeid fields from the Main logon table
-        // returns an object
-        //
-        // parameters
-        //  $fields - array of field names, if not array gets all fields
-        //  $id - user id
-
+	/**
+	 * Gets the specifeid fields from the Main logon table
+	 * @param array $fields - fields to get, null gets the lot
+	 * @param string $errorString - erro string on failure
+	 * @param string $id - user id, optional
+	 * @return object
+	 */
+    protected function getUser($fields, $errorString, $id=""){
         if($id==""){
         	$where["UserId"] = $this->id;
         }
@@ -960,14 +994,14 @@ abstract class UserAdminBase{
         return($row);
     }
 
-    function updateMisc($fields, $errorString, $id=""){
-        // Updates fields in the miscellaneous table to the required value
-        // Returns true or PEAR error
-        //
-        //  Parameters
-        //  $fields - array - fieldName => value
-        //  $id - string - Users id
-
+	/**
+	 * Updates fields in the miscellaneous table to the required value
+	 * @param array $fields - fields and values
+	 * @param string $errorString - error string for failure
+	 * @param string $id - optiohal user id
+	 * @return bool - true on success
+	 */
+    protected function updateMisc(array $fields, $errorString, $id=""){
          if($id==""){
         	$where["UserId"] = $this->id;
         }
@@ -978,14 +1012,14 @@ abstract class UserAdminBase{
         return(true);
     }
 
-    function getMisc($fields, $errorString, $id=""){
-        // Gets the specifeid fields from the misc table
-        // returns an object
-        //
-        // parameters
-        //  $fields - array of field names, if not array gets all fields
-        //  $userId - user id
-
+	/**
+	 * Gets the specifeid fields from the misc table
+	 * @param array $fields - fields to get, null gets the lot
+	 * @param string $errorString - error to generate on failure
+	 * @param string $id - optinoal user id
+	 * @return object
+	 */
+    protected function getMisc($fields, $errorString, $id=""){
         if($id==""){
         	$where["UserId"] = $this->id;
         }
@@ -1001,16 +1035,19 @@ abstract class UserAdminBase{
         return($row);
     }
 
-	function response($text){
-		// displays a routines resulting response
-
+	/**
+	 * Display a response in the main template
+	 * @param string $text - text to show
+	 * @return string - total output including main template output
+	 */
+	protected function response($text){
 		$contentMain["content"] =  "<br /><br /><p>{$this->session->t($text)}</p>";
 		$tpl = $this->tpl($contentMain);
 		$tpl->ne('content');
 		return $tpl->output();
 	}
 	/**
-	 * Create user admin template
+	 * Create user admin template - stub
 	 * @param array $contentMain - template content data
 	 * @param bool $noMenusAndInfo - don't show user info
 	 * @return Template 

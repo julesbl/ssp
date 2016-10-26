@@ -379,10 +379,10 @@ abstract class ConfigurationBase
 	 * @var array of integers
 	 */
 	public $userLevels = array(
-			"public" =>0,
+			"public" => 0,
 			"user" => 5,
 			"userPlus" => 6,
-			"admin"=>31
+			"admin" => 31
 		);
 	/**
 	 * level above which user is admin

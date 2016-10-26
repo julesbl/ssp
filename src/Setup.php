@@ -36,15 +36,25 @@ namespace w34u\ssp;
 
 class Setup{
 
-	/** @var SSP_Protect ssp session object */
+	/** 
+	 * ssp session object
+	 * @var Protect  */
 	public $session;
-	/** @var SSP_Configuration config object */
+	/** 
+	 * config object
+	 * @var Configuration  */
 	public $cfg;
-	/** @var SSP_DB database object */
+	/** 
+	 * database object
+	 * @var SspDB  */
 	public $db;
-	/** @var string seperator for page title */
+	/** 
+	 * seperator for page title
+	 * @var string  */
 	public $pageTitleSeperator = ' - ';
-	/** @var array page title */
+	/** 
+	 * page title elements
+	 * @var array  */
 	private $pageTitleSegments = array();
 	/** Template to be used
 	 * @var string  */
@@ -52,9 +62,7 @@ class Setup{
 
 	/**
 	 * SSP site constructor
-	 * @param SSP_Protect $session - protection object
-	 * @param SSP_Configuration $cfg - configuration
-	 * @param SSP_DB $db - database object
+	 * @param Protect $session - protection object
 	 * @param bool $translateAdmin - load admin translation files
 	 * @param string $template - main template name
 	 */
@@ -168,6 +176,9 @@ class Setup{
 
 		if(!isset($contentMain["menu"])){
 			$contentMain["menu"] = "";
+		}
+		if($this->cfg->enableSetup === true){
+			$contentMain['showDisableSetupText'] = true;
 		}
 		$tpl = new Template($contentMain, $template, false);
 		return($tpl);
