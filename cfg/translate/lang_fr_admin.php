@@ -148,6 +148,14 @@ w34u\ssp\Translate::addToLanguage('fr', array(
 	'all a b c d e f g h i j k l m n o p q r s t u v w x y z' => 'tous a b c d e f g h i j k l m n o p q r s t u v w x y z',
 	'all' => 'tous',
 	'User fault' => 'Faute flag utilisateur',
+	// Site creation and intialisation
+	'Site database creation and intialisation' => 'Site database creation and intialisation',
+	'Admin email' => 'Admin email',
+	'Admin user name' => 'Admin user name',
+	'Repeat the password' => 'Repeat the password',
+	'Please check the passwords, they must be the same' => 'Please check the passwords, they must be the same',
+	'There are already admin users in the system, please delete these first if attempting to recover access to the system.' => 'There are already admin users in the system, please delete these first if attempting to recover access to the system.',
+	'Admin user created' => 'Admin user created',
 ));
 /* End of file lang_fr.php */
 /* Location: /translate/ */

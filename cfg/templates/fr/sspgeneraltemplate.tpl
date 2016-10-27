@@ -44,6 +44,9 @@
 		{menu}
 		</td>
 		<td id="content">
+	{:if:showDisableSetupText}
+	<h2 style="color: red;">Setup is still enabled, please disable by setting $enableSetup = false in configuration</h2>
+	{:endif:showDisableSetupText}
 		{:if:displayName}
 		<p>Pseudonyme: {displayName}</p>
 		{:endif:displayName}

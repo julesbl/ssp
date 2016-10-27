@@ -32,4 +32,3 @@ $session = new Protect();
 $ssp = new Setup($session, true);
 $admin = new UserAdmin($session, $ssp, '', 'sspsmalltemplate.tpl');
 echo $admin->adminCreate($content);
-

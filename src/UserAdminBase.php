@@ -297,51 +297,66 @@ abstract class UserAdminBase{
 		else{
 			// create admin user
 			$form = new sfc\Form(SSP_Path(), 'none', 'createAdminForm');
-			$form->tplf = 'adminCreateFrom.tpl';
+			$form->tplf = 'adminCreateForm.tpl';
 			$form->errorAutoFormDisplay = false;
-			$form->fe('text', 'email', 'Admin email');
-			$form->currentElelementObject->required = true;
-			$form->currentElelementObject->dataType = 'email';
-			$form->fe('password', 'password1', 'Password');
+			if($this->cfg->loginType === 0){
+				$form->fe('text', 'email', 'Admin email');
+				$form->currentElelementObject->required = true;
+				$form->currentElelementObject->dataType = 'email';
+			}
+			if($this->cfg->loginType === 1){
+				$form->fe('text', 'userName', 'Admin user name');
+				$form->currentElelementObject->required = true;
+				$form->currentElelementObject->dataType = 'email';
+			}
+			$form->fe('text', 'password1', 'Password');
 			$form->currentElelementObject->required = true;
 			$form->currentElelementObject->dataType = 'password';
-			$form->fe('password', 'password2', 'Repeat the password');
+			$form->fe('text', 'password2', 'Repeat the password');
 			$form->currentElelementObject->required = true;
 			$form->currentElelementObject->dataType = 'password';
 			if($form->processForm($_POST)){
 				if(!$form->error){
-					
+					if(strcmp($form->getField('password1'), $form->getField('password2')) === 0){
+						$userId = md5(uniqid($this->cfg->magicUser,true));
+						$userPassword = $this->session->cryptPassword($form->getField('password1'));
+						$userDate = time();
+						$fields = array(
+							"UserId" => $userId,
+							"UserPassword" => $userPassword,
+							"UserAccess" => 'admin',
+							"UserDateCreated" => $userDate,
+							"CreationFinished" => "1",
+						);
+						if($this->cfg->loginType === 0){
+							$fields['UserEmail'] = $form->getField('email');
+						}
+						if($this->cfg->loginType === 1){
+							$fields['UserName'] = $form->getField('userName');
+						}
+						$this->db->insert($this->cfg->userTable, $fields, "SSP Admin Creation: Creating admin entry");
+
+						// create empty misc info
+						$this->userMiscInit($userId);
+						$userInfo = $this->db->get($this->cfg->userTable, array("UserId"=>$userId), "Getting user info for auto login of admin on creation");
+						$login = new Logon($this->session,"", true, false);
+						$login->userLoginCheck($userInfo);
+						$content['admin_creation_status'] = $this->session->t('Admin user created');
+					}
+					else{
+						$form->setError('password1', 'Please check the passwords, they must be the same');
+						$content['form'] = $form->create(true);
+					}
 				}
 				else{
-					
+					$content['form'] = $form->create(true);
 				}
 			}
 			else{
-				
+				$content['form'] = $form->create();
 			}
-			
-			$userId = md5(uniqid($this->cfg->magicUser,true));
-			$userEmail = SSP_encrypt('admin@admin.com');
-			$userName = 'admin';
-			$userPassword = $this->session->cryptPassword('password1000');
-			$userDate = time();
-			$fields = array(
-				"UserId" => $userId,
-				"UserEmail" => $userEmail,
-				"UserName" => $userName,
-				"UserPassword" => $userPassword,
-				"UserAccess" => $adminAccess,
-				"UserDateCreated" => $userDate,
-				"CreationFinished" => "1",
-			);
-			$this->db->insert($this->cfg->userTable, $fields, "SSP Admin Creation: Creating admin entry");
-
-			// create empty misc info
-			$this->userMiscInit($userId);
-			$userInfo = $this->db->get($this->cfg->userTable, array("UserId"=>$userId), "Getting user info for auto login of admin on creation");
-			$login = new Logon($this->session,"", true, false);
-			$login->userLoginCheck($userInfo);
 		}
+		$content['adminPath'] = $this->cfg->totalAdminScript;
 		$tpl = new Template($content, 'adminCreate.tpl');
 		$mainTpl = $this->tpl(['content' => $tpl->output(), 'title' => 'Site database creation and intialisation'], true);
         return $mainTpl->output();

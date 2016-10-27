@@ -1094,7 +1094,7 @@ class Form {
 			$form->ne("formHidden");
 
 			$formResult = $form->output();
-
+			
 			if (is_object($this->tpl)) {
 				$this->tpl->display = false;
 				$this->tpl->setData($this->tplElement, $formResult);

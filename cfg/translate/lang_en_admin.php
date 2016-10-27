@@ -149,6 +149,14 @@ w34u\ssp\Translate::addToLanguage('en', array(
 	// the next item is used to detect that all has been selected from the list for generating the query
 	'all' => 'all',
 	'User fault' => 'User flag fault',
+	// Site creation and intialisation
+	'Site database creation and intialisation' => 'Site database creation and intialisation',
+	'Admin email' => 'Admin email',
+	'Admin user name' => 'Admin user name',
+	'Repeat the password' => 'Repeat the password',
+	'Please check the passwords, they must be the same' => 'Please check the passwords, they must be the same',
+	'There are already admin users in the system, please delete these first if attempting to recover access to the system.' => 'There are already admin users in the system, please delete these first if attempting to recover access to the system.',
+	'Admin user created' => 'Admin user created',
 ));
 /* End of file lang_fr.php */
 /* Location: /translate/ */

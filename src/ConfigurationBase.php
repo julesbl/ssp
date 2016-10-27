@@ -441,7 +441,7 @@ abstract class ConfigurationBase
 	 * allow remote auto login
 	 * @var bool
 	 */
-	public $autoLoginEnable = true;
+	public $autoLoginEnable = false;
 	/**
 	 * table for remote login setup
 	 * @var string
@@ -524,13 +524,19 @@ abstract class ConfigurationBase
 	public $confirmExpiry = 604800;
 
 	// remember me fuctionality for the login
-	/** @var bool enable remember me functionality */
+	/** 
+	 * enable remember me functionality
+	 * @var bool  */
 	public $loginRememberMe = true;
-	/** @var int number of days the remember me cookie lasts */
+	/** 
+	 * number of days the remember me cookie lasts
+	 * @var int  */
 	public $loginRememberMePeriod = 100;
 
 	// Change this !!!!!
-	/** @var string remember me cookie name */
+	/** 
+	 * remember me cookie name
+	 * @var string  */
 	public $loginRememberMeCookie = null;
 	
 	/**
