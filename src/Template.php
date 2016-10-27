@@ -202,7 +202,7 @@ class Template {
 	 * @param string $charsetHtml - character set for mutibyte string for this template
 	 * @param boolean $charsetQuotes - type of html encoding as used by htmlentities
 	 */
-	function __construct($replaces, $templateFile, $display = false, $charsetHtml = false, $charsetQuotes = false) {
+	public function __construct($replaces, $templateFile, $display = false, $charsetHtml = false, $charsetQuotes = false) {
 
 		// print out or return result
 		$this->display = $display;
