@@ -332,7 +332,7 @@ abstract class LogonBase {
 				}
 				if($this->cfg->randomCheck){
 					// set up random check cookie and entry
-					$randomCookie=mt_rand(0,100000);
+					$randomCookie = mt_rand(0,100000);
 					setcookie($this->cfg->randomCookie, $randomCookie, 0, $this->cfg->cookiePath, $this->cfg->cookieDomain, $this->cfg->useSSL);
 					$querySet["SessionRandom"] = $randomCookie;
 				}

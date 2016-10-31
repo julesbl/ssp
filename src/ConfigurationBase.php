@@ -372,6 +372,13 @@ abstract class ConfigurationBase
 	 */
 	public $randomCookie = null;
 	/**
+	 * Number of random numbers to store for check, so if 2 the current and previous
+	 * This was implemented to prevent session failure on fast double click on
+	 * slow sites
+	 * @var int
+	 */
+	public $randomCookieChecks = 2;
+	/**
 	 * User levels for logins
 	 * users "public" and "admin" must always exist for the
 	 * routines to function, you can have user types with priorities higher
