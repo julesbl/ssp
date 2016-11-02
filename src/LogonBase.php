@@ -114,8 +114,16 @@ abstract class LogonBase {
 				$this->loginSuccess();
 			}
 		}
+		$success = false;
 		if($form->processForm($_POST)){
-			if(!$form->error and $this->loginFormCheck($form) and $userId = $this->logonCheck($form->userInfo)){
+			if(!$form->error and $this->loginFormCheck($form)){
+				$userId = $this->logonCheck($form->userInfo);
+				if($userId !== false){
+					$success = true;
+				}
+			}
+			
+			if($success){
 				$this->loginSuccess($userId);
 			}
 			else{
@@ -164,7 +172,7 @@ abstract class LogonBase {
 	}
 	
 	/**
-	 * Stub for login succesful display screen
+	 * Stub for login successful display screen
 	 * @param string $userId
 	 * @param string $returnPath
 	 */
@@ -237,14 +245,18 @@ abstract class LogonBase {
 			$where = array();
 			$where["UserEmail"] = $userEmail;
 			$userInfo = $this->db->get($this->cfg->userTable, $where, "SSP Logon: Getting user login data using email");
-			$this->errorDesc = "Email not found";
-			if($this->db->numRows()){
+			if($this->db->numRows() > 0){
 				// email and password found
-				$this->errorDesc = "Password not correct: '$userPassword'";
 				if($this->session->checkPassword($userPassword, $userInfo->UserPassword)){
 					// password the same
-					$passwordOk=true;
+					$passwordOk = true;
 				}
+				else{
+					$this->errorDesc = "Password not correct: '$userPassword'";
+				}
+			}
+			else{
+				$this->errorDesc = "Email not found";
 			}
 		}
 		elseif($this->cfg->loginType==1){
@@ -255,14 +267,18 @@ abstract class LogonBase {
 			$where = array();
 			$where["UserName"] = $userName;
 			$userInfo = $this->db->get($this->cfg->userTable, $where, "SSP Logon: Getting user login data using username");
-			$this->errorDesc = "User name not found";
-			if($this->db->numRows()){
+			if($this->db->numRows() > 0){
 				// user name found
-				$this->errorDesc = "Password not correct: '$userPassword'";
 				if($this->session->checkPassword($userPassword, $userInfo->UserPassword)){
 					// password the same
-					$passwordOk=true;
+					$passwordOk = true;
 				}
+				else{
+					$this->errorDesc = "Password not correct: '$userPassword'";
+				}
+			}
+			else{
+				$this->errorDesc = "User name not found";
 			}
 		}
 
@@ -282,7 +298,7 @@ abstract class LogonBase {
 	 * @return string/bool - user's id on success else false
 	 */
     private function logonCheck($userInfo){
-        $loginOk=false;
+        $loginOk = false;
 
 		// if external login check ok do the rest
 		if($this->userLoginCheck($userInfo)){
@@ -293,21 +309,27 @@ abstract class LogonBase {
 			foreach($this->cfg->validUserFlags as $flagName => $validFlagValue){
 				if($userInfo->$flagName != $validFlagValue){
 					$userOk = false;
-					$this->errorsDesc = "Invalid user flag ". $flagName. " value required: ". $validFlagValue. " actual: ". $userInfo->$flagName;
+					$this->errorDesc = "Invalid user flag ". $flagName. " value required: ". $validFlagValue. " actual: ". $userInfo->$flagName;
 					break;
 				}
 			}
 
 			if($this->cfg->fixedIpAddress or $userInfo->UserIpCheck){
 				// check user IP
-				if(SSP_paddIp($_SERVER["REMOTE_ADDR"]) == SSP_paddIp($userInfo->UserIp)){
-					// Fixed ip correct
-					// set User ip for update into the session table
-					$querySet["SessionUserIp"]=$userInfo->UserIp;
+				$allowedIpAddreses = explode(',',$userInfo->UserIp);
+				$foundAddress = false;
+				foreach($allowedIpAddreses as $ipAddress){
+					if(strcasecmp(SSP_paddIp($_SERVER["REMOTE_ADDR"]), SSP_paddIp($ipAddress)) === 0){
+						// Fixed ip correct
+						// set User ip for update into the session table
+						$querySet["SessionUserIp"] = $userInfo->UserIp;
+						$foundAddress = true;
+						break;
+					}
 				}
-				else{
-					$this->errorsDesc = "IP address not correct";
-					$userOk=false;
+				if(!$foundAddress){
+					$this->errorDesc = "Current ip address {$_SERVER["REMOTE_ADDR"]} not in users list";
+					$userOk = false;
 				}
 			}
 
@@ -316,7 +338,7 @@ abstract class LogonBase {
 				$where = array("UserId"=>$userInfo->UserId);
 				if($this->db->get($this->cfg->sessionTable, $where, "SSP Logon: Checking for multiple logins")){
 					// user already logged in
-					$this->errorsDesc = "User already logged in";
+					$this->errorDesc = "User already logged in";
 					$userOk = false;
 				}
 			}
@@ -324,7 +346,7 @@ abstract class LogonBase {
 
 			// do final set up if everything has worked ok
 			if($userOk){
-				$loginOk=true;
+				$loginOk = true;
 				$querySet["UserId"] = $userInfo->UserId;
 				if($this->cfg->checkIpAddress){
 					// set up IP address for this session

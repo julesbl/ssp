@@ -353,7 +353,9 @@ abstract class ConfigurationBase
 	 * @var int
 	 */
 	public $checkIpAccuracy = 3;
-	/** @var int accuracy to which IPv6 addresses are checked to be equal */
+	/** 
+	 * accuracy to which IPv6 addresses are checked to be equal
+	 * @var int  */
 	public $checkIpv6Accuracy = 7;
 	/**
 	 * All users have fixed IP addresses

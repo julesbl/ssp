@@ -326,12 +326,12 @@ abstract class ProtectBase{
                 $needHigherLogin = true; // flag different login needed
                 $this->log("User Access level not equal to the page's level");
             }
-            elseif($this->cfg->checkIpAddress and SSP_trimIp($sessionInfo->SessionIp) != SSP_trimIp($_SERVER["REMOTE_ADDR"])){
+            elseif($this->cfg->checkIpAddress and SSP_trimIp($sessionInfo->SessionIp) !== SSP_trimIp($_SERVER["REMOTE_ADDR"])){
                 // users IP address has changed
                 $userFault = true;
 				$this->log("User IP address changed ".SSP_paddIp($_SERVER["REMOTE_ADDR"]));
            }
-            elseif(($this->cfg->fixedIpAddress or $userInfo->UserIpCheck) and SSP_paddIp($sessionInfo->SessionUserIp) != SSP_paddIp($_SERVER["REMOTE_ADDR"])){
+           elseif(($this->cfg->fixedIpAddress or $userInfo->UserIpCheck) and SSP_paddIp($sessionInfo->SessionUserIp) !== SSP_paddIp($_SERVER["REMOTE_ADDR"])){
                 // user is at incorrect IP address
                 $userFault = true;
 				$this->log("User IP address incorrect, UserIP: ". SSP_paddIp($sessionInfo->SessionUserIp). " Remote IP: ". SSP_paddIp($_SERVER["REMOTE_ADDR"]));

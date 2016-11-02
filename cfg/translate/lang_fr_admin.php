@@ -93,7 +93,7 @@ w34u\ssp\Translate::addToLanguage('fr', array(
 	// Change advanced information
 	'Change advanced information' => 'Changer informations avancées',
 	'Check user IP for logon and session' => 'Vérifier IP pour login et session',
-	'User IP address' => 'Adresse IP utilisateur',
+	'User IP address' => 'Liste des adresses IP des utilisateurs, séparées par des virgules',
 	'User Access rights' => 'Droits d\'accès aux utilisateurs',
 	'User Disabled' => 'Utilisateur désactivé',
 	'User Pending program enable' => 'Activer programme utilisateur',

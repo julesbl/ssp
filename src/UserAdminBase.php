@@ -715,7 +715,7 @@ abstract class UserAdminBase{
         $form->tplf = "changeadmin.tpl";
         $form->fe("check", "UserIpCheck","Check user IP for logon and session", $checkData);
         $form->fe("text", "UserIp", "User IP address", "Users Ip address");
-		$form->fep("width=30,maxChar=30,dataType=real,maxLength=35");
+		$form->fep("maxChar=255, maxLength=255");
         $form->fe("select", "UserAccess", "User Access rights", $this->cfg->userAccessTypeDropdown);
         $form->fe("check", "UserDisabled", "User Disabled", $checkData);
         $form->fe("check", "UserPending", "User Pending program enable", $checkData);

@@ -196,10 +196,10 @@ function SSP_trimIp($ipNumber){
 	}
     $ip = SSP_paddIp($ipNumber);
 	if(!$ipv6){
-		$trim= $SSP_Config->checkIpAccuracy*6;
+		$trim = $SSP_Config->checkIpAccuracy*6;
 	}
 	else{
-		$trim= $SSP_Config->checkIpv6Accuracy*5;
+		$trim = $SSP_Config->checkIpv6Accuracy*5;
 	}
     return(substr($ip, 0, $trim));
 }
