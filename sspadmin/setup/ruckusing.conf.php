@@ -23,7 +23,7 @@ return array(
             'database' => $ssp_config->dsnDatabaseName,
             'user' => $ssp_config->dsnUser,
             'password' => $ssp_config->dsnPassword,
-            //'charset' => 'utf8',
+            'charset' => $ssp_config->connectionEncoding,
             'directory' => 'ssp',
             //'socket' => '/var/run/mysqld/mysqld.sock'
         ),
