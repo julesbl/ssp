@@ -27,5 +27,8 @@
 	"support": {
 		"issues": "https://github.com/julesbl/ssp/issues",
 		"source": "https://github.com/julesbl/ssp"
-	}
+	},
+    "require-dev": {
+        "codeception/codeception": "dev-master"
+    }
 }
