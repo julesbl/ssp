@@ -47,10 +47,10 @@ class Email{
 	 */
 	public $emailTemplate = "emailTemplateMain.tpl";
 	/** 
-	 *  charcter set to be
+	 * character set to be used in emails
 	 * @var string
 	 */
-	private $charset = "UTF-8";
+	private static $charset = "UTF-8";
 	/**
 	 * Name of function to send and email
 	 * @var string
@@ -89,7 +89,7 @@ class Email{
 		$tpl->encode = false;
 		$tpl->numberReturnLines = 1; // remove comment from the top
 		$message = $tpl->output();
-		$result = $this->ECRIAmailer($fromName, $fromEmail, $toName, $toEmail, $subject, $message, $this->charset);
+		$result = $this->sendmail($fromName, $fromEmail, $toName, $toEmail, $subject, $message, self::$charset);
 		return($result);
 	}
 	
@@ -130,26 +130,18 @@ class Email{
 	 * @param string $message
 	 * @return bool 
 	 */
-	private function ECRIAmailer($fromName, $fromAddress, $toName, $toAddress, $subject, $message, $charset="utf-8"){
-		// Copyright 2005 ECRIA LLC, http://www.ECRIA.com
-		// Please use or modify for any purpose but leave this notice unchanged.
-		$headers  = "MIME-Version: 1.0\n";
-		$headers .= "Content-type: text/plain; charset={$charset}\n";
-		$headers .= "X-Priority: 3\n";
-		$headers .= "X-MSMail-Priority: Normal\n";
-		$headers .= "X-Mailer: php/". phpversion(). "\n";
-		$headers .= "From: \"". $fromName. "\" <". $fromAddress. ">\n";
-		$headers .= 'Reply-To: ' .$fromAddress . "\n";
-		$toAddressExtended = '"'. $toName. '" <'. $toAddress. '>';
-		// check for spam
-		if (stristr($message,'Content-Type:') || stristr($message,'bcc:')) {
-			return(false);
-		}
-		else{
-			return call_user_func(self::$emailRoutine, $toAddressExtended, $subject, $message, $headers);
-		}
+	private function sendmail($fromName, $fromAddress, $toName, $toAddress, $subject, $message, $charset="utf-8"){
+		return call_user_func(self::$emailRoutine, $fromName, $fromAddress, $toName, $toAddress, $subject, $message, $charset);
 	}
 	
+	/**
+	 * Set the character set to be used in the emails
+	 * @param string $charset - Character set e.g. UTF-8
+	 */
+	public static function setEmailCharset($charset){
+		self::$charset = $charset;
+	}
+
 	/**
 	 * Change email routine used to send email
 	 * @param string $emailRoutine - email routine to send email

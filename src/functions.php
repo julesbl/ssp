@@ -330,14 +330,29 @@ function SSP_Domain(){
 
 /**
  * Send and email
- * @param string $toAddress - where to send it to
- * @param string $subject - subject of email
- * @param string $message - message to be sent
- * @param string $headers - email headers
+ * @param string $fromName
+ * @param string $fromAddress
+ * @param string $toName
+ * @param string $toAddress
+ * @param string $subject
+ * @param string $message
  * @return bool - true on success
  */
-function SSP_SendMail($toAddress, $subject, $message, $headers){
-	return mail($toAddress, $subject, $message, $headers);
+function SSP_SendMail($fromName, $fromAddress, $toName, $toAddress, $subject, $message, $charset="utf-8"){
+	$headers  = "MIME-Version: 1.0\n";
+	$headers .= "Content-type: text/plain; charset={$charset}\n";
+	$headers .= "X-Priority: 3\n";
+	$headers .= "X-MSMail-Priority: Normal\n";
+	$headers .= "X-Mailer: php/". phpversion(). "\n";
+	$headers .= "From: \"". $fromName. "\" <". $fromAddress. ">\n";
+	$headers .= 'Reply-To: ' .$fromAddress . "\n";
+	$toAddressExtended = '"'. $toName. '" <'. $toAddress. '>';
+	// check for spam
+	if (stristr($message,'Content-Type:') || stristr($message,'bcc:')) {
+		SSP_error('SSP_SendMail: failed to send email due to spam content in message to'. $toAddress, E_USER_WARNING);
+		return(false);
+	}
+	return mail($toAddressExtended, $subject, $message, $headers);
 }
 /**
  * 

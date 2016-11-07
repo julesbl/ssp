@@ -161,6 +161,11 @@ abstract class ConfigurationBase
 	 * change
 	 * @var string  */
 	public $noReplyEmail = null;
+	/**
+	 * Generate html emails for password recovery etc.
+	 * @var bool
+	 */
+	public $htmlEmails = false;
 	/** 
 	 * fields displayed in SSP_UserAdmin::getName from userMiscTable
 	 * @var array  */
