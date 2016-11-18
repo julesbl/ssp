@@ -66,10 +66,15 @@ abstract class LogonBase {
 	 * @var string 
 	 */
 	public $output = "";
+	/**
+	 * Form auth section completed
+	 * @var bool
+	 */
+	private $formSuccess = false;
 
 	// remember me stuff
 	/** 
-	 * do remeber me on login form
+	 * do remember me on login form
 	 * @var bool  */
 	private $rememberMe = false;
 	/** 
@@ -80,13 +85,14 @@ abstract class LogonBase {
 	 * request to save a cookie to remember me
 	 * @var bool  */
 	private $rememberMeSave = false;
-
+	
+	const FORM_LOGIN_SESSION_NAME = 'sspFormLoginSuccess';
 
 	/**
 	 * Login base class constructor
 	 * @param w34u\ssp\Protect $session - session object
 	 * @param w34u\ssp\Template $tpl - template in which to wrap the form
-	 * @param bool $ignoreToken - dont use a token on the login form
+	 * @param bool $ignoreToken - don't use a token on the login form
 	 */
 	public function __construct($session, $tpl = "", $ignoreToken = false){
         
@@ -95,12 +101,49 @@ abstract class LogonBase {
 		$this->db = SspDb::getConnection();
 		$this->rememberMe = $this->cfg->loginRememberMe;
 		
+		if(!isset($_SESSION[self::FORM_LOGIN_SESSION_NAME])){
+			$_SESSION[self::FORM_LOGIN_SESSION_NAME] = false;
+		}
+		$this->formSuccess =& $_SESSION[self::FORM_LOGIN_SESSION_NAME];
+		
+		if(!$this->cfg->twoFactorAuthentication or ($this->cfg->twoFactorAuthentication and $this->formSuccess === false)){
+			$this->formSuccess = $this->processAuthForm($tpl, $ignoreToken);
+		}
+		if($this->formSuccess !== false){
+			$twoFactorOk = $this->processTwoFactor($this->formSuccess !== false);
+		}
+		if($this->formSuccess !== false and $twoFactorOk){
+			$result = $this->formSuccess;
+			$this->formSuccess = false;
+			$this->loginSuccess($result);
+		}
+	}
+	
+	/**
+	 * Display and process login screen
+	 * @param w34u\ssp\Template $tpl
+	 * @param bool $ignoreToken
+	 * @return type bool/string - false on failure/userid on success
+	 */
+	private function processAuthForm($tpl, $ignoreToken){
 		// define the form to login
 		$form = $this->loginScreenDefine($tpl, $ignoreToken);
 		// process the form on submit
-		$this->processForm($form);
+		$result = $this->processForm($form);
+		return $result;
 	}
 	
+	/**
+	 * Do two factor authentication
+	 * @param string $userId
+	 * @return boolean
+	 */
+	protected function processTwoFactor($userId){
+		if($this->cfg->twoFactorAuthentication){
+		}
+		return true;
+	}
+
 	/**
 	 * Process the remember me, and generate the errors if needed
 	 * @param sfc\Form $form
@@ -110,8 +153,8 @@ abstract class LogonBase {
 
 		if($this->rememberMeLogin){
 			$userId = $this->logonCheck($form->userInfo);
-			if($userId){
-				$this->loginSuccess();
+			if($userId !== false){
+				return $userId;
 			}
 		}
 		$success = false;
@@ -119,32 +162,28 @@ abstract class LogonBase {
 			if(!$form->error and $this->loginFormCheck($form)){
 				$userId = $this->logonCheck($form->userInfo);
 				if($userId !== false){
-					$success = true;
+					return $userId;
 				}
 			}
 			
-			if($success){
-				$this->loginSuccess($userId);
+			// login failure
+			if($this->cfg->loginDebug){
+				$form->tda("error", $this->errorDesc);
 			}
-			else{
-				// login failure
-				if($this->cfg->loginDebug){
-					$form->tda("error", $this->errorDesc);
-				}
-				if($this->cfg->loginType==0){
-					$firstError = "Email";
-				}
-				if($this->cfg->loginType==1){
-					$firstError = "User name";
-				}
-				$form->addError($this->session->t($firstError. " or password incorrect"));
-				sleep($this->cfg->logonFailDelay);
-				$this->output = $form->create(true);
+			if($this->cfg->loginType==0){
+				$firstError = "Email";
 			}
+			if($this->cfg->loginType==1){
+				$firstError = "User name";
+			}
+			$form->addError($this->session->t($firstError. " or password incorrect"));
+			sleep($this->cfg->logonFailDelay);
+			$this->output = $form->create(true);
 		}
 		else{
 			$this->output = $form->create();
 		}
+		return $success;
 	}
 	
 	/**

@@ -512,10 +512,10 @@ abstract class ConfigurationBase
 	 */
 	public $logonFailDelay = 2;
 	/**
-	 * false - no developer additions, true - additional fields
+	 * Enable two factor authentication
 	 * @var bool
 	 */
-	public $furtherLogin = false;
+	public $twoFactorAuthentication = false;
 	/**
 	 * admin must vet each new member
 	 * @var bool

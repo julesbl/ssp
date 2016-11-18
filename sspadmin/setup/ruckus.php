@@ -20,6 +20,13 @@ foreach ($files as $file) {
 if($loader === null){
 	die('Failed to load composer!!!!!');
 }
+if(file_exists(__DIR__. '/../devinclude.php')){
+	require __DIR__. '/../devinclude.php';
+}
+$ssp_config = new \w34u\ssp\Configuration();
+if($ssp_config->enableSetup !== true){
+	exit('Setup disabled, Enable in configuration, ->enableSetup');
+}
 
 if(file_exists(__DIR__. '/../devinclude.php')){
 	require __DIR__. '/../devinclude.php';
