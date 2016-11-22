@@ -95,6 +95,7 @@ w34u\ssp\Translate::addToLanguage('en', array(
 	'Check user IP for logon and session' => 'Check user IP for logon and session',
 	'User IP address' => 'User IP address list, comma seperated',
 	'User Access rights' => 'User Access rights',
+	'Enable two factor authentication' => 'Enable two factor authentication',
 	'User Disabled' => 'User Disabled',
 	'User Pending program enable' => 'User Pending program enable',
 	'User waiting admin vetting' => 'User waiting admin vetting',

@@ -136,10 +136,14 @@ abstract class LogonBase {
 	/**
 	 * Do two factor authentication
 	 * @param string $userId
-	 * @return boolean
+	 * @return boolean - true on success
 	 */
 	protected function processTwoFactor($userId){
 		if($this->cfg->twoFactorAuthentication){
+			$user = $this->db->get($this->cfg->userTable, ['UserId' => $userId], 'SSP Login: getting user for two factor auth');
+			if($user->use_two_factor_auth != 0){
+				// do two factor auth for this user
+			}
 		}
 		return true;
 	}

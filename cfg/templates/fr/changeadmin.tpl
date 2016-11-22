@@ -19,6 +19,10 @@
 			<td>{UserAccess}</td>
 		</tr>
 		<tr>
+			<td>{use_two_factor_authDesc}</td>
+			<td>{use_two_factor_auth}</td>
+		</tr>
+		<tr>
 			<td>{UserDisabledDesc}</td>
 			<td>{UserDisabled}</td>
 		</tr>

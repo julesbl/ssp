@@ -34,6 +34,16 @@
 	<tr>
 		<td>Date de la création de l'utilisateur</td><td>{UserDateCreated}</td>
 	</tr>
+		{:if:Use_two_factor_auth}
+	<tr>
+		<td>Authentification à deux facteurs</td><td>Activée</td>
+	</tr>
+		{:endif:Use_two_factor_auth}
+		{:ifnot:Use_two_factor_auth}
+	<tr>
+		<td>Authentification à deux facteurs</td><td>Non utilisé</td>
+	</tr>
+		{:endif:Use_two_factor_auth}
 		{:if:userDisabled}
 	<tr>
 		<td>Utilisateur désactivé</td><td class="SSP_Error">Utilisateur désactivé !!!!</td>

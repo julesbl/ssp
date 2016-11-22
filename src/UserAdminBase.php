@@ -716,6 +716,7 @@ abstract class UserAdminBase{
         $form->fe("check", "UserIpCheck","Check user IP for logon and session", $checkData);
         $form->fe("text", "UserIp", "User IP address", "Users Ip address");
 		$form->fep("maxChar=255, maxLength=255");
+		$form->fe("check", "use_two_factor_auth","Enable two factor authentication", $checkData);
         $form->fe("select", "UserAccess", "User Access rights", $this->cfg->userAccessTypeDropdown);
         $form->fe("check", "UserDisabled", "User Disabled", $checkData);
         $form->fe("check", "UserPending", "User Pending program enable", $checkData);
@@ -749,7 +750,7 @@ abstract class UserAdminBase{
         // Displays admin flags and information on a user
 
         $info = get_object_vars($this->getUser("*", "Getting admin data for display"));
-
+		var_dump($info);
         $info["userAccess"] = $this->session->t($this->cfg->userAccessTypeDropdown[$info["UserAccess"]]);
 
         $info["UserEmail"] = SSP_Decrypt($info["UserEmail"]);
@@ -762,6 +763,10 @@ abstract class UserAdminBase{
         $info["UserDateLogon"] = date("r", $info["UserDateLogon"]);
         $info["UserDateLastLogon"] = date("r", $info["UserDateLastLogon"]);
         $info["UserDateCreated"] = date("r", $info["UserDateCreated"]);
+		
+        if($info["use_two_factor_auth"] != 0){
+        	$info["Use_two_factor_auth"] = "";
+        }
 
         if($info["UserDisabled"]){
         	$info["userDisabled"] = "";

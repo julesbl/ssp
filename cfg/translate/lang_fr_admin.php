@@ -95,6 +95,7 @@ w34u\ssp\Translate::addToLanguage('fr', array(
 	'Check user IP for logon and session' => 'Vérifier IP pour login et session',
 	'User IP address' => 'Liste des adresses IP des utilisateurs, séparées par des virgules',
 	'User Access rights' => 'Droits d\'accès aux utilisateurs',
+	'Enable two factor authentication' => 'Activer l\'authentification à deux facteurs',
 	'User Disabled' => 'Utilisateur désactivé',
 	'User Pending program enable' => 'Activer programme utilisateur',
 	'User waiting admin vetting' => 'Utilisateur attend vérification administrative',
