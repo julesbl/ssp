@@ -750,7 +750,6 @@ abstract class UserAdminBase{
         // Displays admin flags and information on a user
 
         $info = get_object_vars($this->getUser("*", "Getting admin data for display"));
-		var_dump($info);
         $info["userAccess"] = $this->session->t($this->cfg->userAccessTypeDropdown[$info["UserAccess"]]);
 
         $info["UserEmail"] = SSP_Decrypt($info["UserEmail"]);
