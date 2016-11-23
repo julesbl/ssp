@@ -327,13 +327,13 @@ abstract class ConfigurationBase
 	 */
 	public $sessVarName = null;
 	/**
-	 * timeout for session in seconds 172800 = 2 days, session gets cleaned up
+	 * timeout for session in seconds 3600 = 1 hour, session gets cleaned up
 	 * @var int  */
-	public $sessMaxLifetime = 172800;
+	public $sessMaxLifetime = 3600;
 	/**
 	 * time after which the login expires if no activity in seconds, 3600 = 1 hour
 	 * @var int  */
-	public $loginExpiry = 7200;
+	public $loginExpiry = 1200;
 	/**
 	 * allow user to login multiple times (from different machines)
 	 * @var bool
