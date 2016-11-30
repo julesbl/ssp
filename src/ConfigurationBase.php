@@ -157,7 +157,7 @@ abstract class ConfigurationBase
 	 * @var string  */
 	public $noReplyName = null;
 	/** 
-	 * no reply emails
+	 * Email used for no reply emails
 	 * change
 	 * @var string  */
 	public $noReplyEmail = null;

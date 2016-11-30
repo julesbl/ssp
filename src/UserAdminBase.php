@@ -392,7 +392,7 @@ abstract class UserAdminBase{
 			$this->updateUser(array("UserWaiting"=>1), "SSP Admin: Seeting user waiting flag on joiup email creation", $id);
         }
         // send email
-		$email = new Email($this->cfg);
+		$email = new Email();
 		$result = $email->noReplyEmail($content, "emailmemberjoining.tpl", $emailAddress->UserEmail, $userData->FirstName. ' '. $userData->FamilyName);
 		if($result === false){
 			SSP_error('SSP Admin: failed to send join email to user '. $emailAddress->UserEmail, E_USER_ERROR);
@@ -839,7 +839,7 @@ abstract class UserAdminBase{
 				$content["subject"] = $form->getField("subject");
 				$content["firstName"] = $rowFrom->FirstName;
 				$content["familyName"] = $rowFrom->FamilyName;
-				$email = new Email($this->cfg);
+				$email = new Email();
 				$result = $email->generalEmail($content, "emailmember.tpl", $this->session->userEmail, ($rowFrom->FirstName. " ". $rowFrom->FamilyName), $emailTo, ($rowTo->FirstName. " ". $rowTo->FamilyName));
 				if($result === false){
 					SSP_error('SSP Admin: failed to send email to user '. $emailTo, E_USER_ERROR);
@@ -894,7 +894,7 @@ abstract class UserAdminBase{
 						$content['token'] = $token;
                         $content["adminEmail"] = $this->cfg->adminEmail;
 						
-						$email = new Email($this->cfg);
+						$email = new Email();
 						$email->noReplyEmail($content, "emailpasswordrecovery0.tpl", $row->UserEmail, $rowMisc->FirstName. " ". $rowMisc->FamilyName);
                     }
                     else{
@@ -907,7 +907,7 @@ abstract class UserAdminBase{
                         $content["UserPassword"] = $row["UserPassword"];
                         $content["adminEmail"] = $this->cfg->adminEmail;
 
-						$email = new Email($this->cfg);
+						$email = new Email();
 						$email->noReplyEmail($content, "emailpasswordrecovery1.tpl", $row->UserEmail, $rowMisc->FirstName. " ". $rowMisc->FamilyName);
                     }
                     $form->tda("sent");
