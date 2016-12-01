@@ -72,7 +72,6 @@ class Email {
 	 */
 	public function __construct() {
 		$this->cfg = \w34u\ssp\Configuration::getConfiguration();
-		$this->charset = $this->cfg->siteEncoding;
 	}
 
 	/**
@@ -95,7 +94,6 @@ class Email {
 		$emailContent['domain'] = $this->cfg->url;
 		$emailContent['adminEmail'] = $this->cfg->adminEmail;
 		$subject = $emailBody->returnedLines[1];
-		$subject = '=?' . self::$charset . '?B?' . base64_encode(mb_ereg_replace("[\r\n]", '', $subject)) . '?=';
 		$tpl = new Template($emailContent, $this->emailTemplate);
 		$tpl->encode = false;
 		$tpl->numberReturnLines = 1; // remove comment from the top
@@ -105,10 +103,10 @@ class Email {
 			// system html email templates always have the same name with Html.tpl on the end
 			$emailTplHtml = substr($emailTpl, 0, -4). 'Html.tpl';
 			$emailBodyHtml = new Template($emailContent, $emailTplHtml);
-			$emailBodyHtml->returnedLines = 1;
+			$emailBodyHtml->numberReturnLines = 1;
 			$emailContent['content'] = $emailBodyHtml->output();
 			$tplHtml = new Template($emailContent, $this->emailTemplateHtml);
-			$tplHtml->returnedLines = 1;
+			$tplHtml->numberReturnLines = 1;
 			$htmlMessage = $tplHtml->output();
 		}
 		$result = $this->sendmail($fromName, $fromEmail, $toName, $toEmail, $subject, $message, $htmlMessage, self::$charset);

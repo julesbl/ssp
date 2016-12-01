@@ -329,26 +329,41 @@ function SSP_Domain(){
 }
 
 /**
- * Send and email
- * @param string $fromName
- * @param string $fromAddress
- * @param string $toName
- * @param string $toAddress
- * @param string $subject
- * @param string $message
+ * Send an email using php mail
+ * @param string $fromName - who the email is from
+ * @param string $fromAddress - email of who sent it
+ * @param string $toName - Name of person recieving the email
+ * @param string $toAddress - address to send the email to
+ * @param string $subject - email subject in plain text
+ * @param string $plainMessage - plain text message
+ * @param string $htmlMessage - html version of the message
+ * @param string $charset - character encoding
  * @return bool - true on success
  */
-function SSP_SendMail($fromName, $fromAddress, $toName, $toAddress, $subject, $message, $charset="utf-8"){
-	$headers  = "MIME-Version: 1.0\n";
-	$headers .= "Content-type: text/plain; charset={$charset}\n";
-	$headers .= "X-Priority: 3\n";
-	$headers .= "X-MSMail-Priority: Normal\n";
-	$headers .= "X-Mailer: php/". phpversion(). "\n";
-	$headers .= "From: \"". $fromName. "\" <". $fromAddress. ">\n";
-	$headers .= 'Reply-To: ' .$fromAddress . "\n";
-	$toAddressExtended = '"'. $toName. '" <'. $toAddress. '>';
+function SSP_SendMail($fromName, $fromAddress, $toName, $toAddress, $subject, $plainMessage, $htmlMessage = null, $charset="utf-8"){
+	$subject = '=?' . $charset . '?B?' . base64_encode(mb_ereg_replace("[\r\n]", '', $subject)) . '?=';
+	$headers  = "MIME-Version: 1.0\r\n";
+	$headers .= "X-Priority: 3\r\n";
+	$headers .= "X-MSMail-Priority: Normal\r\n";
+	$headers .= "X-Mailer: php/". phpversion(). "\r\n";
+	$headers .= "From: \"". strip_tags($fromName). "\" <". strip_tags($fromAddress). ">\r\n";
+	$headers .= 'Reply-To: ' .strip_tags($fromAddress) . "\r\n";
+	$toAddressExtended = '"'. strip_tags($toName). '" <'. strip_tags($toAddress). '>';
+	if($htmlMessage === null){
+		$headers .= "Content-type: text/plain; charset=". strip_tags($charset). "\r\n";
+		$message = $plainMessage;
+	}
+	else{
+		$boundary = uniqid('np');
+		$headers .= "Content-Type: multipart/alternative;boundary=" . $boundary . "\r\n";
+		$message = $plainMessage;
+		$message .= "\r\n\r\n--" . $boundary . "\r\n";
+		$message .= "Content-type: text/html;charset=utf-8\r\n\r\n";
+		$message .= $htmlMessage;
+		$message .= "\r\n\r\n--" . $boundary . "\r\n";
+	}
 	// check for spam
-	if (stristr($message,'Content-Type:') || stristr($message,'bcc:')) {
+	if (stristr($plainMessage,'Content-Type:') or stristr($plainMessage,'bcc:') or stristr($htmlMessage,'Content-Type:') or stristr($htmlMessage,'bcc:')) {
 		SSP_error('SSP_SendMail: failed to send email due to spam content in message to'. $toAddress, E_USER_WARNING);
 		return(false);
 	}
