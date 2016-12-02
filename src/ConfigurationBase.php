@@ -517,6 +517,11 @@ abstract class ConfigurationBase
 	 */
 	public $twoFactorAuthentication = false;
 	/**
+	 * Enable the public user joinup script
+	 * @var bool
+	 */
+	public $enableUserJoin = false;
+	/**
 	 * admin must vet each new member
 	 * @var bool
 	 */
@@ -525,7 +530,7 @@ abstract class ConfigurationBase
 	 * what the program does to confirm user
 	 * 0 - new user is instantly a member
 	 * 1 - emailed random password which can be changed
-	 * 2 - emailed a link, promted for password
+	 * 2 - emailed a link, prompted for password
 	 * 3 - emailed a link, enables the account
 	 * @var int
 	 */

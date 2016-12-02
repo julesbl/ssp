@@ -1,6 +1,6 @@
 // html email sent to new member on sucesfully joining
-<h1>Welcome to the SSP System.</h1>
+<h1>Bienvenue sur le système SSP.</h1>
 
-<p>To confirm your membership please click on the following link:</p>
+<p>Pour confirmer votre abonnement, veuillez cliquer le lien qui suit :</p>
 
 <p><a href="{joinLink}/{token}">{joinLink}/{token}</a></p>

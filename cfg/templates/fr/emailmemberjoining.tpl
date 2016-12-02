@@ -1,5 +1,4 @@
 // email sent to new member on sucesfully joining
-
 Confirmation d'abonnement SSP
 Bienvenue sur le système SSP.
 

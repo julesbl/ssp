@@ -178,6 +178,14 @@ $app->group('/useradmin', function() use ($app) {
 		$admin = new UserAdmin($session, $ssp, $userId);
 		return $response->getBody()->write($admin->changeEmail($needPassword, true));
 	});
+	// Admin ok of user
+	$app->any('/enableUser', function(Request $request, Response $response){
+		$session = $this->session;
+		$ssp = $this->ssp;
+		$userId = $request->getAttribute('userId');
+		$admin = new UserAdmin($session, $ssp, $userId);
+		return $response->getBody()->write($admin->userAdminOk());
+	});
 	// change advanced user information
 	$app->any('/chAdv', function(Request $request, Response $response){
 		$session = $this->session;
