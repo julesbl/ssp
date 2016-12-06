@@ -411,10 +411,10 @@ abstract class ProtectBase{
             $this->killLogin();
             $this->loggedIn = false;
             session_write_close(); // ensure the session varibles are updated
-            $logonDivertContent['explanation'] = $this->t("General protection fault");
+            $explanation = $this->t("General protection fault");
             if($this->cfg->accessFaultDebug){
                 // Add fault data to divert page
-                $logonDivertContent["explanation"] .= "<br />";
+                $explanation .= "<br />";
             }
 			$this->db->cache = $queryResultCacheing;
 			if($this->config->noLoginDivert or SSP_isAjaxCall()){
@@ -422,17 +422,17 @@ abstract class ProtectBase{
 				exit();
 			}
 			else{
-				SSP_Divert($logonPath, $logonDivertContent, "", !$this->cfg->accessFaultDebug);
+				$this->goToLogin($explanation);
 			}
         }
         elseif($pageAccess > 0 and (!$this->loggedIn or $needHigherLogin)){
             // logged on user needs a higher or different login session or no user logged in
             session_write_close(); // ensure the session varibles are updated
             // divert to logon script
-            $logonDivertContent['explanation'] = $this->t("Access control fault");
+            $explanation = $this->t("Access control fault");
             if($this->cfg->accessFaultDebug){
                 // Add fault data to divert page
-                $logonDivertContent["explanation"] .= "<br />";
+                $explanation .= "<br />";
             }
 			$this->db->cache = $queryResultCacheing;
 			if($this->config->noLoginDivert or SSP_isAjaxCall()){
@@ -440,7 +440,7 @@ abstract class ProtectBase{
 				exit();
 			}
 			else{
-				SSP_Divert($logonPath, $logonDivertContent, "", !$this->cfg->accessFaultDebug);
+				$this->goToLogin($explanation);
 			}
         }
         elseif($pageAccess == 0 and $userFault){
@@ -661,34 +661,38 @@ abstract class ProtectBase{
 	 * @return bool - true on user type allowed
 	 */
     public function isAccess($level, $equals=false){
-        // checks the specified level against users level.
-        // Parameters:
-        //      level:string - "user", "admin", other "level"
-        //      equals:bool
-        // if user level is the same of higher than the specfied level returns true.
-        // if equals is true only returns true if user level is the same.
-        // returns false if level does not exist.
-
         if(isset($this->cfg->userLevels[$level]) and $this->loggedIn){
             if(($this->cfg->userLevels[$this->userAccessLevel] >= $this->cfg->userLevels[$level]) and !$equals){
-                return(true);
+                return true;
             }
             elseif($equals and ($this->userAccessLevel == $level)){
-                return(true);
-            }
-            else{
-                return(false);
+                return true ;
             }
         }
-        else{
-            return(false);
-        }
+		return false;
     }
+	
+	/**
+	 * Divert to login if user does not have required login level
+	 * @param string $level - allowed user level
+	 * @param bool $equals - only that user type, not ones greater
+	 */
+	public function requireAccess($level, $equals=false){
+		if(!$this->isAccess($level, $equals)){
+			$this->goToLogin();
+		}
+	}
+	
+	/**
+	 * Divert to login if user not admin
+	 */
+	public function requireAdmin(){
+		if(!$this->admin){
+			$this->goToLogin();
+		}
+	}
 
-    function compareAccess($accessLevel, $accessLevel2=""){
-    }
-
-    /**
+	/**
 	 * Log a user off the system, blanks all session data except language
 	 * @param SSP_Template $tpl - template object
 	 * @param bool $showLogoffScreen - display the logoff screen
@@ -729,6 +733,22 @@ abstract class ProtectBase{
 			return $this->displayLogOffScreen($tpl, $userId, $returnPage);
 		}
     }
+	
+	/**
+	 * Divert to the login page
+	 * @param string $explanation - explanation for divert to login
+	 */
+	private function goToLogin($explanation = null){
+		$logonPath = $this->cfg->logonScript;
+		$logonDivertContent = array(
+			"pageTitle" => $this->t("Diverting to logon"), 
+			"linkText" => $this->t("Click here to login if divert does not happen within 5 seconds")
+			);
+		if($explanation !== null){
+			$logonDivertContent['explanation'] = $explanation;
+		}
+		SSP_Divert($logonPath, $logonDivertContent, "", !$this->cfg->accessFaultDebug);
+	}
 
 	/**
 	 * Totaly destroy the session
