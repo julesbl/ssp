@@ -63,22 +63,13 @@ $container['session'] = function($container) {
 $container['ssp'] = function($container){
 	return new Setup($container['session'], true);
 };
-/**
- * Divert to login if not admin
- * @param Protect $session
- */
-function ssp_logon($session){
-	if(!$session->admin){
-		SSP_Divert($session->cfg->logonScript);
-	}
-};
 
 $app = new \Slim\App($container);
 // home page
 $app->any('/', function (Request $request, Response $response) {
 	/* @var $session Protect */
 	$session = $this->session;
-	ssp_logon($session);
+	$session->requireAdmin();
 	$ssp = $this->ssp;
 	$lister = new UserLister($ssp);
 	return $response->getBody()->write($lister->lister());
@@ -87,7 +78,7 @@ $app->any('/', function (Request $request, Response $response) {
 $app->any('/delete/{userId}', function (Request $request, Response $response) {
 	/* @var $session Protect */
 	$session = $this->session;
-	ssp_logon($session);
+	$session->requireAdmin();
 	$ssp = $this->ssp;
 	$userId = $request->getAttribute('userId', '');
 	$lister = new UserLister($ssp);
@@ -97,7 +88,7 @@ $app->any('/delete/{userId}', function (Request $request, Response $response) {
 $app->any('/filterChange', function (Request $request, Response $response) {
 	/* @var $session Protect */
 	$session = $this->session;
-	ssp_logon($session);
+	$session->requireAdmin();
 	$ssp = $this->ssp;
 	$lister = new UserLister($ssp);
 	return $response->getBody()->write($lister->displayFilterForm());
@@ -106,7 +97,7 @@ $app->any('/filterChange', function (Request $request, Response $response) {
 $app->any('/filterAdminPending', function (Request $request, Response $response) {
 	/* @var $session Protect */
 	$session = $this->session;
-	ssp_logon($session);
+	$session->requireAdmin();
 	$ssp = $this->ssp;
 	$lister = new UserLister($ssp);
 	$lister->filter->displayAdminPending();
@@ -116,7 +107,7 @@ $app->any('/filterAdminPending', function (Request $request, Response $response)
 $app->any('/filterNormal', function (Request $request, Response $response) {
 	/* @var $session Protect */
 	$session = $this->session;
-	ssp_logon($session);
+	$session->requireAdmin();
 	$ssp = $this->ssp;
 	$lister = new UserLister($ssp);
 	$lister->filter->newSearch();
@@ -126,7 +117,7 @@ $app->any('/filterNormal', function (Request $request, Response $response) {
 $app->any('/adminusercreation', function (Request $request, Response $response) {
 	/* @var $session Protect */
 	$session = $this->session;
-	ssp_logon($session);
+	$session->requireAdmin();
 	$ssp = $this->ssp;
 	
 	$admin = new UserAdmin($session, $ssp, $session->userId);
@@ -222,7 +213,7 @@ $app->group('/useradmin', function() use ($app) {
 	// Set up user admin for a particular user
 	/* @var $session Protect */
 	$session = $this->session;
-	ssp_logon($session);
+	$session->requireAdmin();
 	if(!isset($_SESSION["adminUserId"])){
 		$_SESSION["adminUserId"] = "";
 	}
