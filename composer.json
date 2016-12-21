@@ -29,6 +29,7 @@
 		"source": "https://github.com/julesbl/ssp"
 	},
     "require-dev": {
-        "codeception/codeception": "dev-master"
+        "codeception/codeception": "dev-master",
+        "Codeception/Specify": "^0.4.5"
     }
 }
