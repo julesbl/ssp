@@ -280,7 +280,7 @@ abstract class ProtectBase{
 						// admin user
 						$this->admin = true;
 					}
-					$this->userEmail = SSP_decrypt($userInfo->UserEmail);
+					$this->userEmail = SSP_decrypt($userInfo->UserEmail, $this->cfg->useEncryption);
 					if(isset($userInfo->country) and trim($userInfo->country) != ""){
 						$this->country = $userInfo->country;
 					}

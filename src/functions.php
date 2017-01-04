@@ -46,7 +46,7 @@ function SSP_uniqueId(){
 /**
  * Generate a totally random password
  * @param int $len - length of password
- * @param string $chars - characters to genearte password from
+ * @param string $chars - characters to generate password from
  * @return string - password
  */
 function SSP_rndPassword($len, $chars = ""){
@@ -67,7 +67,7 @@ function SSP_rndPassword($len, $chars = ""){
  * @param int $limit - length of password
  * @return string - password
  */
-function SSP_generatePassword($limit=8){
+function SSP_generatePassword($limit = 20){
   $vowels = array('a', 'e', 'i', 'o', 'u');
   $const = array('b', 'c', 'd', 'f', 'g', 'h', 'j', 'k', 'l', 'm', 'n', 'p', 'q', 'r', 's', 't', 'v', 'w', 'x', 'y', 'z');
 
@@ -94,15 +94,15 @@ function SSP_generatePassword($limit=8){
  */
 function SSP_stringRaw($string){
     if(!ini_get('magic_quotes_gpc')){
-        return($string);
+        return $string;
     }
     else {
-        return(stripslashes($string));
+        return stripslashes($string);
     }
 }
 
 /**
- * Adds slashes to a string if neccessary
+ * Adds slashes to a string if necessary
  * @param string $string
  * @return string
  */
@@ -116,20 +116,39 @@ function SSP_stringCode($string){
 }
 
 /**
- * Encrypt a string using php mcrypt functions
+ * Encrypt a string using php mcrypt functions and the 3DES encryption using CBC
+ * for largish strings
  * @param string $input
- * @return string
+ * @param bool $useEncryption - override encryption locally
+ * @return string - base 64 encoded text
  */
-function SSP_encrypt($input){
+function SSP_encrypt($input, $useEncryption = true){
     $SSP_Config = Configuration::getConfiguration();
-    if($SSP_Config->useEncryption){
+    if($useEncryption){
         if(get_magic_quotes_gpc()){
             $inputConv = stripslashes($input);
         }
         else{
             $inputConv = $input;
         }
-        return(mcrypt_ecb(MCRYPT_3DES, $SSP_Config->encryptionString, $inputConv, MCRYPT_ENCRYPT));
+		// Generate a key from a hash and create a 40 character key
+		$key = md5(utf8_encode($SSP_Config->encryptionString));
+		$key .= substr($key, 0, 16);
+		$key = pack('H*', $key);
+		
+		//Pad for PKCS7
+		$blockSize = mcrypt_get_block_size(MCRYPT_3DES, MCRYPT_MODE_CBC);
+		$len = strlen($inputConv);
+		$pad = $blockSize - ($len % $blockSize);
+		$inputConv .= str_repeat(chr($pad), $pad);
+		
+		# create a random IV to use with CBC encoding
+		$iv_size = mcrypt_get_iv_size(MCRYPT_3DES, MCRYPT_MODE_CBC);
+		$iv = mcrypt_create_iv($iv_size, MCRYPT_RAND);
+		
+		$encData = mcrypt_encrypt(MCRYPT_3DES, $key, $inputConv, MCRYPT_MODE_CBC, $iv);
+		
+        return base64_encode($iv. $encData);
     }
     else{
         // no encryption
@@ -138,7 +157,7 @@ function SSP_encrypt($input){
             return($input);
         }
         else{
-            return(stripslashes($input));
+            return stripslashes($input);
         }
     }
 }
@@ -146,13 +165,30 @@ function SSP_encrypt($input){
 /**
  * Decrypt a string using php mcrypt functions
  * @global SSP_Configure $SSP_Config
- * @param string $input
+ * @param string $input string to be encrypted
+ * @param bool $useEncryption - override encryption locally
  * @return string
  */
-function SSP_decrypt($input){
+function SSP_decrypt($input, $useEncryption = true){
     $SSP_Config = Configuration::getConfiguration();
-    if($SSP_Config->useEncryption){
-        return(mcrypt_ecb(MCRYPT_3DES, $SSP_Config->encryptionString, $input, MCRYPT_DECRYPT));
+    if($useEncryption){
+		// Generate a key from a hash and create a 40 character key
+		$key = md5(utf8_encode($SSP_Config->encryptionString));
+		$key .= substr($key, 0, 16);
+		$key = pack('H*', $key);
+		
+		$input = base64_decode($input);
+		
+		$iv_size = mcrypt_get_iv_size(MCRYPT_3DES, MCRYPT_MODE_CBC);
+		$iv = substr($input, 0, $iv_size);
+		
+		$input = substr($input, $iv_size);
+		
+		$data = mcrypt_decrypt(MCRYPT_3DES, $key, $input, MCRYPT_MODE_CBC, $iv);
+		$blockSize = mcrypt_get_block_size(MCRYPT_3DES, MCRYPT_MODE_CBC);
+		$len = strlen($data);
+		$pad = ord($data[$len-1]);
+        return substr($data, 0, strlen($data) - $pad);
     }
     else{
         return($input);

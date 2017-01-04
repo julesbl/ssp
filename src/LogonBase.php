@@ -282,7 +282,7 @@ abstract class LogonBase {
 
         if($this->cfg->loginType==0){
 			// encrypt email and password
-			$userEmail = SSP_encrypt(trim(strtolower($form->getField("email"))));
+			$userEmail = SSP_encrypt(trim(strtolower($form->getField("email"))), $this->cfg->useEncryption);
 			$userPassword = trim($form->getField("password"));
 			// check email and password
 			$where = array();
