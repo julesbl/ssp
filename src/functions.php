@@ -88,7 +88,7 @@ function SSP_generatePassword($limit = 20){
 }
 
 /**
- * Removes slashes from a string if necessary
+ * Removes slashes in a string returned from a form if necessary
  * @param string $string - string to strip slashes
  * @return string
  */
@@ -102,7 +102,7 @@ function SSP_stringRaw($string){
 }
 
 /**
- * Adds slashes to a string if necessary
+ * Adds slashes to a string going to a form if necessary
  * @param string $string
  * @return string
  */
@@ -208,9 +208,9 @@ function SSP_paddIp($ipNumber){
 	}
 	else{
 		// break up IP number
-		$numbers=explode(".",trim($ipNumber));
+		$numbers = explode(".",trim($ipNumber));
 		foreach($numbers as $key => $value){
-			$numbers[$key]=str_pad($value, 5, "0", STR_PAD_LEFT);
+			$numbers[$key]=str_pad($value, 3, "0", STR_PAD_LEFT);
 		}
 		$result = implode(".",$numbers);
 	}
@@ -232,12 +232,14 @@ function SSP_trimIp($ipNumber){
 	}
     $ip = SSP_paddIp($ipNumber);
 	if(!$ipv6){
-		$trim = $SSP_Config->checkIpAccuracy*6;
+		// -ve last char removes last x chars
+		$trim = ($SSP_Config->checkIpAccuracy - 4) * 4;
+		return substr($ip, 0, $trim);
 	}
 	else{
-		$trim = $SSP_Config->checkIpv6Accuracy*5;
+		$trim = $SSP_Config->checkIpv6Accuracy * 5;
+		return $ipNumber;
 	}
-    return(substr($ip, 0, $trim));
 }
 
 

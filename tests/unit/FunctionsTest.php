@@ -41,4 +41,26 @@ class FunctionsTest extends \Codeception\Test\Unit
 			$this->assertTrue(strcmp($this->stringToBeEncrypted, $this->decryptedString) === 0);
 		});
 	}
+	
+	public function testPadIp(){
+		$this->IPv4ToBePadded = "192.0.12.23";
+		$this->IPv4Padded = "192.000.012.023";
+		$this->IPv6NotToBePadded = "2001::192";
+		$this->specify('Padding IPv4 address', function(){
+			$this->assertTrue(strcmp($this->IPv4Padded, w34u\ssp\SSP_paddIp($this->IPv4ToBePadded)) === 0);
+		});
+		$this->specify('Not padding IPv6 address', function(){
+			$this->assertTrue(strcmp($this->IPv6NotToBePadded, w34u\ssp\SSP_paddIp($this->IPv6NotToBePadded)) === 0);
+		});
+	}
+	
+	public function testTrimIp(){
+		$cfg = w34u\ssp\Configuration::getConfiguration();
+		$cfg->checkIpAccuracy = 3;
+		$this->IPv4ToBeTrimmed = "192.0.12.23";
+		$this->IPv4Trimmed = "192.000.012";
+		$this->specify('Trimming IPv4 address '.$this->IPv4ToBeTrimmed. ' to '. w34u\ssp\SSP_trimIp($this->IPv4ToBeTrimmed). ' == '. $this->IPv4Trimmed , function(){
+			$this->assertTrue(strcmp($this->IPv4Trimmed, w34u\ssp\SSP_trimIp($this->IPv4ToBeTrimmed)) === 0);
+		});
+	}
 }
