@@ -2386,14 +2386,23 @@ class Form {
 		return(true);
 	}
 
-	private function addDataCheck($type, $errorMessage, $validChars, $description = "") {
-		// add a data check type to the filed data checks array
-
-		$this->fieldDataChecks[$type] = new \w34u\ssp\DataCheck($type, $errorMessage, $validChars, $description);
+	/**
+	 * Add a data check type to the filed data checks array
+	 * @param string $type - name of type
+	 * @param string $errorMessage - error message to be generated on fail
+	 * @param string $validChars - list of characters that are valid for this type
+	 * @param type $description
+	 */
+	public function addDataCheck($type, $errorMessage, $validChars, $description = "") {
+		$this->fieldDataChecks[$type] = new \w34u\ssp\dataCheck($type, $errorMessage, $validChars, $description);
 	}
 
+	/**
+	 * Removes slashes submitted forms etc if magic_quotes_gpc is set
+	 * @param array $post - data from the form
+	 * @return array
+	 */
 	private function rems($post) {
-		// Removes slashes submitted forms etc if magic_quotes_gpc is set
 		if (get_magic_quotes_gpc()) {
 			foreach ($post as $keyPost => $valuePost) {
 				if (!is_array($valuePost)) {
