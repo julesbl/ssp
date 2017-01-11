@@ -894,8 +894,8 @@ abstract class UserAdminBase {
 					$form->tda("sent");
 					$result = $form->create();
 				} else {
-					// email not found
-					$form->tda("error");
+					// email not found, pretend its going anyway to prevent enumeration by failure
+					$form->tda("sent");
 					$result = $form->create();
 				}
 			} else {

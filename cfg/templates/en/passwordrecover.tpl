@@ -16,9 +16,6 @@
 {formHidden}
 </form>
 {:if:sent}
-<p>The password recovery email has been sent to your email address</p>
+<p>The if your email is listed the password recovery email has been sent to your email address</p>
 {:endif:sent}
-{:if:error}
-<p><strong style="color:red;">Incorrect email address, please try again</strong></p>
-{:endif:error}
 <p><a href="{loginPath}">Return to login screen</a></p>

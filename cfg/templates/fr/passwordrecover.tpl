@@ -18,7 +18,4 @@
 {:if:sent}
 <p>L'envoi de l'email pour rétablir votre mot de passe effectué.</p>
 {:endif:sent}
-{:if:error}
-<p><strong style="color:red;">Adresse email erronée. Veuillez réessayer.</strong></p>
-{:endif:error}
 <p><a href="{loginPath}">Retourner à la page du login</a></p>
