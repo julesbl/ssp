@@ -63,4 +63,15 @@ class FunctionsTest extends \Codeception\Test\Unit
 			$this->assertTrue(strcmp($this->IPv4Trimmed, w34u\ssp\SSP_trimIp($this->IPv4ToBeTrimmed)) === 0);
 		});
 	}
+	
+	public function testFormTokens(){
+		$this->formId = 'form_id';
+		$this->formToken = \w34u\ssp\SSP_Token($this->formId);
+		$this->specify('Form token valid', function(){
+			$this->assertTrue(w34u\ssp\SSP_TokenCheck($this->formToken, $this->formId) === true);
+		});
+		$this->specify('Form token used and no longer available', function(){
+			$this->assertTrue(w34u\ssp\SSP_TokenCheck($this->formToken, $this->formId) !== true);
+		});
+	}
 }
