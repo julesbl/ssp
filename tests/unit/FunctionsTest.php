@@ -20,14 +20,13 @@ class FunctionsTest extends \Codeception\Test\Unit
     // check unique id function
     public function testSSP_uniqueId()
     {
-		$this->id = w34u\ssp\SSP_uniqueId();
-		$this->specify('Check id is 32 characters', function(){
-			$this->assertTrue(strlen($this->id) === 32);
-		});
-		$this->specify('Check id is hexadecimal', function(){
-			$this->assertTrue(ctype_xdigit($this->id));
-		});
-		
+	$this->id = w34u\ssp\SSP_uniqueId();
+	$this->specify('Check id is 32 characters', function(){
+		$this->assertTrue(strlen($this->id) === 32);
+	});
+	$this->specify('Check id is hexadecimal', function(){
+		$this->assertTrue(ctype_xdigit($this->id));
+	});
     }
 	// string encryption functions
 	public function testStringEncryption(){
@@ -64,6 +63,7 @@ class FunctionsTest extends \Codeception\Test\Unit
 		});
 	}
 	
+	// test tokens used to verify form submission
 	public function testFormTokens(){
 		$this->formId = 'form_id';
 		$this->formToken = \w34u\ssp\SSP_Token($this->formId);
@@ -73,5 +73,16 @@ class FunctionsTest extends \Codeception\Test\Unit
 		$this->specify('Form token used and no longer available', function(){
 			$this->assertTrue(w34u\ssp\SSP_TokenCheck($this->formToken, $this->formId) !== true);
 		});
+		$cfg = w34u\ssp\Configuration::getConfiguration();
+		$original = $cfg->tokenClean;
+		$cfg->tokenClean = 2;
+		$this->formToken = \w34u\ssp\SSP_Token($this->formId);
+		sleep(3);
+		$this->specify('Form token cleaned out due to timeout', function(){
+			$this->assertTrue(w34u\ssp\SSP_TokenCheck($this->formToken, $this->formId) !== true);
+		});
+		$cfg->tokenClean = $original;
 	}
+	
+	
 }
