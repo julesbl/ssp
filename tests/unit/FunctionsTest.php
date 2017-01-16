@@ -67,6 +67,10 @@ class FunctionsTest extends \Codeception\Test\Unit
 	public function testFormTokens(){
 		$this->formId = 'form_id';
 		$this->formToken = \w34u\ssp\SSP_Token($this->formId);
+		$this->anotherFromId = 'anotherForm_id';
+		$this->specify('One form pretending to be another', function(){
+			$this->assertTrue(w34u\ssp\SSP_TokenCheck($this->formToken, $this->anotherFromId) !== true);
+		});
 		$this->specify('Form token valid', function(){
 			$this->assertTrue(w34u\ssp\SSP_TokenCheck($this->formToken, $this->formId) === true);
 		});
@@ -84,5 +88,37 @@ class FunctionsTest extends \Codeception\Test\Unit
 		$cfg->tokenClean = $original;
 	}
 	
+	// email function, uses mailcatcher
+	/*
+	public function testEmail(){
+		$this->subject = "Test email";
+		$this->targetEmail = 'test1@w34u.com';
+		$this->targetName = 'Testing recipient';
+		$this->fromName = 'Testy McTestFace';
+		$this->fromEmail = 'test2@w34u.com';
+		$this->textEmail = 'A test email, used for testing the ssp email function';
+		$this->specify('Sending text email', function(){
+			$result = \w34u\ssp\SSP_SendMail($this->fromName, $this->fromEmail, $this->targetName, $this->targetEmail, $this->subject, $this->textEmail);
+			$this->assertTrue($result === true, 'Check email sent');
+		});
+	}
+	 * 
+	 */
 	
+	// response token routines
+	public function testResponseTokens(){
+		$this->responseId = 'responseId';
+		$this->responseToken = \w34u\ssp\SSP_ResponseToken($this->responseId, 10);
+		$this->specify('Response token is valid', function(){
+			$this->assertTrue(strcmp(w34u\ssp\SSP_CheckResponseToken($this->responseToken), $this->responseId) === 0);
+		});
+		$this->specify('Response token has been used', function(){
+			$this->assertTrue(w34u\ssp\SSP_CheckResponseToken($this->responseToken) === false);
+		});
+		$this->responseToken = \w34u\ssp\SSP_ResponseToken($this->responseId, 1);
+		sleep(2);
+		$this->specify('Response token has times out', function(){
+			$this->assertTrue(w34u\ssp\SSP_CheckResponseToken($this->responseToken) === false);
+		});
+	}
 }
