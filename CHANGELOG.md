@@ -1,5 +1,18 @@
 # Change log
 
+## 3.1.0 - 2017 03 01
+
+Big update with a lot of improvements and fixes
+
+- Database upgrade and migration tool implemented, used in improved installation and upgrade operations.
+- Form classes moved to separate directory, broken into individual files and documented.
+- Administration application re-implemented using slim framework.
+- Fast double click no longer kills session on slow sites.
+- User with ip checking can now have multiple addresses.
+- HTML option for system emails.
+- Stub and option for two factor authentication.
+- Added testing framework and unit tests for critical global functions.
+
 ## 3.0.9 - 2016 11 23
 
 Password now allows all ASCII7 printable characters, changed default login and session cleanup to shorter values
