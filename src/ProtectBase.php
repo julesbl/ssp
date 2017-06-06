@@ -337,7 +337,7 @@ abstract class ProtectBase{
 				$this->log("User IP address incorrect, UserIP: ". SSP_paddIp($sessionInfo->SessionUserIp). " Remote IP: ". SSP_paddIp($_SERVER["REMOTE_ADDR"]));
             }
 
-			$userFault = $this->chackRandom($sessionInfo);
+			$userFault = $this->chackRandomFault($sessionInfo);
 
         }
         else{
@@ -359,34 +359,36 @@ abstract class ProtectBase{
 	 * @param object $sessionInfo - session record
 	 * @return boolean - true if fails
 	 */
-	private function chackRandom($sessionInfo){
-		if($this->cfg->randomCheck and !$this->config->noCookieUpdate){
-			// do checking of random number cookie
-			if(isset($_COOKIE[$this->cfg->randomCookie])){
-				// Cookie exists
-				$randomsStored = explode(',', $sessionInfo->SessionRandom);
-				if(in_array($_COOKIE[$this->cfg->randomCookie], $randomsStored) !== false){
-					// Numbers match, generate next number and set cookie and session table.
+	private function chackRandomFault($sessionInfo){
+		if(!$this->cfg->randomCheck or $this->config->noCookieUpdate){
+			// return ok if not configured
+			return false;
+		}
+		// do checking of random number cookie
+		if(isset($_COOKIE[$this->cfg->randomCookie])){
+			// Cookie exists
+			$randomsStored = explode(',', $sessionInfo->SessionRandom);
+			if(in_array($_COOKIE[$this->cfg->randomCookie], $randomsStored) !== false){
+				// Numbers match, generate next number and set cookie and session table.
 
-					$randomCookie = mt_rand(0,100000);
-					setcookie($this->cfg->randomCookie, $randomCookie, 0, $this->cfg->cookiePath, $this->cfg->cookieDomain, $this->cfg->useSSL);
+				$randomCookie = mt_rand(0,100000);
+				setcookie($this->cfg->randomCookie, $randomCookie, 0, $this->cfg->cookiePath, $this->cfg->cookieDomain, $this->cfg->useSSL);
 
-					$randomsStored[] = $randomCookie;
-					if(count($randomsStored) > $this->cfg->randomCookieChecks){
-						array_shift($randomsStored);
-					}
-					$fields = array("SessionRandom" => implode(',', $randomsStored));
-					$where = array("SessionId" => $sessionInfo->SessionId);
-					$this->db->update($this->cfg->sessionTable, $fields, $where, "SSP Session: Set Random Cookie failed");
-					return false;
+				$randomsStored[] = $randomCookie;
+				if(count($randomsStored) > $this->cfg->randomCookieChecks){
+					array_shift($randomsStored);
 				}
-				else{
-					$this->log("Random cookie not the same");
-				}
+				$fields = array("SessionRandom" => implode(',', $randomsStored));
+				$where = array("SessionId" => $sessionInfo->SessionId);
+				$this->db->update($this->cfg->sessionTable, $fields, $where, "SSP Session: Set Random Cookie failed");
+				return false;
 			}
 			else{
-				$this->log("Random cookie does not exist");
+				$this->log("Random cookie not the same");
 			}
+		}
+		else{
+			$this->log("Random cookie does not exist");
 		}
 		return true;
 	}
