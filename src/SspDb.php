@@ -496,7 +496,7 @@ class SspDb{
 			// database object is broken
 			$errorSql = true;
 			$error = "\nDatabase error ". date('d/m/Y H:i:s');
-			$error .= "\nPackege Error: ". $errorString. "\nQuery: ". $query. "\n";
+			$error .= "\nPackege Error: ". $errorString;
 			$this->errorDescription = $error;
 		}
 		elseif($this->db->ErrorNo() != 0){
@@ -558,7 +558,7 @@ class SspDb{
 			else{
 				error_log($error, $this->cfg->message_type, $this->cfg->errorLog);
 				foreach($this->cfg->errorAdmins as $toAddress => $toName){
-					ECRIAmailer("SSP SQL error handler", $this->cfg->noReplyEmail, $toName, $toAddress, "SSP SQL error on ". $this->cfg->siteName, $error);
+					SSP_SendMail("SSP SQL error handler", $this->cfg->noReplyEmail, $toName, $toAddress, "SSP SQL error on ". $this->cfg->siteName, $error);
 				}
 			}
 			if($this->abortOnError){

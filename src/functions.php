@@ -407,6 +407,7 @@ function SSP_SendMail($fromName, $fromAddress, $toName, $toAddress, $subject, $p
 	}
 	return mail($toAddressExtended, $subject, $message, $headers);
 }
+
 /**
  * 
  * @global SSP_Configure $SSP_Config
@@ -710,7 +711,7 @@ function SSP_errorHandler($errno, $errstr, $errfile, $errline){
 	else{
 		error_log($error, $SSP_Config->message_type, $SSP_Config->errorLog, $SSP_Config->adminEmail);
 		foreach($SSP_Config->errorAdmins as $toAddress => $toName){
-			ECRIAmailer("SSP error handler", $SSP_Config->noReplyEmail, $toName, $toAddress, "Notice or warning on ". $SSP_Config->siteName, $error);
+			SSP_SendMail("SSP error handler", $SSP_Config->noReplyEmail, $toName, $toAddress, "Notice or warning on ". $SSP_Config->siteName, $error);
 		}
 	}
 }
