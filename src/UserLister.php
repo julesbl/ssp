@@ -79,7 +79,7 @@ class UserLister{
 
 		// check for and create the filter
 		if(!isset($_SESSION["SSP_MemberFilter"])){
-			$_SESSION["SSP_MemberFilter"]= new MemberFilter($this->cfg->defaultAlpha);
+			$_SESSION["SSP_MemberFilter"]= new \w34u\ssp\MemberFilter($this->cfg->defaultAlpha);
 		}
 		$this->filter =& $_SESSION["SSP_MemberFilter"];
 	}
@@ -352,7 +352,7 @@ class UserLister{
 		// display list of users
 
 		if(!isset($_SESSION["SSP_ListerSave"])){
-			$_SESSION["SSP_ListerSave"]= new ListerSave($this->cfg->limit);
+			$_SESSION["SSP_ListerSave"]= new \w34u\ssp\ListerSave($this->cfg->limit);
 		}
 		$listerSave =& $_SESSION["SSP_ListerSave"];
 
