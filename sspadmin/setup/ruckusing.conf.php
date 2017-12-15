@@ -60,5 +60,5 @@ return array(
     'migrations_dir' => array('default' => RUCKUSING_WORKING_BASE . '/migrations'),
     'db_dir' => RUCKUSING_WORKING_BASE . DIRECTORY_SEPARATOR . 'db',
     'log_dir' => RUCKUSING_WORKING_BASE . DIRECTORY_SEPARATOR . 'logs',
-    'ruckusing_base' => dirname(__FILE__) . DIRECTORY_SEPARATOR . '/../../vendor/ruckusing/ruckusing-migrations'
+    'ruckusing_base' => $path_to_vendor_directory. 'ruckusing/ruckusing-migrations'
 );

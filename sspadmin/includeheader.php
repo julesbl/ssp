@@ -35,9 +35,9 @@
 *   Rev. Date	13/01/2016
 *   Descrip:	Changed to psr-4 and composer.
 */
-
+$path_to_vendor_directory = __DIR__. '/../vendor/';
 /* @var $loader \Composer\Autoload\ClassLoader */
-$loader = require __DIR__. '/../vendor/autoload.php';
+$loader = require $path_to_vendor_directory. 'autoload.php';
 if(file_exists(__DIR__. '/devinclude.php')){
 	require __DIR__. '/devinclude.php';
 }
