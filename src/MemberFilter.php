@@ -46,8 +46,8 @@ class MemberFilter{
 
     var $alpha = "all"; // condition for alphabetical listing eg. a, b etc.
     var $alphaField = ""; // field on which the alphabetical condition is applied.
-    var $filterFields = ""; // filters applied to fields array
-    var $filterValues = ""; // filter strings for filters
+    var $filterFields = []; // filters applied to fields array
+    var $filterValues = []; // filter strings for filters
     var $userAccess = "all"; // user type
     var $filterOr = 0; // use or condition on sql where statment
 	var $filterOnFlags = 1; // filter using flags
