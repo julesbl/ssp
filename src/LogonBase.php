@@ -333,6 +333,19 @@ abstract class LogonBase {
 		}
 		return($passwordOk);
 	}
+	
+	/**
+	 * Programatic login using user id.
+	 * @param type $userId
+	 * @return boolean/string - false on fail else user id
+	 */
+	public function loginUser($userId){
+		$userInfo = $this->db->get($this->cfg->userTable, ['UserId' => $userId], 'SSP Logon: Getting user login information for programatic login');
+		if($userInfo === false){
+			return false;
+		}
+		return $this->logonCheck($userInfo);
+	}
 
 	/**
 	 * Check user account is valid for login and sets up session and remember me
