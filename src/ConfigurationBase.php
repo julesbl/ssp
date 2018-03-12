@@ -827,7 +827,7 @@ abstract class ConfigurationBase
 		// defines the name of the handler which is used for storing and retrieving data associated with a session.
 		// files - uses inbuilt php routines, only good for unix systems with small numbers of users
 		// user - database using abstraction layer.
-		ini_set("session.save_handler","user");
+		//ini_set("session.save_handler","user");
 
 		// specifies the number of seconds after which a session will be seen as 'garbage' and cleaned up. Will also clean up any other temporary tables.
 		ini_set("session.gc_maxlifetime", $this->sessMaxLifetime); // 1440 = 24 minutes
