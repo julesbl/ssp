@@ -3,6 +3,7 @@
 if(php_sapi_name() !== "cli"){
 	exit();
 }
+$path_to_vendor_directory = __DIR__. '/../../vendor/';
 $files = array(
 		__DIR__ . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR . 'autoload.php',
 		__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR . 'autoload.php',
