@@ -111,36 +111,60 @@ class UserAdmin extends UserAdminBase {
 			$form->tplf = "userJoin.tpl";
 		}
 		$form->fe("text", "firstName", "First name");
-		$form->fep("width=30, required=true");
+		$form->fep("required=true");
+		$form->currentElelementObject->lClass = 'control-label';
+		$form->currentElelementObject->elClass = 'form-control';
+		
 		$form->fe("text", "lastName", "Last name");
-		$form->fep("width=30, required=true");
+		$form->fep("required=true");
+		$form->currentElelementObject->lClass = 'control-label';
+		$form->currentElelementObject->elClass = 'form-control';
+		
 		$form->fe("text", "email", "Your email");
-		$form->fep("width=30,required=true, dataType=email");
+		$form->fep("required=true, dataType=email");
+		$form->currentElelementObject->lClass = 'control-label';
+		$form->currentElelementObject->elClass = 'form-control';
+		
+		$form->fe("password", "password", "Your password");
+		$form->fep("required=true, dataType=password, minChar=" . $this->cfg->minPassword);
+		$form->currentElelementObject->lClass = 'control-label';
+		$form->currentElelementObject->elClass = 'form-control';
 
-		if ($this->cfg->loginType == 1 or $this->cfg->getUserName) {
-			$form->fe("text", "name", "User name");
-			$form->fep("width=15,required=true,dataType=password");
-		}
-		if ($needPassword) {
-			$form->fe("password", "password", "Your password");
-			$form->fep("width=15, required=true, dataType=password, minChar=" . $this->cfg->minPassword);
-
-			$form->fe("password", "password2", "Enter password again");
-			$form->fep("width=15,sql=false,dataType=password,required=true");
-		}
-		if ($this->cfg->userHasSignUpOptions) {
-			// user has a set of options to sign up
-			$form->fe("select", "signUpLevel", "Type of membership", $this->cfg->userAccessSignUpDropdown);
-			$form->fep("dataType=int, sql=false");
-		}
+		$form->fe("password", "password2", "Enter password again");
+		$form->fep("sql=false,dataType=password,required=true");
+		$form->currentElelementObject->lClass = 'control-label';
+		$form->currentElelementObject->elClass = 'form-control';
+		
+		$options = [0,1];
+		$form->fe("check", "tandcs", 'Read and accepted our terms and conditions', $options);
+		$form->fep("required=true");
+		$form->currentElelementObject->lClass = 'control-label';
+		$form->currentElelementObject->elClass = 'form-control';
+		
+		$form->fe("check", "privacy_policy", 'Read our privacy policy</a> ', $options);
+		$form->fep("required=true");
+		$form->currentElelementObject->lClass = 'control-label';
+		$form->currentElelementObject->elClass = 'form-control';
+		
+		$form->fe("check", "contact_them", 'Would it be OK to contact you about special offers and changes?', $options);
+		$form->currentElelementObject->lClass = 'control-label';
+		$form->currentElelementObject->elClass = 'form-control';
+		
 		$form->tda("loginPath", $this->cfg->logonScript);
 
 		if ($form->processForm($_POST)) {
 			if (!$form->error) {
 				$form->setField("email", strtolower($form->getField("email")));
-				if ($this->userCreateCheck($form)) {
+				$check = $this->checkUserJoin($form);
+				if($check === 'fault'){
+					// divert to home page doing nothing if duplicate email, prevents querying of users by failed creation
+					SSP_Divert('/');
+				}
+				if ($check === false) {
+					// fault in form detected by check routine
 					return $form->create(true);
 				} else {
+					// create a new user
 					$loginData = array();
 					$userId = SSP_uniqueId();
 					$loginData["UserId"] = $userId;
@@ -149,15 +173,7 @@ class UserAdmin extends UserAdminBase {
 					if ($needPassword) {
 						$loginData["UserPassword"] = $this->session->cryptPassword($form->getField("password"));
 					}
-					if ($this->cfg->userHasSignUpOptions) {
-						if (isset($this->cfg->userAccessSignUpLevels[$form->getField("signUpLevel")])) {
-							$loginData["UserAccess"] = $this->cfg->userAccessSignUpLevels[$form->getField("signUpLevel")];
-						} else {
-							$loginData["UserAccess"] = $this->cfg->userDefault;
-						}
-					} else {
-						$loginData["UserAccess"] = $this->cfg->userDefault;
-					}
+					$loginData["UserAccess"] = $this->cfg->userDefault;
 					$loginData["CreationFinished"] = 1;
 					if ($this->cfg->adminCheck) {
 						$loginData["UserAdminPending"] = 1;
@@ -174,10 +190,21 @@ class UserAdmin extends UserAdminBase {
 					$miscData["UserId"] = $userId;
 					$miscData["FirstName"] = $form->getField("firstName");
 					$miscData["FamilyName"] = $form->getField("lastName");
+					$miscData['company'] = $form->getField("company");
+					$miscData['tandcs'] = 1;
+					$miscData['privacy_policy'] = 1;
+					if($form->getField("contact_them") == 1){
+						$miscData['contact_them'] = 1;
+					}
 					$this->db->insert($this->cfg->userMiscTable, $miscData, "Inserting new member misc data");
 					$this->id = $userId;
+					$login = new \w34u\ssp\Logon($this->session);
+					// login the user
+					if($this->cfg->joinLoggedIn === true and $this->cfg->adminCheck === false and $this->cfg->confirmType === 0){
+						$login->loginUser($userId);
+					}
 					$this->userFinish($userId);
-					return $this->welcomeScreen();
+					SSP_Divert('/');
 				}
 			} else {
 				return $form->create(true);
@@ -186,7 +213,34 @@ class UserAdmin extends UserAdminBase {
 			return $form->create();
 		}
 	}
-
+	
+	/**
+	 * Check the user entries in the registration form
+	 * @param sfc\Form $form
+	 * @return boolean/string - true on good entries, fault on duplicate email entries
+	 */
+	private function checkUserJoin(&$form){
+		if ($form->getField('password') !== $form->getField('password2')) {
+			$form->addError('Please ensure the passwords are identical identical');
+			$form->setError('password', 'Must be the same');
+			$form->setError('password2', 'Must be the same');
+			return false;
+		}
+		if($form->getField('tandcs') != '1'){
+			$form->setError('tandcs', 'Please accept our Terms and conditions');
+			return false;
+		}
+		if($form->getField('privacy_policy') != '1'){
+			$form->setError('privacy_policy', 'Please accept out Privacy policy');
+			return false;
+		}
+		$email = $this->db->get($this->cfg->userTable, ['UserEmail' => $form->getField('email')], 'SSP Admin: Checking for duplicate email when creating');
+		if($email !== false){
+			return 'fault';
+		}
+		return true;
+	}
+	
 	/**
 	 * Get logged in users name
 	 * @param string $userId - user id

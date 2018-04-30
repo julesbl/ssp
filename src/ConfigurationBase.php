@@ -525,8 +525,8 @@ abstract class ConfigurationBase
 	 * admin must vet each new member
 	 * @var bool
 	 */
-	public $adminCheck = true;
-	/** what the program does to confirm user
+	public $adminCheck = false;
+	/**
 	 * what the program does to confirm user
 	 * 0 - new user is instantly a member
 	 * 1 - emailed random password which can be changed
@@ -535,6 +535,12 @@ abstract class ConfigurationBase
 	 * @var int
 	 */
 	public $confirmType = 2;
+	/**
+	 * User is instantly logged in after joining.
+	 * Only works for $adminCheck = false and $confirmType = 0
+	 * @var boolean
+	 */
+	public $joinLoggedIn = false;
 	/**
 	 * How long the user has to click on the link in seconds
 	 * 604800 = 7 days

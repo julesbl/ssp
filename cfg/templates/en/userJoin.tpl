@@ -1,6 +1,7 @@
 <!-- userJoin.tpl - user joinup template -->
 <h1>Join SSP</h1>
 <form action="{formAction}" method="post">
+	{errorList}
 	<table>
 		<tr>
 			<td>
@@ -64,6 +65,30 @@
 			</td>
 		</tr>
 		{:endif:signUpLevel}
+		<tr>
+			<td>
+				{tandcsDesc}
+			</td>
+			<td>
+				{tandcs}
+			</td>
+		</tr>
+		<tr>
+			<td>
+				{privacy_policyDesc}
+			</td>
+			<td>
+				{privacy_policy}
+			</td>
+		</tr>
+		<tr>
+			<td>
+				{contact_themDesc}
+			</td>
+			<td>
+				{contact_them}
+			</td>
+		</tr>
 		<tr>
 			<td>
 				&nbsp;
