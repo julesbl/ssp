@@ -63,7 +63,6 @@ $container['session'] = function($container) {
 $container['ssp'] = function($container){
 	return new Setup($container['session'], true);
 };
-
 $app = new \Slim\App($container);
 // home page
 $app->any('/', function (Request $request, Response $response) {
@@ -296,13 +295,20 @@ $app->group('/user', function() use ($app) {
 	});
 	// user joinup script
 	$app->any('/usercreation', function(Request $request, Response $response){
+		/* @var $session Protect */
 		$session = $this->session;
+		/* @var $ssp Setup */
 		$ssp = $this->ssp;
 		
 		$ssp->pageTitleAdd("Join the site");
 		$admin = new UserAdmin($session, $ssp, "", "sspsmalltemplate.tpl", false);
-		$response->getBody()->write($admin->userJoin());
-		
+		$join = $admin->userJoin();
+		if(!is_bool($join)){
+			$response->getBody()->write($join);
+		}
+		else{
+			SSP_Divert($session->cfg->siteRoot);
+		}		
 		return $response;
 	});
 });

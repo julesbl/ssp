@@ -158,7 +158,7 @@ class UserAdmin extends UserAdminBase {
 				$check = $this->checkUserJoin($form);
 				if($check === 'fault'){
 					// divert to home page doing nothing if duplicate email, prevents querying of users by failed creation
-					SSP_Divert('/');
+					return false;
 				}
 				if ($check === false) {
 					// fault in form detected by check routine
@@ -190,7 +190,6 @@ class UserAdmin extends UserAdminBase {
 					$miscData["UserId"] = $userId;
 					$miscData["FirstName"] = $form->getField("firstName");
 					$miscData["FamilyName"] = $form->getField("lastName");
-					$miscData['company'] = $form->getField("company");
 					$miscData['tandcs'] = 1;
 					$miscData['privacy_policy'] = 1;
 					if($form->getField("contact_them") == 1){
@@ -204,7 +203,7 @@ class UserAdmin extends UserAdminBase {
 						$login->loginUser($userId);
 					}
 					$this->userFinish($userId);
-					SSP_Divert('/');
+					return true;
 				}
 			} else {
 				return $form->create(true);
