@@ -308,7 +308,7 @@ class Fe {
 		}
 		if ($this->type == 'select' or $this->type == 'radio' and trim($this->field) !== "") {
 			// get valid results if not already supplied
-			if (count($this->validResults == 0)) {
+			if (count($this->validResults) == 0) {
 				$this->getValidResults($this->data);
 			}
 			if (array_search(trim($this->field), $this->validResults) === false) {
