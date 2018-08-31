@@ -840,18 +840,22 @@ abstract class ProtectBase{
 	 * @return bool - returns true on match 
 	 */
 	public function checkPassword($password, $encryptedPassword){
-        $match = false;
         if($this->cfg->encryptPassword){
-            if(strlen(trim($encryptedPassword)) != 0 and strlen(trim($password)) != 0 and strcmp(crypt(trim($password), $encryptedPassword), $encryptedPassword) === 0){
-            	$match = true;
+            if(strlen(trim($encryptedPassword)) != 0 and strlen(trim($password)) != 0){
+				if(function_exists('hash_equals') and hash_equals($encryptedPassword, crypt(trim($password), $encryptedPassword)) === true){
+					return true;
+				}
+				elseif(strcmp(crypt(trim($password), $encryptedPassword), $encryptedPassword) === 0){
+					return true;
+				}
             }
         }
         else{
             if(strcmp($encryptedPassword, trim($password)) == 0){
-            	$math = true;
+            	return true;
             }
         }
-        return($match);
+		return false;
     }
 	
 	/**
