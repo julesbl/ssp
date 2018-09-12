@@ -141,21 +141,19 @@ class Configuration extends ConfigurationBase
 	 */
 	public $magicToken = null;
 	/**
-	 * Path to the templates directory, relative to w34u/ssp/src
-	 * e.g. '/../../../../cfg/templates/'
+	 * Path to the templates directory
 	 * @var string
 	 */
-	public $templateDir = null;
+	public $templateDir = __DIR__. '/templates/';
 	/** 
 	 * enable translation routines
 	 * @var bool   */
-	//public $translate = true;
+	public $translate = false;
 	/**
-	 * Path to translation directory , relative to w34u/ssp/src
-	 * e.g. '/../../../../cfg/translate/'
+	 * Path to translation directory
 	 * @var string
 	 */
-	public $translatePath = null;
+	public $translatePath = __DIR__. '/translate/';
 }
 
 /* End of file Configuration.php */

@@ -793,7 +793,7 @@ abstract class ConfigurationBase
 		
 		date_default_timezone_set($this->siteTimezoneIdentifier);
 		
-		Protect::setTemplatePath(__DIR__. $this->templateDir);
+		Protect::setTemplatePath($this->templateDir);
 		
 		// Translation configuration
 		if($this->translate){
@@ -803,7 +803,7 @@ abstract class ConfigurationBase
 				Translate::debug();
 			}
 			// configure language translation object
-			$SSP_lang = new Translate($this->lang, $this->translateLangs, __DIR__. $this->translatePath);
+			$SSP_lang = new Translate($this->lang, $this->translateLangs, $this->translatePath);
 
 			CheckData::addTranslation($SSP_lang);
 			sfc\Form::addTranslation($SSP_lang);
