@@ -25,6 +25,8 @@ if(!isset($_POST['SFC_Submit'])){
 		'db:migrate'
 	];
 	$main = new \Ruckusing_FrameworkRunner($db_config, $params);
+	restore_error_handler();
+	restore_exception_handler();
 	$content['database_creation'] = $main->execute();
 }
 
