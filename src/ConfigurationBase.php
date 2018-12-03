@@ -786,10 +786,10 @@ abstract class ConfigurationBase
 		else{
 			$debug = true;
 		}
-		$this->loginDebug = $debug and $this->loginDebug;
-		$this->accessFaultDebug = $debug and $this->accessFaultDebug;
-		$this->divertDebug = $debug and $this->divertDebug;
-		$this->displaySqlFaults = $debug and $this->displaySqlFaults;
+		$this->loginDebug = $debug && $this->loginDebug;
+		$this->accessFaultDebug = $debug && $this->accessFaultDebug;
+		$this->divertDebug = $debug && $this->divertDebug;
+		$this->displaySqlFaults = $debug && $this->displaySqlFaults;
 		
 		date_default_timezone_set($this->siteTimezoneIdentifier);
 		
