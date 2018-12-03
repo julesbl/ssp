@@ -76,6 +76,22 @@ class SessionHandler{
 	public function __construct(){
 		$this->cfg = Configuration::getConfiguration();
 		$this->db = SspDb::getConnection();
+		// set session name if a site crawling bot
+		if($this->bot_detected()){
+			session_id('bot_session');
+		}
+	}
+
+	/**
+	 * Detect if bot is scanning the site
+	 * @return bool
+	 */
+	private function bot_detected(){
+		if(isset($_SERVER['HTTP_USER_AGENT']) and
+			preg_match('/bot|crawl|slurp|spider|mediapartners/i', $_SERVER['HTTP_USER_AGENT'])){
+			return true;
+		}
+		return false;
 	}
 
 	/**
