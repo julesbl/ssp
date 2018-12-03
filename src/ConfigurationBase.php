@@ -502,6 +502,16 @@ abstract class ConfigurationBase
 	 */
 	public $loginType = 0;
 	/**
+	 * If enabled allows login by email
+	 * @var bool
+	 */
+	public $loginByEmail = false;
+	/**
+	 * Types of logins that can use the email option
+	 * @var array
+	 */
+	public $loginByEmailUserTypes = ['user'];
+	/**
 	 * reload login email or user name on failure
 	 * @var bool
 	 */

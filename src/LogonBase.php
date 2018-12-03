@@ -259,7 +259,14 @@ abstract class LogonBase {
 			$form->fep("required=true");
 		}
 		$form->fe("password", "password", "Password");
-		$form->fep("required=true, dataType=password, load=false, minChar=". $this->cfg->minPassword);
+		$form->fep("dataType=password, load=false");
+
+		// login by email option
+		if($this->cfg->loginByEmail === true){
+			$form->fe('check', 'emaillogin', 'Login by email', [0,1]);
+			$form->currentElelementObject->textBefore = false;
+			$form->currentElelementObject->encap = true;
+		}
 
 		if($this->rememberMe){
 			$form->fe("check", "rememberMe", "Remember me (do not tick this box on a public computer)", array(0,1));
