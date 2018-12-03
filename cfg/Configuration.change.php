@@ -141,19 +141,21 @@ class Configuration extends ConfigurationBase
 	 */
 	public $magicToken = null;
 	/**
-	 * Path to the templates directory
-	 * @var string
-	 */
-	public $templateDir = __DIR__. '/templates/';
-	/** 
 	 * enable translation routines
 	 * @var bool   */
 	public $translate = false;
+
 	/**
-	 * Path to translation directory
-	 * @var string
+	 * Configuration constructor.
 	 */
-	public $translatePath = __DIR__. '/translate/';
+	public function __construct()
+	{
+		// set up path to templates directory
+		$this->templateDir = __DIR__. '/templates/';
+		// set up path to translation directory
+		$this->translatePath = __DIR__. '/translate/';
+		parent::__construct();
+	}
 }
 
 /* End of file Configuration.php */

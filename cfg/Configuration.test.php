@@ -107,23 +107,18 @@ class Configuration extends ConfigurationBase
 
 	public $magicToken = "another randomish string to help creaste tokens";
 	/**
-	 * Path to the templates directory
-	 * @var string
-	 */
-	public $templateDir = "/../cfg/templates/";
-	/** 
 	 * enable translation routines
 	 * @var bool   */
 	public $translate = true;
-	/**
-	 * Path to translation directory
-	 * @var string
-	 */
-	public $translatePath = "/../cfg/translate/";
-	
+
 	public $displaySqlFaults = true;
 	
 	public function __construct() {
+		// set up path to templates directory
+		$this->templateDir = __DIR__. '/templates/';
+		// set up path to translation directory
+		$this->translatePath = __DIR__. '/translate/';
+
 		parent::__construct();
 		
 		$this->loginDebug = true;
