@@ -136,7 +136,7 @@ abstract class ProtectBase{
 	public $db;
 	/**
 	 * Local configuration
-	 * @var SSP_ProtectConfig
+	 * @var ProtectConfig
 	 */
 	private $config = false;
 
@@ -146,7 +146,7 @@ abstract class ProtectBase{
 	private static $translate = false;
 	/** 
 	 * translator object use to translate strings
-	 * @var SSP_translate  */
+	 * @var Translate  */
 	public static $tranlator;
 	/** 
 	 * name of method used in tranlation object
@@ -172,12 +172,12 @@ abstract class ProtectBase{
 	 * @param bool $doHistory - do history for this page
 	 * @param ProtectConfig $config - Protected session configuration options
 	 */
-    public function __construct($pageAccessLevel="", $pageCheckEquals=false, $doHistory = true, $config = false){
+    public function __construct($pageAccessLevel="", $pageCheckEquals=false, $doHistory = true, $config = null){
 
         global $loginContent;
 		
-		if($config === false){
-			$this->config = new \w34u\ssp\ProtectConfig();
+		if($config === null){
+			$this->config = new ProtectConfig();
 		}
 		else{
 			$this->config = $config;
@@ -310,7 +310,7 @@ abstract class ProtectBase{
 					break;
 				}
 			}
-			
+
 			if(!$flagsValid){
 				$userFault = true;
 			}
@@ -337,7 +337,9 @@ abstract class ProtectBase{
 				$this->log("User IP address incorrect, UserIP: ". SSP_paddIp($sessionInfo->SessionUserIp). " Remote IP: ". SSP_paddIp($_SERVER["REMOTE_ADDR"]));
             }
 
-			$userFault = $this->chackRandomFault($sessionInfo);
+			if($this->chackRandomFault($sessionInfo)){
+				$userFault = true;
+			}
 
         }
         else{
@@ -698,6 +700,7 @@ abstract class ProtectBase{
 	 * Log a user off the system, blanks all session data except language
 	 * @param SSP_Template $tpl - template object
 	 * @param bool $showLogoffScreen - display the logoff screen
+	 * @return string - logoff screen
 	 */
 	public function logoff($tpl, $showLogoffScreen = true){
 		$userId = $this->userId;
@@ -840,18 +843,23 @@ abstract class ProtectBase{
 	 * @return bool - returns true on match 
 	 */
 	public function checkPassword($password, $encryptedPassword){
+		$password = trim($password);
+		$encryptedPassword = trim($encryptedPassword);
+		if(strlen($password) < $this->cfg->minPassword){
+			return false;
+		}
         if($this->cfg->encryptPassword){
-            if(strlen(trim($encryptedPassword)) != 0 and strlen(trim($password)) != 0){
-				if(function_exists('hash_equals') and hash_equals($encryptedPassword, crypt(trim($password), $encryptedPassword)) === true){
+            if(strlen($encryptedPassword) !== 0 and strlen($password) !== 0){
+				if(function_exists('hash_equals') and hash_equals($encryptedPassword, crypt($password, $encryptedPassword)) === true){
 					return true;
 				}
-				elseif(strcmp(crypt(trim($password), $encryptedPassword), $encryptedPassword) === 0){
+				elseif(strcmp(crypt($password, $encryptedPassword), $encryptedPassword) === 0){
 					return true;
 				}
             }
         }
         else{
-            if(strcmp($encryptedPassword, trim($password)) == 0){
+            if(strcmp($encryptedPassword, $password) == 0){
             	return true;
             }
         }
@@ -871,8 +879,8 @@ abstract class ProtectBase{
 	
 	/**
 	 * Attempt to translate a string of text
-	 * @param type $text
-	 * @return type
+	 * @param string $text
+	 * @return string
 	 */
 	public function t($text){
 		if(self::$translate){
@@ -880,7 +888,7 @@ abstract class ProtectBase{
 			return(self::$tranlator->$translateMethod($text));
 		}
 		else{
-			return($text);
+			return $text;
 		}
 	}
 	
@@ -889,7 +897,7 @@ abstract class ProtectBase{
 	 * @return bool
 	 */
 	public function isTranslate(){
-		return(self::$translate);
+		return self::$translate;
 	}
 	
 	/**
