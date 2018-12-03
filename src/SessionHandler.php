@@ -64,12 +64,12 @@ class SessionHandler{
 	private $session_name = '';
 	/**
 	 * Database connection
-	 * @var SSP_DB 
+	 * @var SspDb
 	 */
 	private $db;
 	/**
 	 * System Configuration
-	 * @var SSP_Configuration
+	 * @var Configuration
 	 */
 	private $cfg;
 	
@@ -80,9 +80,9 @@ class SessionHandler{
 
 	/**
 	 * Set up the session handling
-	 * @param type $save_path
-	 * @param type $session_name
-	 * @return type
+	 * @param string $save_path
+	 * @param string $session_name
+	 * @return boolean
 	 */
 	public function open($save_path, $session_name){
 		$this->save_path = $save_path;
