@@ -176,7 +176,7 @@ class ApiInterface{
 		// send keep alive to a remote system
 
 		$messageObject = new API_message("keepAlive");
-		$messageObject->data["sessionId"] = $sessionId;
+		//$messageObject->data["sessionId"] = $sessionId;
 
 		$result = $this->sendMessage($messageObject);
 
@@ -259,7 +259,7 @@ class ApiInterface{
 				$userLoginInfo = $this->db->get($userTable, $where, "SSP Protect: getting user login information");
 				// create login record
 				$login = new Logon($this, "", false, true);
-				$login->logonCheck($userLoginInfo);
+				//$login->logonCheck($userLoginInfo);
 				session_write_close();
 				SSP_Divert(SSP_Path());
 			}
