@@ -35,6 +35,8 @@
 
 namespace w34u\ssp;
 
+use w34u\ssp\sfc\Form;
+
 abstract class LogonBase {
 	// Class to handle user logons
 
@@ -51,15 +53,15 @@ abstract class LogonBase {
 
 	/** 
 	 * ssp config var
-	 * @var w34u\ssp\Configuration   */
+	 * @var Configuration   */
 	public $cfg; // configuration
 	/** 
 	 * 
-	 * @var w34u\ssp\SspDB database object */
+	 * @var SspDB database object */
 	public $db; // database object
 	/** 
 	 *  session object
-	 * @var w34u\ssp\Protect */
+	 * @var Protect */
 	public $session;
 	/**
 	 * Form output
@@ -90,11 +92,11 @@ abstract class LogonBase {
 
 	/**
 	 * Login base class constructor
-	 * @param w34u\ssp\Protect $session - session object
-	 * @param w34u\ssp\Template $tpl - template in which to wrap the form
+	 * @param Protect $session - session object
+	 * @param Template $tpl - template in which to wrap the form
 	 * @param bool $ignoreToken - don't use a token on the login form
 	 */
-	public function __construct($session, $tpl = "", $ignoreToken = false){
+	public function __construct($session, $tpl = null, $ignoreToken = false){
         
 		$this->session = $session;
 		$this->cfg = Configuration::getConfiguration();
@@ -121,9 +123,9 @@ abstract class LogonBase {
 	
 	/**
 	 * Display and process login screen
-	 * @param w34u\ssp\Template $tpl
+	 * @param Template $tpl
 	 * @param bool $ignoreToken
-	 * @return type bool/string - false on failure/userid on success
+	 * @return bool/string - false on failure/userid on success
 	 */
 	private function processAuthForm($tpl, $ignoreToken){
 		// define the form to login
@@ -150,7 +152,8 @@ abstract class LogonBase {
 
 	/**
 	 * Process the remember me, and generate the errors if needed
-	 * @param sfc\Form $form
+	 * @param Form $form
+	 * @return bool - true on successful  login
 	 */
 	protected function processForm($form){
 		$this->rememberMeGet($form);
@@ -193,7 +196,7 @@ abstract class LogonBase {
 	/**
 	 * Divert back to page login from which login was invoked
 	 * optionally display login success page.
-	 * @param string/bool $userId - users id
+	 * @param string | bool $userId - users id
 	 */
 	private function loginSuccess($userId = false){
 		$returnPage = $this->session->getReturnPage();
@@ -274,7 +277,7 @@ abstract class LogonBase {
 	
 	/**
 	 * Check the data returned by the login form is for an existing user
-	 * @param w34u\ssp\sfc\Form $form
+	 * @param sfc\Form $form
 	 * @return bool - true on existing user
 	 */
 	protected function loginFormCheck(&$form){
@@ -335,8 +338,8 @@ abstract class LogonBase {
 	}
 	
 	/**
-	 * Programatic login using user id.
-	 * @param type $userId
+	 * Programmatic login using user id.
+	 * @param string $userId
 	 * @return boolean/string - false on fail else user id
 	 */
 	public function loginUser($userId){

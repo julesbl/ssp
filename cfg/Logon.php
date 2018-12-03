@@ -33,12 +33,12 @@ namespace w34u\ssp;
 class Logon extends LogonBase{
 	/**
 	 * Login base class constructor
-	 * @param w34u\ssp\Protect $session - session object
-	 * @param w34u\ssp\Template $tpl - template in which to wrap the form
+	 * @param Protect $session - session object
+	 * @param Template $tpl - template in which to wrap the form
 	 * @param bool $ignoreToken - dont use a token on the login form
 	 * @param bool $createForm - create the login form
 	 */
-	public function __construct($session, $tpl = "", $ignoreToken = false, $createForm = true){
+	public function __construct($session, $tpl = null, $ignoreToken = false, $createForm = true){
 
     	if($createForm){
 			parent::__construct($session, $tpl, $ignoreToken);

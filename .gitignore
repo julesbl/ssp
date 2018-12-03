@@ -3,3 +3,8 @@
 /cfg/Configuration.php
 /sspadmin/devinclude.php
 /composer.lock
+.idea/
+js/
+tests/_envs/
+testscripts/form/images/
+testscripts/form/preview/

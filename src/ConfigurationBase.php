@@ -176,7 +176,7 @@ abstract class ConfigurationBase
 	public $displayNameFormat = "%s %s";
 	/** 
 	 * Site encoding for admin
-	 * @var type  */
+	 * @var string  */
 	public $siteEncoding = "UTF-8";
 
 	// General SSP configuration
@@ -722,7 +722,7 @@ abstract class ConfigurationBase
 	
 	/**
 	 * Static configuration
-	 * @var SSP_Configuration
+	 * @var Configuration
 	 */
 	private static $cfg = null;
 	
@@ -733,7 +733,7 @@ abstract class ConfigurationBase
 	private static $sessionName = null;
 	/**
 	 * Properties that are checked on object creation to be non null
-	 * @var string
+	 * @var string[]
 	 */
 	private static $checkProperties = array(
 		'dsnDatabaseName', 'siteName', 'adminName', 'adminEmail', 'noReplyName', 'noReplyEmail', 'url', 'cookieDomain', 'siteRoot', 'sessVarName',
@@ -786,10 +786,10 @@ abstract class ConfigurationBase
 		else{
 			$debug = true;
 		}
-		$this->loginDebug = $this->loginDebug and $debug;
-		$this->accessFaultDebug = $this->accessFaultDebug and $debug;
-		$this->divertDebug = $this->divertDebug and $debug;
-		$this->displaySqlFaults = $this->displaySqlFaults and $debug;
+		$this->loginDebug = $debug and $this->loginDebug;
+		$this->accessFaultDebug = $debug and $this->accessFaultDebug;
+		$this->divertDebug = $debug and $this->divertDebug;
+		$this->displaySqlFaults = $debug and $this->displaySqlFaults;
 		
 		date_default_timezone_set($this->siteTimezoneIdentifier);
 		
