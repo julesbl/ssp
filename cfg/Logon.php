@@ -31,23 +31,6 @@
 namespace w34u\ssp;
 
 class Logon extends LogonBase{
-	/**
-	 * Login base class constructor
-	 * @param Protect $session - session object
-	 * @param Template $tpl - template in which to wrap the form
-	 * @param bool $ignoreToken - dont use a token on the login form
-	 * @param bool $createForm - create the login form
-	 */
-	public function __construct($session, $tpl = null, $ignoreToken = false, $createForm = true){
-
-    	if($createForm){
-			parent::__construct($session, $tpl, $ignoreToken);
-    	}
-		else{
-			$this->cfg = Configuration::getConfiguration();
-			$this->db = SspDb::getConnection();
-    	}
-    }
 
 	public function userLoginCheck($userInfo){
 		// stub for user defined login check

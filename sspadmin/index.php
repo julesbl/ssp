@@ -237,13 +237,13 @@ $app->group('/user', function() use ($app) {
 	// user login
 	$app->any('/logon', function(Request $request, Response $response){
 		$session = $this->session;
+		/* @var $ssp Setup */
 		$ssp = $this->ssp;
-		$contentMain = array();
+		$login = new Logon($session);
+		$contentMain = ['content' => $login->do_login()];
 		$ssp->pageTitleAdd('Logon');
 		$tpl = $ssp->tpl($contentMain, "sspsmalltemplate.tpl", false);
-
-		$login = new Logon($session, $tpl);
-		$response->getBody()->write($login->output);
+		$response->getBody()->write($tpl->output());
 		return $response;
 	});
 	// user logoff

@@ -507,7 +507,12 @@ abstract class ConfigurationBase
 	 */
 	public $loginByEmail = false;
 	/**
-	 * Types of logins that can use the email option
+	 * If true the default login will be by email
+	 * @var bool
+	 */
+	public $loginByEmailDefault = false;
+	/**
+	 * Types of user logins that can use the email option
 	 * @var array
 	 */
 	public $loginByEmailUserTypes = ['user'];
