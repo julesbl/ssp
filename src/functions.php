@@ -772,10 +772,10 @@ function ssp_stringTruncate($string, $width, $lines){
 }
 
 /**
- * store a veriable value in the session variables
+ * store a variable value in the session variables
  * @param string $sessionVarName - storage name in the session variables
- * @param any $default - defualt value if storage does not initially exist
- * @return any
+ * @param mixed $default - default value if storage does not initially exist
+ * @return mixed
  */
 function &SSP_attachToSeshVar($sessionVarName, $default){
 	if(!isset($_SESSION[$sessionVarName])){
