@@ -517,6 +517,12 @@ abstract class ConfigurationBase
 	 */
 	public $loginByEmailUserTypes = ['user'];
 	/**
+	 * Time for which the login email link is valid in seconds
+	 * 3600 - 1 hour
+	 * @var int
+	 */
+	public $loginByEmailTimeout = 3600;
+	/**
 	 * reload login email or user name on failure
 	 * @var bool
 	 */

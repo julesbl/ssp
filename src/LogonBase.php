@@ -112,10 +112,13 @@ abstract class LogonBase {
 			// process remember me before login form goes ahead
 			$this->loginSessionData = $this->rememberMeGet();
 		}
-		if($this->loginSessionData === false) {
+		if($this->loginSessionData === false){
 			$formData = $this->processAuthForm($ignoreToken);
 			$userData = $this->getUserData($formData);
-			if ($userData !== false) {
+			if ($this->cfg->loginByEmail and !empty($formData->emaillogin)){
+				// commence login by email process
+			}
+			elseif ($userData !== false){
 				if ($this->session->checkPassword($formData->password, $userData->UserPassword)) {
 					$this->loginSessionData = $userData;
 				} else {
@@ -156,20 +159,6 @@ abstract class LogonBase {
 
 	}
 	
-
-	/**
-	 * Do two factor authentication
-	 * @param \stdClass $userInfo
-	 * @return boolean - true on success
-	 */
-	protected function processTwoFactor($userInfo){
-		if(!$this->cfg->twoFactorAuthentication or $userInfo->use_two_factor_auth == 0){
-			// bypass if not configured or user has not configured it
-			return true;
-		}
-		return true;
-	}
-
 	/**
 	 * Display and process login form
 	 * @param bool $ignoreToken - form not to use timed token
@@ -277,6 +266,25 @@ abstract class LogonBase {
 		$form->tda("siteName", $this->cfg->siteName);
 		$form->tda("joinSiteLink", $this->cfg->userCreation);
 		return $form;
+	}
+
+	private function startEmailLogin($userInfo){
+		if(!empty($userInfo)){
+
+		}
+	}
+
+	/**
+	 * Do two factor authentication
+	 * @param \stdClass $userInfo
+	 * @return boolean - true on success
+	 */
+	protected function processTwoFactor($userInfo){
+		if(!$this->cfg->twoFactorAuthentication or $userInfo->use_two_factor_auth == 0){
+			// bypass if not configured or user has not configured it
+			return true;
+		}
+		return true;
 	}
 
 	/**
