@@ -1,6 +1,6 @@
 <h1>Simple Site Protection</h1>
 {:if:logged_in}
-<p>user logged in</p>
+<p>User logged in</p>
 {:endif:logged_in}
 <p>These set of php routines are designed to allow php developers to easily secure
 a site or an application.</p>

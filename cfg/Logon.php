@@ -37,18 +37,6 @@ class Logon extends LogonBase{
 
 		return true ;
 	}
-
-	public function loginSuccessDisplay($userId, $returnPath){
-		// create logon successful content
-
-		$logonSuccessContent = array(
-			"pageTitle" => "Logon Success",
-			"headTitle" => $this->session->t("Welcome Back"),
-			"returnPath" => $returnPath,
-			"siteRoot" => $this->cfg->siteRoot
-			);
-		return $logonSuccessContent;
-	}
 }
 
 /* End of file Logon.php */

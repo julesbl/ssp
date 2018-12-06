@@ -590,10 +590,15 @@ abstract class ConfigurationBase
 	 */
 	public $getUserName = false;
 	/**
-	 * Automatically return to page from which login was triggered
+	 * Go to a particular page after login
 	 * @var bool
 	 */
-	public $autoReturnAfterLogin = true;
+	public $loginAfterGoToPage = false;
+	/**
+	 * Page to go to after login
+	 * @var string
+	 */
+	public $loginAfterGoToPageUrl = null;
 
 	/**
 	 * Prefix for user id generation

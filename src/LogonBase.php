@@ -121,8 +121,27 @@ abstract class LogonBase {
 				} else {
 					$this->errorDesc = 'Password does not match';
 					// re-display login form with error
-					$this->processAuthForm($ignoreToken, true);
+					$this->processAuthForm($ignoreToken, true, $formData);
 				}
+			}
+			elseif($formData !== false){
+				$this->errorDesc = 'Could not find user';
+				$this->processAuthForm($ignoreToken, true, $formData);
+			}
+		}
+		if($this->loginSessionData !== false){
+			if($this->processTwoFactor($this->loginSessionData) === true){
+				if($this->logonCheck($this->loginSessionData)){
+					$this->loginSuccess();
+				}
+				else{
+					// sort out form reload data
+					$formData = new \stdClass();
+					$formData->user = $this->loginSessionData->UserName;
+					$formData->email = $this->loginSessionData->UserEmail;
+					$this->processAuthForm($ignoreToken, true, $formData);
+				}
+				$this->loginSessionData = false;
 			}
 		}
 		return $this->output;
@@ -140,15 +159,13 @@ abstract class LogonBase {
 
 	/**
 	 * Do two factor authentication
-	 * @param string $userId
+	 * @param \stdClass $userInfo
 	 * @return boolean - true on success
 	 */
-	protected function processTwoFactor($userId){
-		if($this->cfg->twoFactorAuthentication){
-			$user = $this->db->get($this->cfg->userTable, ['UserId' => $userId], 'SSP Login: getting user for two factor auth');
-			if($user->use_two_factor_auth != 0){
-				// do two factor auth for this user
-			}
+	protected function processTwoFactor($userInfo){
+		if(!$this->cfg->twoFactorAuthentication or $userInfo->use_two_factor_auth == 0){
+			// bypass if not configured or user has not configured it
+			return true;
 		}
 		return true;
 	}
@@ -157,13 +174,14 @@ abstract class LogonBase {
 	 * Display and process login form
 	 * @param bool $ignoreToken - form not to use timed token
 	 * @param bool $error - error from form data processing
+	 * @param \stdClass $formData - data from the form submission
 	 * @return bool|\stdClass - false on failure else form data
 	 */
-	private function processAuthForm($ignoreToken, $error = false){
+	private function processAuthForm($ignoreToken, $error = false, $formData = null){
 		// define the form to login
 		$form = $this->loginScreenDefine($ignoreToken);
 		// process the form on submit
-		$result = $this->processForm($form);
+		$result = $this->processForm($form, $error, $formData);
 		return $result;
 	}
 
@@ -171,9 +189,10 @@ abstract class LogonBase {
 	 * Process the remember me, and generate the errors if needed
 	 * @param Form $form
 	 * @param bool $error - true if problem with email of password during login
+	 * @param \stdClass $formData - data from the form submission
 	 * @return bool|\stdClass - false if input fails else form field values
 	 */
-	protected function processForm($form, $error = false){
+	protected function processForm($form, $error = false, $formData = null){
 		if($form->processForm($_POST)){
 			if(!$form->error){
 				return $form->getValues(true);
@@ -195,6 +214,9 @@ abstract class LogonBase {
 					$firstError = "User name";
 				}
 				$form->addError($this->session->t($firstError. " or password incorrect"));
+				if($this->cfg->reLoadOnLoginFail === true and !empty($formData)){
+					$form->data = get_object_vars($formData);
+				}
 				$this->output = $form->create(true);
 			}
 		}
@@ -259,26 +281,21 @@ abstract class LogonBase {
 
 	/**
 	 * Divert back to page login from which login was invoked
-	 * optionally display login success page.
-	 * @param string | bool $userId - users id
 	 */
-	private function loginSuccess($userId = false){
+	private function loginSuccess(){
+		if($this->cfg->loginAfterGoToPage === true and !empty($this->cfg->loginAfterGoToPageUrl)){
+			SSP_Divert($this->cfg->loginAfterGoToPageUrl);
+		}
 		$returnPage = $this->session->getReturnPage();
 		if(trim($returnPage) != ""){
-			// gotto page that diverted to login
+			// go to page that diverted to login
 			$returnPath = $returnPage;
 		}
 		else{
 			// got back to site root
 			$returnPath = $this->cfg->siteRoot;
 		}
-		if($userId){
-			$logonSuccessContent = $this->loginSuccessDisplay($userId, $returnPath);
-		}
-		else{
-			$logonSuccessContent = '';
-		}
-		SSP_Divert($returnPath, $logonSuccessContent, "logonsuccess.tpl", $this->cfg->autoReturnAfterLogin);
+		SSP_Divert($returnPath);
 	}
 
 	/**
@@ -323,68 +340,6 @@ abstract class LogonBase {
 	}
 
 	/**
-	 * Check the data returned by the login form is for an existing user
-	 * @param sfc\Form $form
-	 * @return bool - true on existing user
-	 */
-	protected function loginFormCheck(&$form){
-		$passwordOk=false;
-
-        if($this->cfg->loginType==0){
-			// encrypt email and password
-			$userEmail = SSP_encrypt(trim(strtolower($form->getField("email"))), $this->cfg->useEncryption);
-			$userPassword = trim($form->getField("password"));
-			// check email and password
-			$where = array();
-			$where["UserEmail"] = $userEmail;
-			$userInfo = $this->db->get($this->cfg->userTable, $where, "SSP Logon: Getting user login data using email");
-			if($this->db->numRows() > 0){
-				// email and password found
-				if($this->session->checkPassword($userPassword, $userInfo->UserPassword)){
-					// password the same
-					$passwordOk = true;
-				}
-				else{
-					$this->errorDesc = "Password not correct: '$userPassword'";
-				}
-			}
-			else{
-				$this->errorDesc = "Email not found";
-			}
-		}
-		elseif($this->cfg->loginType==1){
-			// encrypt password
-			$userName = trim($form->getField("user"));
-			$userPassword = trim($form->getField("password"));
-			// check user name and password
-			$where = array();
-			$where["UserName"] = $userName;
-			$userInfo = $this->db->get($this->cfg->userTable, $where, "SSP Logon: Getting user login data using username");
-			if($this->db->numRows() > 0){
-				// user name found
-				if($this->session->checkPassword($userPassword, $userInfo->UserPassword)){
-					// password the same
-					$passwordOk = true;
-				}
-				else{
-					$this->errorDesc = "Password not correct: '$userPassword'";
-				}
-			}
-			else{
-				$this->errorDesc = "User name not found";
-			}
-		}
-
-		if($passwordOk){
-			$form->userInfo = $userInfo;
-			if($this->rememberMe and $form->getField("rememberMe") == "1"){
-				$this->rememberMeSave = true;
-			}
-		}
-		return $passwordOk;
-	}
-	
-	/**
 	 * Programmatic login using user id.
 	 * @param string $userId
 	 * @return boolean/string - false on fail else user id
@@ -409,7 +364,7 @@ abstract class LogonBase {
 		// if external login check ok do the rest
 		if($this->userLoginCheck($userInfo)){
 			// do final checks on the user and set up session info
-			$userOk=true;
+			$userOk = true;
 			
 			// check user flags
 			foreach($this->cfg->validUserFlags as $flagName => $validFlagValue){
@@ -453,6 +408,7 @@ abstract class LogonBase {
 			// do final set up if everything has worked ok
 			if($userOk){
 				$this->userSetup($userInfo);
+				$loginOk = true;
 			}
 		}
 
@@ -463,7 +419,7 @@ abstract class LogonBase {
 			$fields = array("SessionId" => session_id());
 			$where = array("SessionId" => $oldSessionId);
 			$this->db->update($this->cfg->sessionTable, $fields, $where, "SSP session handling: updating new session record after session regen");
-            return $userInfo->UserId;
+            return true;
         }
         else{
         	// long delay on login failure
