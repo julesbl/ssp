@@ -117,6 +117,7 @@ abstract class LogonBase {
 			$userData = $this->getUserData($formData);
 			if ($this->cfg->loginByEmail and !empty($formData->emaillogin)){
 				// commence login by email process
+				$this->startEmailLogin($userData);
 			}
 			elseif ($userData !== false){
 				if ($this->session->checkPassword($formData->password, $userData->UserPassword)) {
@@ -152,11 +153,18 @@ abstract class LogonBase {
 
 	/**
 	 * Login using token from email login option
-	 * @param $tpl
-	 * @param $token
+	 * @param string $token - token sent via email
 	 */
-	public function do_email_login($tpl, $token){
-
+	public function do_email_login($token){
+		$userId = SSP_CheckResponseToken($token);
+		if($userId === false){
+			SSP_Divert($this->cfg->siteRoot);
+		}
+		$result = $this->loginUser($userId);
+		if($result === false){
+			SSP_Divert($this->cfg->siteRoot);
+		}
+		$this->loginSuccess();
 	}
 	
 	/**
@@ -268,9 +276,21 @@ abstract class LogonBase {
 		return $form;
 	}
 
+	/**
+	 * Generate and send email for login
+	 * @param \stdClass $userInfo - user information
+	 */
 	private function startEmailLogin($userInfo){
-		if(!empty($userInfo)){
-
+		$minutes = $this->cfg->loginByEmailTimeout/60;
+		$tpl = new Template(['minutes' => $minutes], 'loginbyemail.tpl');
+		$this->output = $tpl->output();
+		if(!empty($userInfo) and in_array($userInfo->UserAccess, $this->cfg->loginByEmailUserTypes)){
+			$token = SSP_ResponseToken($userInfo->UserId, $this->cfg->loginByEmailTimeout);
+			$userMisc = $this->db->get($this->cfg->userMiscTable, ['UserId' => $userInfo->UserId], 'SSP login: getting user information for email login');
+			$userMisc->link = $this->cfg->loginByEmailUrl. $token;
+			$userMisc->minutes = $minutes;
+			$mail = new Email();
+			$mail->noReplyEmail(get_object_vars($userMisc), 'emailloginbyemail.tpl', $userInfo->UserEmail, $userMisc->FirstName. ''. $userMisc->FamilyName);
 		}
 	}
 

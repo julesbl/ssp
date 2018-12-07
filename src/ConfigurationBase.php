@@ -233,6 +233,11 @@ abstract class ConfigurationBase
 	 */
 	public $logoffScript = "sspadmin/user/logoff";
 	/**
+	 * Path used by email link to login
+	 * @var string
+	 */
+	public $loginByEmailUrl = "sspadmin/user/emaillogin/";
+	/**
 	 * Password recovery script
 	 * @var string
 	 */
@@ -792,6 +797,7 @@ abstract class ConfigurationBase
 		}
 		$this->logonScript = $path. $this->logonScript;
 		$this->logoffScript = $path. $this->logoffScript;
+		$this->loginByEmailUrl = $path. $this->loginByEmailUrl;
 		$this->passwordRecover = $path. $this->passwordRecover;
 		$this->newPassword = $path. $this->newPassword;
 		$this->userAdminScript = $path. $this->userAdminScript;
@@ -839,6 +845,7 @@ abstract class ConfigurationBase
 		// set up pages not to be included in the history
 		ProtectBase::addNoHistoryPage($this->logonScript);
 		ProtectBase::addNoHistoryPage($this->logoffScript);
+		ProtectBase::addNoHistoryPage($this->loginByEmailUrl);
 		ProtectBase::addNoHistoryPage($this->passwordRecover);
 		ProtectBase::addNoHistoryPage($this->userConfirm);
 		ProtectBase::addNoHistoryPage($this->newPassword);

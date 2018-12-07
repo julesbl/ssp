@@ -109,14 +109,15 @@ class Email {
 			$tplHtml->numberReturnLines = 1;
 			$htmlMessage = $tplHtml->output();
 		}
-		$result = $this->sendmail($fromName, $fromEmail, $toName, $toEmail, $subject, $message, $htmlMessage, self::$charset);
+		$result = $this->sendmail($fromName, $fromEmail, $toName, $toEmail, $subject, $message, $htmlMessage);
 		return($result);
 	}
 
 	/**
 	 * Send emails to the admin error recipients
-	 * @param array $emailContent - replacement fields for the email
-	 * @param string $emailTpl - template to be used
+	 * @param array/object $emailContent - content for email template
+	 * @param string $emailTpl - name of email template
+	 * @return bool - true on success
 	 */
 	public function adminErrorEmail($emailContent, $emailTpl) {
 		foreach ($this->cfg->errorAdmins as $email => $name) {
@@ -127,10 +128,10 @@ class Email {
 
 	/**
 	 * Sends an email from no-reply
-	 * @param array $emailContent
-	 * @param string $emailTpl
-	 * @param string $toEmail
-	 * @param string $toName
+	 * @param array/object $emailContent - content for email template
+	 * @param string $emailTpl - name of email template
+	 * @param string $toEmail - recipient email address
+	 * @param string $toName - recipient name
 	 * @return bool - true on success
 	 */
 	public function noReplyEmail($emailContent, $emailTpl, $toEmail, $toName) {
@@ -146,10 +147,14 @@ class Email {
 	 * @param string $toAddress
 	 * @param string $subject
 	 * @param string $message
-	 * @param type $htmlMessage
+	 * @param string $htmlMessage
+	 * @param string $charset - charset to use
 	 * @return bool
 	 */
-	private function sendmail($fromName, $fromAddress, $toName, $toAddress, $subject, $message, $htmlMessage, $charset = "utf-8") {
+	private function sendmail($fromName, $fromAddress, $toName, $toAddress, $subject, $message, $htmlMessage, $charset = null) {
+		if(empty($charset)){
+			$charset = self::$charset;
+		}
 		return call_user_func(self::$emailRoutine, $fromName, $fromAddress, $toName, $toAddress, $subject, $message, $htmlMessage, $charset);
 	}
 
@@ -170,6 +175,5 @@ class Email {
 	}
 
 }
-
 /* End of file Email.php */
 /* Location: ./src/Email.php */

@@ -30,7 +30,7 @@
 		<tr>
 			<td colspan="2">
 				{emaillogin}<br />
-				<p>An email will be sent to your account with a link that will log you in</p>
+				<p>An email will be sent to your account with a link that will log you in to the site.</p>
 			</td>
 		</tr>
 		{:endif:emaillogin}
@@ -46,7 +46,7 @@
 		<tr>
 			<td colspan="2">
 				{rememberMe}<br />
-				<p>Ticking this checkbox wiil place a cookie on your machine in the browser storage, it will only be readable by this site.</p>
+				<p>Ticking this checkbox will place a cookie on your machine in the browser storage, it will only be readable by this site.</p>
 			</td>
 		</tr>
 		{:endif:rememberMe}

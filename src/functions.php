@@ -409,9 +409,7 @@ function SSP_SendMail($fromName, $fromAddress, $toName, $toAddress, $subject, $p
 }
 
 /**
- * 
- * @global SSP_Configure $SSP_Config
- * @global SSP_DB $SSP_DB
+ * Generate a token for a user action
  * @param string $userId
  * @param int $time - time in seconds
  * @return string - token 32v chars

@@ -15,7 +15,7 @@
 			</tr>
 			<tr>
 				<td style="border-top: 1px solid #ccc; margin-top: 7px;">
-					<p>This email orriginated from {domain}.<br />
+					<p>This email originated from {domain}.<br />
 					Please contact support on {adminEmail} if you have any problems with this item.</p>
 				</td>
 			</tr>

@@ -258,6 +258,13 @@ $app->group('/user', function() use ($app) {
 		$response->getBody()->write($session->logoff($tpl, true));
 		return $response;
 	});
+	// user email login
+	$app->any('/emaillogin/{token}', function(Request $request, Response $response){
+		$session = $this->session;
+		$token = $request->getAttribute('token', '');
+		$login = new Logon($session);
+		$login->do_email_login($token);
+	});
 	// start password recovery
 	$app->any('/passwordrecover', function(Request $request, Response $response){
 		$session = $this->session;

@@ -40,6 +40,7 @@ $menu = new MenuGen();
 $menu->add('/', "Home");
 $menu->add($SSP_Config->adminDir, "Administration");
 $menu->add('/user.php', "User page");
+$menu->add($SSP_Config->logoffScript, 'Logoff');
 $content["menu"] = $menu->cMenu();
 $tpl = new Template($tpl_content, "user.tpl");
 $content['content'] = $tpl->output();
