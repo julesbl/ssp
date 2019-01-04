@@ -39,16 +39,25 @@
 namespace w34u\ssp;
 
 class SspDb{
-	// database routines for Adodb
-
-	/** @var ADOConnection adodb database connection */
+	/**
+	 * adodb database connection
+	 * @var ADODB_mysqli
+	 */
 	public $db;
 	/** 
 	 * ssp configuration object
-	 * @var Configuration */
+	 * @var Configuration
+	 */
 	private $cfg;
-	public $result; // adodb result from a query
-	/** @var bool - database is connected */
+	/**
+	 * adodb result from a query
+	 * @var
+	 */
+	public $result;
+	/**
+	 * database is connected
+	 * @var bool
+	 */
 	public $connected = false;
 	/** @var array - saved results between looped sql operations */
 	private $results = array();
@@ -83,11 +92,9 @@ class SspDb{
 	private static $connection = null;
 
 	/**
-	 * Constuctor
+	 * Constructor
 	 *
 	 * @param string $dsn adodb database connection string
-	 * @param array $config not used with adodb
-	 * @param SSP_Configuration $cfg SSP configuration object
 	 */
 	public function __construct($dsn){
 		// constructor
