@@ -71,6 +71,11 @@ class ProtectConfig{
 	 */
 	public $noHistoryPages = array();
 	/**
+	 * Send the ssl security headers
+	 * @var bool
+	 */
+	public $sslSendHeaders = true;
+	/**
 	 * Debuging enabled
 	 * @var bool
 	 */

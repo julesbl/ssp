@@ -185,6 +185,9 @@ abstract class ProtectBase{
 
 		$this->cfg = Configuration::getConfiguration();
 		$this->db = SspDb::getConnection();
+
+		// send ssl security headers
+	    $this->sendSslHeaders();
 		
 		// set up db session handling
 		$handler = new SessionHandler();
@@ -354,6 +357,17 @@ abstract class ProtectBase{
 		
 		// restore query cacheing mode
 		$this->db->cache = $queryResultCacheing;
+	}
+
+	/**
+	 * Send ssl security headers
+	 */
+	private function sendSslHeaders(){
+    	if($this->cfg->useSSL and $this->cfg->sslSendHeaders and $this->config->sslSendHeaders){
+    		foreach($this->cfg->sslHeaders as $header => $string){
+    			header($header. ': '. $string);
+		    }
+	    }
 	}
 	
 	/**

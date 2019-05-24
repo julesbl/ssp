@@ -184,6 +184,25 @@ abstract class ConfigurationBase
 	 * configure to use SSL for login, admin and cookies
 	 * @var bool  */
 	public $useSSL = false;
+	/**
+	 * Headers to be sent when in ssl mode
+	 * @var array
+	 */
+	public $sslHeaders = [
+		'strict-transport-security' => 'max-age=31536000; includeSubDomains',
+		'X-XSS-Protection' => '1; mode=block',
+		'X-Content-Type-Options' => 'nosniff',
+		'Referrer-Policy' => 'no-referrer-when-downgrade',
+		'X-Frame-Options' => 'SAMEORIGIN',
+		'Content-Security-Policy' => "default-src 'self' https: data:",
+		'X-Content-Security-Policy' => "default-src 'self' 'unsafe-inline' 'unsafe-eval' https: data:",
+		'Feature-Policy' => "geolocation 'none'; midi 'none'; sync-xhr 'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope 'none'; speaker 'self'; fullscreen 'self'; payment 'none';"
+	];
+	/**
+	 * If in ssl send the securing headers
+	 * @var bool
+	 */
+	public $sslSendHeaders = true;
 	/** 
 	 * domain name with no slashes, www.somesite.com
 	 * change
@@ -340,6 +359,17 @@ abstract class ConfigurationBase
 	 * @var string
 	 */
 	public $sessVarName = null;
+	/**
+	 * If a bot is detected scanning the site this session id is used
+	 * to prevent abandoned sessions rocketing
+	 * @var string
+	 */
+	public $sessBotDetectionId = 'bot_session';
+	/**
+	 * preg match string to detect bot scanning the site
+	 * @var string
+	 */
+	public $sessBotDetectionPattern = '/bot|crawl|slurp|spider|mediapartners/i';
 	/**
 	 * timeout for session in seconds 3600 = 1 hour, session gets cleaned up
 	 * @var int  */
