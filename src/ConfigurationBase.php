@@ -958,7 +958,7 @@ abstract class ConfigurationBase
 	 */
 	private function generateDSN(){
 		if($this->dsn === null){
-			$dsn = $this->dsnDatabaseDriver. '://'. $this->dsnUser. ':'. $this->dsnPassword. '@'. $this->dsnHostName. '/'. $this->dsnDatabaseName;
+			$dsn = $this->dsnDatabaseDriver. '://'. urlencode($this->dsnUser). ':'. urlencode($this->dsnPassword). '@'. $this->dsnHostName. '/'. $this->dsnDatabaseName;
 			if(count($this->dsnOptions)){
 				$dsn .= '?'. implode('&', $this->dsnOptions);
 			}
