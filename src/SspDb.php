@@ -101,7 +101,7 @@ class SspDb{
 
 		$this->db = ADONewConnection($dsn);
 		$this->cfg = Configuration::getConfiguration();
-		$this->error("SSP Session: Opening Database", $dsn);
+		$this->error("SSP Session: Opening Database", $dsn, [], false);
 
 		if(!$this->error){
 			if(isset($this->quoteList[$this->db->databaseType])){
@@ -490,11 +490,12 @@ class SspDb{
 	* If database error display results and perhaps exit program
 	* @param string $errorString Error string from program attempting the database connection
 	* @param string $query query that cause the error
-	* @param array $values array of values passed to the query
+	* @param array | string $values array of values passed to the query
+	* @param $sendEmail bool - send an email on error
 	*
-	* return - false on no error
+	* @return bool - false on no error
 	*/
-	function error($errorString, $query="", $values=""){
+	function error($errorString, $query="", $values="", $sendEmail = true){
 
 		global $session;
 
@@ -564,8 +565,10 @@ class SspDb{
 			}
 			else{
 				error_log($error, $this->cfg->message_type, $this->cfg->errorLog);
-				foreach($this->cfg->errorAdmins as $toAddress => $toName){
-					SSP_SendMail("SSP SQL error handler", $this->cfg->noReplyEmail, $toName, $toAddress, "SSP SQL error on ". $this->cfg->siteName, $error);
+				if ($sendEmail){
+					foreach ($this->cfg->errorAdmins as $toAddress => $toName) {
+						SSP_SendMail("SSP SQL error handler", $this->cfg->noReplyEmail, $toName, $toAddress, "SSP SQL error on " . $this->cfg->siteName, $error);
+					}
 				}
 			}
 			if($this->abortOnError){
