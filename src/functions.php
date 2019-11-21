@@ -36,6 +36,18 @@
 namespace w34u\ssp;
 
 /**
+ * Encode an email for display in the browser so it is difficult to scrape
+ * @param string $email - email to be encoded
+ * @return string - encoded email
+ */
+function SSP_encode_email($email){
+	$output = '';
+	for ($i = 0; $i < strlen($email); $i++) { $output .= '&#'.ord($email[$i]).';'; }
+	return $output;
+}
+
+
+/**
  * Generate a unique id
  * @return string - unique id
  */
