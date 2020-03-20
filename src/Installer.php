@@ -29,18 +29,24 @@
  */
 namespace w34u\ssp;
 use Composer\Script\Event;
-use Composer\Installer\PackageEvent;
 
 class Installer{
 	/**
 	 * @param Event $event
 	 */
 	public static function postInstall(Event $event){
-		$composer = $event->getComposer();
-		$autoload = $composer->getAutoloadGenerator();
+		$io = $event->getIO();
+		$io->write('', true);
+		if($io->askConfirmation('Directory '. __DIR__, false)){
+
+		}
+		$loader = new \Composer\Autoload\ClassLoader();
+		$path = __DIR__. '../../../../ssp_cfg';
+		//rename('../cfg', $path);
+		//$loader->addPsr4('w34u\ssp', $path);
 	}
 }
 /**
  *   File name: Installer.php
- *   Path: bin/Installer.php
+ *   Path: src/Installer.php
  */
