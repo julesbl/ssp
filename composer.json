@@ -1,39 +1,49 @@
 {
-    "name": "w34u/ssp",
-    "version": "3.3.0",
-	"type": "library",
-    "description": "Secure login system for php frameworks, applications and sites",
-	"keywords": ["security","auth", "authenticate"],
-    "require": {
-        "adodb/adodb-php": "^5.0",
-        "ruckusing/ruckusing-migrations": "^1.1",
-        "slim/slim": "^3.5"
-    },
+	"name": "w34u/ssp",
+	"version": "3.3.0",
+	"type": "composer-plugin",
+	"description": "Secure login system for php frameworks, applications and sites",
+	"keywords": [
+		"security",
+		"auth",
+		"authenticate"
+	],
+	"require": {
+		"adodb/adodb-php": "^5.0",
+		"ruckusing/ruckusing-migrations": "^1.1",
+		"slim/slim": "^3.5",
+		"composer-plugin-api": "^1.1"
+	},
+	"extra": {
+		"class": "w34u\\ssp\\Installer"
+	},
 	"autoload": {
 		"psr-4": {
 			"w34u\\ssp\\": "src/"
 		},
-		"files": ["src/functions.php"]
+		"files": [
+			"src/functions.php"
+		]
 	},
-    "license": "MIT",
-    "authors": [
-        {
-            "name": "Julian Blundell",
-            "email": "j.blundell@w34u.com",
-            "homepage": "http://w34u.com",
-            "role": "Developer"
-        }
-    ],
+	"license": "MIT",
+	"authors": [
+		{
+			"name": "Julian Blundell",
+			"email": "j.blundell@w34u.com",
+			"homepage": "http://w34u.com",
+			"role": "Developer"
+		}
+	],
 	"support": {
 		"issues": "https://github.com/julesbl/ssp/issues",
 		"source": "https://github.com/julesbl/ssp"
 	},
-    "require-dev": {
-        "codeception/codeception": "dev-master",
-        "Codeception/Specify": "^0.4.5",
-        "composer/composer": "1.10.1"
-    },
-    "scripts": {
-        "post-install-cmd": "w34u\\ssp\\Installer::postInstall"
-    }
+	"require-dev": {
+		"codeception/codeception": "dev-master",
+		"Codeception/Specify": "^0.4.5",
+		"composer/composer": "1.10.1"
+	},
+	"scripts": {
+		"post-install-cmd": "w34u\\ssp\\Installer::postInstall"
+	}
 }

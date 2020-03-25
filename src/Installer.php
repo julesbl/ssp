@@ -28,20 +28,52 @@
  *   Descrip:    Created.
  */
 namespace w34u\ssp;
-use Composer\Script\Event;
+use Composer\Composer;
+use Composer\IO\IOInterface;
+use Composer\Plugin\PluginInterface;
 
-class Installer{
+class Installer implements PluginInterface{
 	/**
-	 * @param Event $event
+	 * @var Composer
 	 */
-	public static function postInstall(Event $event){
-		$io = $event->getIO();
-		$io->write('', true);
-		if($io->askConfirmation('Directory '. __DIR__, false)){
+	private $composer = null;
+	/**
+	 * @var IOInterface
+	 */
+	private $io = null;
+
+	/**
+	 * Activation method
+	 * @param Composer $composer
+	 * @param IOInterface $io
+	 */
+	public function activate(Composer $composer, IOInterface $io){
+		$this->composer = $composer;
+		$this->io = $io;
+	}
+
+	/**
+	 * Register events
+	 * @return array
+	 */
+	public static function getSubscribedEvent(){
+		return [
+			'post-package-install' => 'postInstall'
+		];
+	}
+
+	/**
+	 * Routine to handle post package installation
+	 * Moves the cfg directory out of the vendor folder
+	 * Moves the admin directory into a browser visible folder.
+	 */
+	public function postInstall(){
+		$this->io->write('', true);
+		if($this->io->askConfirmation('Directory '. __DIR__, false)){
 
 		}
 		$loader = new \Composer\Autoload\ClassLoader();
-		$path = __DIR__. '../../../../ssp_cfg';
+		$path = __DIR__. '../../../../';
 		//rename('../cfg', $path);
 		//$loader->addPsr4('w34u\ssp', $path);
 	}
