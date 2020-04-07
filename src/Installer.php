@@ -56,9 +56,9 @@ class Installer implements PluginInterface{
 	 * Register events
 	 * @return array
 	 */
-	public static function getSubscribedEvent(){
+	public static function getSubscribedEvents(){
 		return [
-			'post-package-install' => 'postInstall'
+			'post-install-cmd' => 'postInstall'
 		];
 	}
 

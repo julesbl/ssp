@@ -2,7 +2,6 @@
 /test.php
 /cfg/Configuration.php
 /sspadmin/devinclude.php
-/composer.lock
 .idea/
 js/
 tests/_envs/
