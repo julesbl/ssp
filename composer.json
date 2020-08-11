@@ -1,6 +1,5 @@
 {
 	"name": "w34u/ssp",
-	"version": "3.3.0",
 	"type": "composer-plugin",
 	"description": "Secure login system for php frameworks, applications and sites",
 	"keywords": [
