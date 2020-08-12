@@ -13,7 +13,7 @@ Valid types (adapters) are Postgres & MySQL:
 
 */
 
-$ssp_config = new \w34u\ssp\Configuration();
+$ssp_config = \w34u\ssp\Configuration::getConfiguration();
 return array(
     'db' => array(
         'development' => array(

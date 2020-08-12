@@ -24,7 +24,7 @@ if($loader === null){
 if(file_exists(__DIR__. '/../devinclude.php')){
 	require __DIR__. '/../devinclude.php';
 }
-$ssp_config = new \w34u\ssp\Configuration();
+$ssp_config = \w34u\ssp\Configuration::getConfiguration();
 if($ssp_config->enableSetup !== true){
 	exit('Setup disabled, Enable in configuration, ->enableSetup');
 }
