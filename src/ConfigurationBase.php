@@ -375,6 +375,17 @@ abstract class ConfigurationBase
 	 * @var int  */
 	public $sessMaxLifetime = 3600;
 	/**
+	 * Use strict mode to prevent cookie session attacks
+	 * @var int
+	 */
+	public $sessUseStrictMode = 1;
+	/**
+	 * Set the session cookie same site to strict to help prevent cross site attacks,
+	 * available since 7.3 other option is Lax
+	 * @var string
+	 */
+	public $sessCookieSamesite = 'Strict';
+	/**
 	 * time after which the login expires if no activity in seconds, 3600 = 1 hour
 	 * @var int  */
 	public $loginExpiry = 1200;
@@ -918,6 +929,14 @@ abstract class ConfigurationBase
 
 		// specifies the domain to set in session_cookie.
 		ini_set("session.cookie_domain", $this->cookieDomain);
+
+		// turn on session strict mode
+		ini_set("session.use_strict_mode", $this->sessUseStrictMode);
+
+		// set same site session variable to strict if it exists, only available 7.3 or gt
+		if(ini_get('session.cookie_samesite') !== false){
+			ini_set('session.cookie_samesite', $this->sessCookieSamesite);
+		}
 		
 		if($this->useSSL){
 			ini_set("session.cookie_secure", 1);
