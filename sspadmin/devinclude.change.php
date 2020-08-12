@@ -29,6 +29,13 @@
  *
  */
 /* @var $loader \Composer\Autoload\ClassLoader */
-$loader->addPsr4('w34u\\ssp\\', __DIR__. '/../cfg/');
+$loader->addPsr4('w34u\\ssp\\', __DIR__. '/../cfg/', true);
+if(php_sapi_name() === 'cli-server' or isset($ssptesting)){
+	if(file_exists(__DIR__. '/../cfg/Configuration.test.php')){
+		require __DIR__. '/../cfg/Configuration.test.php';
+	}
+}
+error_reporting(E_ALL);
+ini_set('display_errors', 'stdout');
 /* End of file devinclude.php */
 /* Location: sspadmin/devinclude.php */
