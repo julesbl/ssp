@@ -154,7 +154,7 @@ class SessionHandler{
 		);
 		$this->db->get($this->cfg->sessionTable, $where, "SSP Session: Check session exists for writing data");
 
-		if($this->db->numRows()){
+		if($this->db->numRows() > 0){
 			// update a current session
 			$fields = array(
 				"SessionData" => $sess_data,
