@@ -225,6 +225,11 @@ class Fe {
 	 */
 	public $required = false;
 	/**
+	 * Aria described by id to add enhanced description to an element
+	 * @var string
+	 */
+	public $ariaDescribedby = null;
+	/**
 	 * maximum number characters allowed, throws error if greater, 0 means no test unless in the data type.
 	 * @var int
 	 */

@@ -285,7 +285,7 @@ class Form {
 	);
 	/**
 	 * data checking object
-	 * @var CheckData */
+	 * @var \w34u\ssp\CheckData */
 	public $checkData;
 	/**
 	 * flags a data error
@@ -1540,6 +1540,9 @@ class Form {
 		}
 		if($el->required === true){
 			$xhtml .= 'required="true" ';
+		}
+		if(!empty($el->ariaDescribedby)){
+			$xhtml .= 'aria-describedby="'. $el->ariaDescribedby. '" ';
 		}
 		if ($el->tabIndex != "") {
 			$xhtml .= 'tabindex="' . $el->tabIndex . '" ';

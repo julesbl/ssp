@@ -264,7 +264,9 @@ abstract class LogonBase {
 
 		if($this->rememberMe){
 			$form->fe("check", "rememberMe", "Remember me (do not tick this box on a public computer)", array(0,1));
-			$form->fep("textBefore=false, encap=true");
+			$form->currentElelementObject->textBefore = false;
+			$form->currentElelementObject->encap = true;
+			$form->currentElelementObject->ariaDescribedby = 'aria_remember_me_description';
 		}
 		if(isset($_SESSION["SSP_LoginPageAddtionalContent"]) and is_array($_SESSION["SSP_LoginPageAddtionalContent"])){
 			$form = array_merge($form->tDataAdditional, $_SESSION["SSP_LoginPageAddtionalContent"]);

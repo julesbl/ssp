@@ -30,7 +30,7 @@
 		<tr>
 			<td colspan="2">
 				{emaillogin}<br />
-				<p>An email will be sent to your account with a link that will log you in to the site.</p>
+				<p>Un e-mail sera envoyé à votre compte avec un lien qui vous permettra de vous connecter au site.</p>
 			</td>
 		</tr>
 		{:endif:emaillogin}
@@ -46,7 +46,7 @@
 		<tr>
 			<td colspan="2">
 				{rememberMe}<br />
-				<p>En cliquant cette boîte, vous comprenez qu'un témoin sera mis dans le moteur de recherche de votre machine qui ne sera lisable que par ce site.</p>
+				<p id="aria_remember_me_description">En cliquant cette boîte, vous comprenez qu'un témoin sera mis dans le moteur de recherche de votre machine qui ne sera lisable que par ce site.</p>
 			</td>
 		</tr>
 		{:endif:rememberMe}

@@ -46,7 +46,7 @@
 		<tr>
 			<td colspan="2">
 				{rememberMe}<br />
-				<p>Ticking this checkbox will place a cookie on your machine in the browser storage, it will only be readable by this site.</p>
+				<p id="aria_remember_me_description">Ticking this checkbox will place a cookie on your machine in the browser storage, it will only be readable by this site.</p>
 			</td>
 		</tr>
 		{:endif:rememberMe}
