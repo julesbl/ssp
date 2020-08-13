@@ -1538,6 +1538,9 @@ class Form {
 				$xhtml .= 'id="' . $el->name . '" ';
 			}
 		}
+		if($el->required === true){
+			$xhtml .= 'required="true" ';
+		}
 		if ($el->tabIndex != "") {
 			$xhtml .= 'tabindex="' . $el->tabIndex . '" ';
 		} else {
@@ -1568,9 +1571,6 @@ class Form {
 		if ($el->error) {
 			$xhtml .= " " . $this->errorClass;
 		}
-		/* 		if($el->dataType != ""){
-		  $xhtml .= " sfc". ucfirst($el->dataType);
-		  } */
 		$xhtml .= '" ';
 		if ($el->lang != "") {
 			$xhtml .= 'lang="' . $el->lang . '" ';
