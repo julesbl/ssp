@@ -124,6 +124,7 @@ class UserAdmin extends UserAdminBase {
 		$form->fep("required=true, dataType=email");
 		$form->currentElelementObject->lClass = 'control-label';
 		$form->currentElelementObject->elClass = 'form-control';
+		$form->currentElelementObject->autocomplete = 'off';
 		
 		$form->fe("password", "password", "Your password");
 		$form->fep("required=true, dataType=password, minChar=" . $this->cfg->minPassword);

@@ -234,7 +234,7 @@ abstract class LogonBase {
 		}
 		$form->tplf = "logonpage.tpl";
 
-		if($this->cfg->loginType==0){
+		if($this->cfg->loginType == 0){
 			// login using email
 			$form->fe("text", "email", "Your email");
 			$form->currentElelementObject->dataType = 'email';
@@ -243,6 +243,7 @@ abstract class LogonBase {
 			// login using username
 			$form->fe("text", "user", "Your user name");
 		}
+		$form->currentElelementObject->autocomplete = 'off';
 		$form->currentElelementObject->required = true;
 
 		$form->fe("password", "password", "Password");

@@ -850,6 +850,7 @@ abstract class UserAdminBase {
 		$form->tda("loginPath", $this->cfg->logonScript);
 		$form->fe("text", "email", "Enter your registered email");
 		$form->fep("required=true,width=30, dataType=email");
+		$form->currentElelementObject->autocomplete = 'off';
 		$form->fe("submit", "submit", "Recover Password");
 		$form->fep("elClass=SSPFormButton");
 

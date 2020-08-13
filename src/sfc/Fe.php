@@ -230,6 +230,11 @@ class Fe {
 	 */
 	public $ariaDescribedby = null;
 	/**
+	 * Auto complete property
+	 * @var string
+	 */
+	public $autocomplete = null;
+	/**
 	 * maximum number characters allowed, throws error if greater, 0 means no test unless in the data type.
 	 * @var int
 	 */
@@ -246,7 +251,7 @@ class Fe {
 	public $precision = false;
 	/**
 	 * Can be set by $this->check() or external code
-	 * @var type 
+	 * @var bool
 	 */
 	public $error = false;
 	/** 

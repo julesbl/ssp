@@ -1544,6 +1544,9 @@ class Form {
 		if(!empty($el->ariaDescribedby)){
 			$xhtml .= 'aria-describedby="'. $el->ariaDescribedby. '" ';
 		}
+		if(!empty($el->autocomplete)){
+			$xhtml .= 'autocomplete="'. $el->autocomplete. '" ';
+		}
 		if ($el->tabIndex != "") {
 			$xhtml .= 'tabindex="' . $el->tabIndex . '" ';
 		} else {
