@@ -114,7 +114,7 @@ class Fe {
 	public $encap = false;
 	/**
 	 * event, javascript and other stuff for the tag
-	 * @var type 
+	 * @var string
 	 */
 	public $script = "";
 	/**
