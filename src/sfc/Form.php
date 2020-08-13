@@ -1173,9 +1173,15 @@ class Form {
 		// Text and password form elements
 		$xhtml = '<input type="' . $el->type . '" ';
 		// sort out placeholder text
-		if ($el->placeholder !== '') {
-			$xhtml .= 'placeholder="' . $this->t($el->placeholder) . '" ';
-		} elseif ($this->addPlaceholder) {
+		if ($el->placeholder !== false){
+			if(is_string($el->placeholder)) {
+				$xhtml .= 'placeholder="' . $this->t($el->placeholder) . '" ';
+			}
+			else{
+				$xhtml .= 'placeholder="' . $this->t($el->description) . '" ';
+			}
+		}
+		elseif($this->addPlaceholder) {
 			$xhtml .= 'placeholder="' . $this->t($el->description) . '" ';
 		}
 		if ($el->width != "") {
@@ -1410,9 +1416,15 @@ class Form {
 		// Textarea form element
 		$xhtml = '<textarea ';
 		// sort out placeholder text
-		if ($el->placeholder !== '') {
-			$xhtml .= 'placeholder="' . $this->t($el->placeholder) . '" ';
-		} elseif ($this->addPlaceholder) {
+		if ($el->placeholder !== false){
+			if(is_string($el->placeholder)) {
+				$xhtml .= 'placeholder="' . $this->t($el->placeholder) . '" ';
+			}
+			else{
+				$xhtml .= 'placeholder="' . $this->t($el->description) . '" ';
+			}
+		}
+		elseif($this->addPlaceholder) {
 			$xhtml .= 'placeholder="' . $this->t($el->description) . '" ';
 		}
 		if ($el->width != "") {
@@ -1478,9 +1490,15 @@ class Form {
 		// function to create file download form field
 		$xhtml = '<input type="file" ';
 		// sort out placeholder text
-		if ($el->placeholder !== '') {
-			$xhtml .= 'placeholder="' . $this->t($el->placeholder) . '" ';
-		} elseif ($this->addPlaceholder) {
+		if ($el->placeholder !== false){
+			if(is_string($el->placeholder)) {
+				$xhtml .= 'placeholder="' . $this->t($el->placeholder) . '" ';
+			}
+			else{
+				$xhtml .= 'placeholder="' . $this->t($el->description) . '" ';
+			}
+		}
+		elseif($this->addPlaceholder) {
 			$xhtml .= 'placeholder="' . $this->t($el->description) . '" ';
 		}
 		if ($el->width != "") {
@@ -2446,8 +2464,8 @@ class Form {
 
 	/**
 	 * Attempt to translate a string of text
-	 * @param type $text
-	 * @return type
+	 * @param string $text
+	 * @return string
 	 */
 	private function t($text) {
 		if (self::$translate and ! $this->translateDisable) {

@@ -44,9 +44,9 @@ class Fe {
 	public $description = "";
 
 	/** 
-	 * Placeholder text
-	 * @var string  */
-	public $placeholder = "";
+	 * Placeholder text, if set to true uses description
+	 * @var bool|string  */
+	public $placeholder = false;
 
 	/** 
 	 * addtional class to be applid to the element
