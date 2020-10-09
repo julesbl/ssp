@@ -183,7 +183,7 @@ abstract class ConfigurationBase
 	/** 
 	 * configure to use SSL for login, admin and cookies
 	 * @var bool  */
-	public $useSSL = false;
+	public $useSSL = null;
 	/**
 	 * Headers to be sent when in ssl mode
 	 * @var array
@@ -291,7 +291,7 @@ abstract class ConfigurationBase
 	 * @var string
 	 */
 	public $userLister = "sspadmin";
-	/**
+	/**user/logon
 	 * root of site including HTTP or HTTPS
 	 * change
 	 * @var string
@@ -808,7 +808,7 @@ abstract class ConfigurationBase
 	 * @var string[]
 	 */
 	private static $checkProperties = array(
-		'dsnDatabaseName', 'siteName', 'adminName', 'adminEmail', 'noReplyName', 'noReplyEmail', 'url', 'cookieDomain', 'siteRoot', 'sessVarName',
+		'dsnDatabaseName', 'siteName', 'adminName', 'adminEmail', 'noReplyName', 'noReplyEmail', 'useSSL', 'url', 'cookieDomain', 'siteRoot', 'sessVarName',
 		'randomCookie', 'loginRememberMeCookie', 'magicUser', 'encryptionString', 'errorAdmins',
 		'magicToken', 'templateDir'
 	);

@@ -66,6 +66,11 @@ class Configuration extends ConfigurationBase
 	 * name of site, used in error logging etc.
 	 * @var string  */
 	public $siteName = null;
+	/**
+	 * Use ssl in site paths
+	 * @var bool
+	 */
+	public $useSSL = null;
 	/** 
 	 * name shown in emails to users from admin
 	 * @var string  */
