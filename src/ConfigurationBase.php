@@ -194,7 +194,7 @@ abstract class ConfigurationBase
 		'X-Content-Type-Options' => 'nosniff',
 		'Referrer-Policy' => 'no-referrer-when-downgrade',
 		'X-Frame-Options' => 'SAMEORIGIN',
-		'Content-Security-Policy' => "default-src 'self' https: data:",
+		'Content-Security-Policy' => "default-src 'self' 'unsafe-inline' 'unsafe-eval' https: data:",
 		'X-Content-Security-Policy' => "default-src 'self' 'unsafe-inline' 'unsafe-eval' https: data:",
 		'Feature-Policy' => "geolocation 'none'; midi 'none'; sync-xhr 'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope 'none'; speaker 'self'; fullscreen 'self'; payment 'none';"
 	];
