@@ -355,7 +355,8 @@ abstract class ConfigurationBase
 	// PHP Session configuration
 	// Change this !!!!!
 	/**
-	 * name of session publiciable storage instance
+	 * name of session public storage instance
+	 * allowed characters are a-zA-Z0-9_ for maximum compatibility
 	 * @var string
 	 */
 	public $sessVarName = null;
@@ -421,6 +422,7 @@ abstract class ConfigurationBase
 	// Change this !!!!!
 	/**
 	 * random cookie name, has a rolling random number to make session stealing difficult
+	 * allowed characters are a-zA-Z0-9_ for maximum compatibility
 	 * @var string
 	 */
 	public $randomCookie = null;
@@ -628,6 +630,7 @@ abstract class ConfigurationBase
 	// Change this !!!!!
 	/** 
 	 * remember me cookie name
+	 * allowed characters are a-zA-Z0-9_ for maximum compatibility
 	 * @var string  */
 	public $loginRememberMeCookie = null;
 	

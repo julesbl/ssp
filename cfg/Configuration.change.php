@@ -107,19 +107,21 @@ class Configuration extends ConfigurationBase
 	public $siteRoot = null;
 	/**
 	 * name of session public storage instance, usually a cookie
-	 * Give it a nice random name, nothing to do with your site name e.g. $jumble#123
+	 * Give it a nice random name, nothing to do with your site name e.g. jumble123, allowed characters are a-zA-Z0-9_ for maximum compatibility
 	 * @var string
 	 */
 	public $sessVarName = null;
 	/**
 	 * random cookie name, has a rolling random number to make session stealing difficult
-	 * Give it a nice random name different from the session name, nothing to do with your site name e.g. $sedric#123
+	 * Give it a nice random name different from the session name, nothing to do with your site name e.g. sedric123
+	 * allowed characters are a-zA-Z0-9_ for maximum compatibility
 	 * @var string
 	 */
 	public $randomCookie = null;
 	/** 
 	 * remember me cookie name
-	 * Give it a nice random name different from the session name, nothing to do with your site name e.g. engleberty#123
+	 * Give it a nice random name different from the session name, nothing to do with your site name e.g. engleberty123
+	 * allowed characters are a-zA-Z0-9_ for maximum compatibility
 	 * @var string  */
 	public $loginRememberMeCookie = null;
 	/**
