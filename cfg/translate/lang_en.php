@@ -78,7 +78,7 @@ w34u\ssp\Translate::setupStrings('en', array(
 	'Please ensure that this has less than %2$s characters. Thanks!' => 'Please ensure that this has less than %2$s characters. Thanks!',
 	'Please ensure that this has at least %2$s characters. Thanks!' => 'Please ensure that this has at least %2$s characters. Thanks!',
 	'Value returned by this is not in valid results' => 'Value returned by this is not in valid results',
-	'* %s' => '* %s', // required field text added to label
+	'%s *' => '%s *', // required field text added to label
 	// file upload errors
 	'The uploaded file exceeds the upload_max_filesize directive in php.ini' => 'The uploaded file exceeds the upload_max_filesize directive in php.ini',
 	'The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form' => 'The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form',

@@ -235,7 +235,7 @@ class Form {
 	public $formCheck = "";
 	/**
 	 * additional variable or array sent to form check function
-	 * @var type 
+	 * @var string
 	 */
 	public $moreCheck = "";
 	/**
@@ -509,10 +509,10 @@ class Form {
 	 */
 	public $style = "";
 	/**
-	 * formatting string to put caracter on required strings
+	 * formatting string to put character on required labels
 	 * @var string
 	 */
-	public $reqChar = "* %s";
+	public $reqChar = "%s *";
 	/**
 	 * Class used on erroring field descriptions and fields.
 	 * @var string
@@ -530,7 +530,7 @@ class Form {
 	// parameters for the auto generated form, used in auto generation
 	/**
 	 * Title and text to be printed above the form
-	 * @var type 
+	 * @var string
 	 */
 	public $formTitle = "";
 	/**
