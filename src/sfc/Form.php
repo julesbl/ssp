@@ -2427,7 +2427,7 @@ class Form {
 	 * @return array
 	 */
 	private function rems($post) {
-		if (get_magic_quotes_gpc()) {
+		if (!((PHP_MAJOR_VERSION == 7 and PHP_MINOR_VERSION >= 4) or PHP_MAJOR_VERSION > 7) and get_magic_quotes_gpc()) {
 			foreach ($post as $keyPost => $valuePost) {
 				if (!is_array($valuePost)) {
 					$post[$keyPost] = stripslashes($valuePost);

@@ -137,7 +137,7 @@ function SSP_stringCode($string){
 function SSP_encrypt($input, $useEncryption = true){
     $SSP_Config = Configuration::getConfiguration();
     if($useEncryption){
-        if(get_magic_quotes_gpc()){
+        if(!((PHP_MAJOR_VERSION == 7 and PHP_MINOR_VERSION >= 4) or PHP_MAJOR_VERSION > 7) and get_magic_quotes_gpc()){
             $inputConv = stripslashes($input);
         }
         else{
