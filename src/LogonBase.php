@@ -114,6 +114,10 @@ abstract class LogonBase {
 		}
 		if($this->loginSessionData === false){
 			$formData = $this->processAuthForm($ignoreToken);
+			// remember me check
+			if($this->rememberMe and $formData->rememberMe == 1){
+				$this->rememberMeSave = true;
+			}
 			$userData = $this->getUserData($formData);
 			if ($this->cfg->loginByEmail and !empty($formData->emaillogin)){
 				// commence login by email process
@@ -477,7 +481,7 @@ abstract class LogonBase {
 		    $querySet["SessionRandom"] = $randomCookie;
 	    }
 	    if($this->rememberMe and !$this->rememberMeLogin and $this->rememberMeSave){
-		    // create remember me cookie if the user was not procuced and the box was ticked
+		    // create remember me cookie if the user was not logged in that way and the box was ticked
 		    $idSet = SSP_uniqueId();
 		    $userIdSet = $userInfo->UserId;
 		    $timeSet = time()+ $this->cfg->loginRememberMePeriod * 24 * 3600;
@@ -488,7 +492,7 @@ abstract class LogonBase {
 		    );
 		    $this->db->insert($this->cfg->tableRememberMe, $rememberMeSet, "SSP Logon: creating remember me entry");
 		    setcookie($this->cfg->loginRememberMeCookie,
-			    $idSet, $timeSet, "/", $this->cfg->cookieDomain, $this->cfg->useSSL);
+			    $idSet, $timeSet, "/", $this->cfg->cookieDomain, $this->cfg->useSSL, $this->cfg->useSSL);
 	    }
 
 	    // update session table
