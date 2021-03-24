@@ -1,6 +1,6 @@
 {
 	"name": "w34u/ssp",
-	"type": "composer-plugin",
+	"type": "library",
 	"description": "Secure login system for php frameworks, applications and sites",
 	"keywords": [
 		"security",
@@ -11,9 +11,6 @@
 		"adodb/adodb-php": "^5.0",
 		"ruckusing/ruckusing-migrations": "^1.1",
 		"slim/slim": "^3.5"
-	},
-	"extra": {
-		"class": "w34u\\ssp\\Installer"
 	},
 	"autoload": {
 		"psr-4": {
