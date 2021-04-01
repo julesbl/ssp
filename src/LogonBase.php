@@ -115,7 +115,7 @@ abstract class LogonBase {
 		if($this->loginSessionData === false){
 			$formData = $this->processAuthForm($ignoreToken);
 			// remember me check
-			if($this->rememberMe and $formData->rememberMe == 1){
+			if($this->rememberMe and !empty($formData) and $formData->rememberMe == 1){
 				$this->rememberMeSave = true;
 			}
 			$userData = $this->getUserData($formData);
