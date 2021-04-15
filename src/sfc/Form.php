@@ -1255,7 +1255,7 @@ class Form {
 				if ($el->lClass != "") {
 					$label .= ' class="' . $el->lClass;
 					if ($el->error) {
-						$xhtml .= ' ' . $this->errorClass;
+						$label .= ' ' . $this->errorClass;
 					}
 					$label .= '"';
 				} elseif ($el->error) {
