@@ -30,6 +30,11 @@ $form->fe("text", "firstElement", "First element, a text box");
 $form->fep("required=true, dataType=text"); // element is required and is of data type text
 $form->fe("password", "pasword", "enter a password");
 $form->fep("required=true, dataType=password, load=false");
+$form->fe('radio', 'radio_test', 'Radio test button separate labels', [0 => 'First option', 1 => 'Second option']);
+$form->fe('radio', 'radio_test_2', 'Radio test button encapsulated labels', [0 => 'First option 2', 1 => 'Second option 2']);
+$form->currentElelementObject->encap = true;
+$form->fe('radio', 'radio_test_3', 'Radio test button separate labels, labels after', [0 => 'First option 3', 1 => 'Second option 3']);
+$form->currentElelementObject->textBefore = false;
 $form->addHidden("hiddenStuff", "Some hidden stuff", "text"); // hidden field
 
 // check for submission
