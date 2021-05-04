@@ -190,21 +190,7 @@ abstract class ProtectBase{
 	    $this->sendSslHeaders();
 		
 		// set up db session handling
-		$handler = new SessionHandler();
-
-		session_set_save_handler(
-			array($handler, 'open'),
-			array($handler, 'close'),
-			array($handler, 'read'),
-			array($handler, 'write'),
-			array($handler, 'destroy'),
-			array($handler, 'gc')
-			);
-
-		// the following prevents unexpected effects when using objects as save handlers
-		register_shutdown_function("session_write_close");
-		
-        session_start();
+	    $this->startSession();
 
 		$this->setupLanguage();
 
@@ -252,78 +238,32 @@ abstract class ProtectBase{
         $values = array(session_id(), session_name());
         $this->db->query($query, $values, "SSP session handling: Get session information");
 
+	    $userFault = false;
         if($this->db->numRows() > 0){
             // get result if existing session
             $sessionInfo = $this->db->fetchRow();
-            $newSession=false;
+	        if(trim($sessionInfo->UserId) != ""){
+		        $userFault = $this->getUser($sessionInfo);
+	        }
         }
         else{
-            $newSession=true;
 			$this->log("New session started");
        }
 
         // process user information if logged in.
-        $userFault = false;
         $needHigherLogin = false;
-		$userInfo = null;
-        if(!$newSession and trim($sessionInfo->UserId) != ""){
-			$where = array("UserId" => $sessionInfo->UserId);
-			$userInfo = $this->db->get($this->cfg->userTable, $where, "SSP Session: getting login data");
-
-            if($this->db->numRows()){
-                // user found
-				
-				// check for login expiry
-				if($sessionInfo->SessionTime + $this->cfg->loginExpiry > time()){
-					$this->loggedIn=true;
-					$this->userId = $userInfo->UserId;
-					$this->userName = $userInfo->UserName;
-					$this->userAccessLevel=$userInfo->UserAccess;
-					if($this->cfg->userLevels[$this->userAccessLevel] >= $this->cfg->adminLevel){
-						// admin user
-						$this->admin = true;
-					}
-					$this->userEmail = SSP_decrypt($userInfo->UserEmail, $this->cfg->useEncryption);
-					if(isset($userInfo->country) and trim($userInfo->country) != ""){
-						$this->country = $userInfo->country;
-					}
-				}
-				else{
-					$this->log("Login expired");
-					$this->loggedIn=false;
-					$this->db->update($this->cfg->sessionTable, array('UserId' => ''), array('SessionId' => session_id(), 'SessionName' => session_name()), 'SSP Session: clearing user id from expired login');
-				}
-            }
-            else{
-				$this->log("User not found from ID");
-                $userFault = true;
-            }
-        }
-
-
         $pageAccess = $this->cfg->userLevels[$pageAccessLevel];
         if($this->loggedIn){
-            // do security checking for user if logged in
-			// validate flags
-			$flagsValid = true;
-			foreach($this->cfg->validUserFlags as $flagName => $validFlagValue){
-				if($userInfo->$flagName != $validFlagValue){
-					$flagsValid = false;
-					$this->log("Invalid user flag ". $flagName. " value required: ". $validFlagValue. " actual: ". $userInfo->$flagName);
-					break;
-				}
-			}
-
-			if(!$flagsValid){
+			if(!$this->validUserFlags()){
 				$userFault = true;
 			}
-            elseif($this->cfg->userLevels[$userInfo->UserAccess] < $pageAccess){
+            elseif($this->cfg->userLevels[$this->userInfo->UserAccess] < $pageAccess){
                 // user does not have a high enough access level
                 $userFault = true;
                 $needHigherLogin = true; // flag higher login needed
-				$this->log("User Access level not high enough Level: ".$userInfo->UserAccess." ".$this->cfg->userLevels[$userInfo->UserAccess]." Page ".$pageAccess);
+				$this->log("User Access level not high enough Level: ".$this->userInfo->UserAccess." ".$this->cfg->userLevels[$this->userInfo->UserAccess]." Page ".$pageAccess);
             }
-            elseif($pageCheckEquals and ($this->cfg->userLevels[$userInfo->UserAccess] != $pageAccess)) {
+            elseif($pageCheckEquals and ($this->cfg->userLevels[$this->userInfo->UserAccess] != $pageAccess)) {
                 // user does not have the correct user access level
                 $userFault = true;
                 $needHigherLogin = true; // flag different login needed
@@ -334,7 +274,7 @@ abstract class ProtectBase{
                 $userFault = true;
 				$this->log("User IP address changed ".SSP_paddIp($_SERVER["REMOTE_ADDR"]));
            }
-           elseif(($this->cfg->fixedIpAddress or $userInfo->UserIpCheck) and SSP_paddIp($sessionInfo->SessionUserIp) !== SSP_paddIp($_SERVER["REMOTE_ADDR"])){
+           elseif(($this->cfg->fixedIpAddress or $this->userInfo->UserIpCheck) and SSP_paddIp($sessionInfo->SessionUserIp) !== SSP_paddIp($_SERVER["REMOTE_ADDR"])){
                 // user is at incorrect IP address
                 $userFault = true;
 				$this->log("User IP address incorrect, UserIP: ". SSP_paddIp($sessionInfo->SessionUserIp). " Remote IP: ". SSP_paddIp($_SERVER["REMOTE_ADDR"]));
@@ -353,10 +293,85 @@ abstract class ProtectBase{
 		$this->userFaultHandling($pageAccess, $userFault, $needHigherLogin, $queryResultCacheing);
 
 		// final setup of page
-		$this->finalSetup($userInfo);
+		$this->finalSetup();
 		
 		// restore query cacheing mode
 		$this->db->cache = $queryResultCacheing;
+	}
+
+	/**
+	 * Start session handling
+	 */
+	private function startSession(){
+		$handler = new SessionHandler();
+
+		session_set_save_handler(
+			array($handler, 'open'),
+			array($handler, 'close'),
+			array($handler, 'read'),
+			array($handler, 'write'),
+			array($handler, 'destroy'),
+			array($handler, 'gc')
+		);
+
+		// the following prevents unexpected effects when using objects as save handlers
+		register_shutdown_function("session_write_close");
+
+		session_start();
+	}
+
+	/**
+	 * @param \stdClass $sessionInfo - session information
+	 * @return bool - true on fault
+	 */
+	private function getUser($sessionInfo){
+		$where = ["UserId" => $sessionInfo->UserId];
+		$this->userInfo = $this->db->get($this->cfg->userTable, $where, "SSP Session: getting login data");
+
+		if($this->db->numRows()){
+			// user found
+
+			// check for login expiry
+			if($sessionInfo->SessionTime + $this->cfg->loginExpiry > time()){
+				$this->loggedIn = true;
+				$this->userId = $this->userInfo->UserId;
+				$this->userName = $this->userInfo->UserName;
+				$this->userAccessLevel=$this->userInfo->UserAccess;
+				if($this->cfg->userLevels[$this->userAccessLevel] >= $this->cfg->adminLevel){
+					// admin user
+					$this->admin = true;
+				}
+				$this->userEmail = SSP_decrypt($this->userInfo->UserEmail, $this->cfg->useEncryption);
+				if(isset($this->userInfo->country) and trim($this->userInfo->country) != ""){
+					$this->country = $this->userInfo->country;
+				}
+				return false;
+			}
+			else{
+				$this->log("Login expired");
+				$this->loggedIn = false;
+				$this->db->update($this->cfg->sessionTable, array('UserId' => ''), array('SessionId' => session_id(), 'SessionName' => session_name()), 'SSP Session: clearing user id from expired login');
+				return true;
+			}
+		}
+		else{
+			$this->log("User not found from ID");
+			return true;
+		}
+	}
+
+	/**
+	 * Check user flags are valid
+	 * @return bool - true on user flags ok
+	 */
+	private function validUserFlags(){
+		foreach($this->cfg->validUserFlags as $flagName => $validFlagValue){
+			if($this->userInfo->{$flagName} != $validFlagValue){
+				$this->log("Invalid user flag ". $flagName. " value required: ". $validFlagValue. " actual: ". $this->userInfo->{$flagName});
+				return false;
+			}
+		}
+		return true;
 	}
 
 	/**
@@ -418,7 +433,6 @@ abstract class ProtectBase{
 	 */
 	private function userFaultHandling($pageAccess, $userFault, $needHigherLogin, $queryResultCacheing){
         // user fault detected in current session other than needing a higher login
-		$logonPath = $this->cfg->logonScript;
 		$logonDivertContent = array(
 			"pageTitle" => $this->t("Diverting to logon"), 
 			"linkText" => $this->t("Click here to login if divert does not happen within 5 seconds")
@@ -477,13 +491,11 @@ abstract class ProtectBase{
 	
 	/**
 	 * Do final user setup and page config
-	 * @param object $userInfo - user login info from database
 	 */
-	private function finalSetup($userInfo){
+	private function finalSetup(){
         // set up final properties
         $this->sessionToken = session_ID();
         if($this->loggedIn){
-			$this->userInfo = $userInfo;
             $this->succesfullLoginSessionCheck();
 		}
 
@@ -712,7 +724,7 @@ abstract class ProtectBase{
 
 	/**
 	 * Log a user off the system, blanks all session data except language
-	 * @param SSP_Template $tpl - template object
+	 * @param Template $tpl - template object
 	 * @param bool $showLogoffScreen - display the logoff screen
 	 * @return string - logoff screen
 	 */
