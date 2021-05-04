@@ -688,7 +688,7 @@ class Form {
 	/**
 	 * set parameters for a form element
 	 * @param string $params - string of parameters to be set name1=value, name2=value, etc.
-	 * @param type $name - name of element, if "" current element will be used
+	 * @param string $name - name of element, if "" current element will be used
 	 */
 	public function fep($params, $name = "") {
 		if ($name != "") {
@@ -1110,28 +1110,28 @@ class Form {
 		return($output);
 	}
 
+	/**
+	 * Creates elements for the template data array
+	 * @param Fe $el
+	 * @param string|array $xhtml
+	 */
 	private function tData($el, $xhtml) {
-		// Creates elements for the template data array
-		//
-		// parameters
-		//	$el - object - form element
-		//	$xhtml - string - xhtml for the main form field
-
-		if ($el->encap) {
-			$this->tData[$el->name] = $this->description($el, $xhtml);
-		} else {
-			if (is_array($xhtml)) {
-				foreach ($xhtml as $key => $string) {
-					if ($key == 0) {
-						$this->tData[$el->name] = $string;
-					} else {
-						$this->tData[$el->name . "_" . ($key - 1)] = $string;
-					}
+		if (is_array($xhtml)) {
+			// handle results from radio buttons
+			foreach ($xhtml as $key => $string) {
+				if ($key == 0) {
+					$this->tData[$el->name] = $string;
+				} else {
+					$this->tData[$el->name . "_" . ($key - 1)] = $string;
 				}
+			}
+		} else {
+			if ($el->encap) {
+				$this->tData[$el->name] = $this->description($el, $xhtml);
 			} else {
 				$this->tData[$el->name] = $xhtml;
+				$this->tData[$el->name . 'Desc'] = $this->description($el);
 			}
-			$this->tData[$el->name . 'Desc'] = $this->description($el);
 		}
 	}
 
@@ -1229,41 +1229,51 @@ class Form {
 	}
 
 	/**
-	 * Genearate a radio button set
+	 * Generate a radio button set
 	 * @param Fe $el - form element
-	 * @return string - xhtml return
+	 * @return array - xhtml return
 	 */
 	private function elRadio($el) {
 		// Checkbox form element
 		if (!is_array($el->data)) {
-			exit("Radio Buttons " . $el->name . " needs array as data");
+			exit("Radio Buttons " . $el->name . " needs array as data [0 => 'first option', 1 => 'second option']");
 		}
 		$xhtml = "";
 		$xhtmlTotal = "";
 		$return = array();
 		$idCount = 0;
 		foreach ($el->data as $key => $description) {
-			if ($el->radioDesc) {
-				$xhtml .= '<label';
-				// error handling
-				if ($el->lClass != "") {
-					$xhtml .= ' class="' . $el->lClass;
-					if ($el->error) {
-						$xhtml .= ' ' . $this->errorClass;
-					}
-					$xhtml .= '"';
-				} elseif ($el->error) {
-					$xhtml .= ' class="' . $this->errorClass . '"';
-				}
-				$xhtml .= '>';
-				if ($el->textBefore) {
-					$xhtml .= $this->t($description);
-				}
-			}
 			if ($el->id != "") {
 				$radioId = $el->id . "_" . $idCount;
 			} else {
 				$radioId = $el->name . "_" . $idCount;
+			}
+			$label = '';
+			if ($el->radioDesc) {
+				$label .= '<label';
+				// error handling
+				if ($el->lClass != "") {
+					$label .= ' class="' . $el->lClass;
+					if ($el->error) {
+						$label .= ' ' . $this->errorClass;
+					}
+					$label .= '"';
+				} elseif ($el->error) {
+					$label .= ' class="' . $this->errorClass . '"';
+				}
+				if(!$el->encap){
+					$label .= ' for="'. $radioId. '"';
+				}
+				$label .= '>';
+				if ($el->textBefore or !$el->encap) {
+					$label .= $this->t($description);
+				}
+				if(!$el->encap){
+					$label .= '</label>';
+				}
+			}
+			if($el->textBefore or $el->encap){
+				$xhtml .= $label;
 			}
 			$xhtml .= '<input type="radio" id="' . $radioId . '" title="' . strip_tags($el->description) . ', ' . strip_tags($description) . '" ';
 			$xhtml .= 'value="' . $key . '" ';
@@ -1278,11 +1288,16 @@ class Form {
 			}
 			$xhtml .= $this->comPars($el, "sfcRadio");
 			$xhtml .= '/>';
-			if ($el->radioDesc) {
-				if (!$el->textBefore) {
-					$xhtml .= $this->t($description);
+			if ($el->radioDesc){
+				if($el->encap) {
+					if (!$el->textBefore) {
+						$xhtml .= $this->t($description);
+					}
+					$xhtml .= '</label>';
 				}
-				$xhtml .= '</label>';
+				elseif(!$el->textBefore){
+					$xhtml .= $label;
+				}
 			}
 			if (strcmp($el->orientation, "vertical") == 0) {
 				$xhtml .= "<br />";
@@ -1293,7 +1308,7 @@ class Form {
 			$xhtml = "";
 		}
 		$return[0] = $xhtmlTotal;
-		return($return);
+		return $return;
 	}
 
 	/**
