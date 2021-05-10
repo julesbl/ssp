@@ -108,9 +108,17 @@ abstract class LogonBase {
 	 * @return string - display of screens
 	 */
 	public function do_login($ignoreToken = false){
-		if($this->rememberMe){
-			// process remember me before login form goes ahead
-			$this->loginSessionData = $this->rememberMeGet();
+		// if remember me enabled
+		if($this->rememberMe === true){
+			// if no session data see if its available
+			if ($this->loginSessionData === false) {
+				$this->loginSessionData = $this->rememberMeGet();
+			}
+			else{
+				// if the user has would up back at the login form probably needs to login with another auth
+				$this->loginSessionData = false;
+				$this->removeRmCookie();
+			}
 		}
 		if($this->loginSessionData === false){
 			$formData = $this->processAuthForm($ignoreToken);
@@ -543,12 +551,18 @@ abstract class LogonBase {
 				return $userInfo;
 			}
 			else{
-				// remove the cookie
-				setcookie($this->cfg->loginRememberMeCookie,
-						"", time()-172800, "/", $this->cfg->cookieDomain, $this->cfg->useSSL);
+				$this->removeRmCookie();
 			}
 		}
 		return false;
+	}
+
+	/**
+	 * Remove remember me cookie
+	 */
+	private function removeRmCookie(){
+		setcookie($this->cfg->loginRememberMeCookie,
+			"", time()-172800, "/", $this->cfg->cookieDomain, $this->cfg->useSSL);
 	}
 }
 /* End of file LogonBase.php */
