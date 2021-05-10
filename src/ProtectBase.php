@@ -398,7 +398,11 @@ abstract class ProtectBase
 	private function sendSslHeaders()
 	{
 		if ($this->cfg->useSSL and $this->cfg->sslSendHeaders and $this->config->sslSendHeaders) {
-			foreach ($this->cfg->sslHeaders as $header => $string) {
+			$headers = $this->cfg->sslHeaders;
+			if($this->cfg->devHeaders === true){
+				$headers = $this->cfg->devSslHeaders;
+			}
+			foreach ($headers as $header => $string) {
 				header($header . ': ' . $string);
 			}
 		}
