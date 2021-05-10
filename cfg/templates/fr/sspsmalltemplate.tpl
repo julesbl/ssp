@@ -40,10 +40,10 @@ info@w34u.com
 <div id="footerBackground">
 <table id="footer" border="0" cellpadding="0" align="center">
 	<tr>
-		<td style="text-align:left;">
+		<td class="leftCol">
             <p>Simple Site Protection<br />Copyright 2005-2012 Julian Blundell - <a href="http://www.w34u.com" title="Go to w34u" target="_blank">w34u</a></p>
 		</td>
-		<td style="text-align:right;">
+		<td class="rightCol">
 		<p>Common Development and Distribution<br />License (CDDL)</p>
 		</td>
 	</tr>

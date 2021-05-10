@@ -210,6 +210,12 @@ body{
 	border:0;
     color: #fff;
 }
+#footer .leftCol{
+	text-align: left;
+}
+#footer .rightCol{
+	text-align: right;
+}
 body#smallTemplate #content form{
 	display: block;
 	width: 500px;
@@ -289,3 +295,10 @@ p.response{
 	font-weight: bold;
 }
 
+h2#setupEnabled{
+	color: red;
+}
+
+input#logonButton{
+	float: right;
+}
