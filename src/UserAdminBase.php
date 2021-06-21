@@ -104,7 +104,7 @@ abstract class UserAdminBase {
 
 	/**
 	 * Constructor
-	 * @param SSP_Protect $session - session object
+	 * @param Protect $session - session object
 	 * @param Setup $ssp
 	 * @param string $id 
 	 */
@@ -158,9 +158,12 @@ abstract class UserAdminBase {
 
 		$form->fe("password", "password", "Password");
 		$form->fep("width=15, dataType=password, dbField=UserPassword");
+		$form->currentElelementObject->minChar = $this->cfg->minPassword;
 
 		$form->fe("password", "password2", "Enter password again");
 		$form->fep("width=15,sql=false,dataType=password");
+		$form->currentElelementObject->minChar = $this->cfg->minPassword;
+
 		if ($this->cfg->fixedIpAddress) {
 			$form->fe("text", "ip", "IP address");
 			$form->fep("width=35,dataType=real, dbField=UserIp");
