@@ -44,7 +44,7 @@
 		</td>
 		<td id="content">
 	{:if:showDisableSetupText}
-	<h2 style="color: red;">Setup is still enabled, please disable by setting $enableSetup = false in configuration</h2>
+	<h2 id="setupEnabled">Setup is still enabled, please disable by setting $enableSetup = false in configuration</h2>
 	{:endif:showDisableSetupText}
 		{:if:displayName}
 		<p>User Name: {displayName}</p>
@@ -57,10 +57,10 @@
 <div id="footerBackground">
 <table id="footer" border="0" cellpadding="0" align="center">
 	<tr>
-		<td style="text-align:left;">
+		<td class="leftCol">
             <p>Simple Site Protection<br />Copyright 2005-2016 Julian Blundell - <a href="http://www.w34u.com" title="Go to w34u" target="_blank">w34u</a></p>
 		</td>
-		<td style="text-align:right;">
+		<td class="rightCol">
 		<p>MIT Open Source License (MIT)</p>
 		</td>
 	</tr>

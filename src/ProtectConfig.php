@@ -76,6 +76,11 @@ class ProtectConfig{
 	 */
 	public $sslSendHeaders = true;
 	/**
+	 * Additional content for the login page
+	 * @var string
+	 */
+	public $loginContent = null;
+	/**
 	 * Debuging enabled
 	 * @var bool
 	 */

@@ -185,10 +185,24 @@ abstract class ConfigurationBase
 	 * @var bool  */
 	public $useSSL = null;
 	/**
-	 * Headers to be sent when in ssl mode
-	 * @var array
+	 * Headers to be sent when in ssl mode in production mode
+	 * @var string[]
 	 */
 	public $sslHeaders = [
+		'strict-transport-security' => 'max-age=31536000; includeSubDomains',
+		'X-XSS-Protection' => '1; mode=block',
+		'X-Content-Type-Options' => 'nosniff',
+		'Referrer-Policy' => 'no-referrer-when-downgrade',
+		'X-Frame-Options' => 'SAMEORIGIN',
+		'Content-Security-Policy' => "default-src 'self' https: data:",
+		'X-Content-Security-Policy' => "default-src 'self' https: data:",
+		'Feature-Policy' => "geolocation 'none'; midi 'none'; sync-xhr 'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope 'none'; speaker 'self'; fullscreen 'self'; payment 'none';"
+	];
+	/**
+	 * Dev ssl headers, allows unsafe inline code
+	 * @var string[]
+	 */
+	public $devSslHeaders = [
 		'strict-transport-security' => 'max-age=31536000; includeSubDomains',
 		'X-XSS-Protection' => '1; mode=block',
 		'X-Content-Type-Options' => 'nosniff',
@@ -198,6 +212,11 @@ abstract class ConfigurationBase
 		'X-Content-Security-Policy' => "default-src 'self' 'unsafe-inline' 'unsafe-eval' https: data:",
 		'Feature-Policy' => "geolocation 'none'; midi 'none'; sync-xhr 'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope 'none'; speaker 'self'; fullscreen 'self'; payment 'none';"
 	];
+	/**
+	 * Use dev ssl headers
+	 * @var bool
+	 */
+	public $devHeaders = false;
 	/**
 	 * If in ssl send the securing headers
 	 * @var bool

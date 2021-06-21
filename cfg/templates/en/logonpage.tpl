@@ -54,7 +54,7 @@
 			<td>
 			</td>
 			<td>
-				<input type="submit" value="Login" name="login" id="logonButton" style="float:right" />
+				<input type="submit" value="Login" name="login" id="logonButton" />
 			</td>
 		</tr>
 	</table>
