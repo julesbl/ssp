@@ -158,11 +158,9 @@ abstract class UserAdminBase {
 
 		$form->fe("password", "password", "Password");
 		$form->fep("width=15, dataType=password, dbField=UserPassword");
-		$form->currentElelementObject->minChar = $this->cfg->minPassword;
 
 		$form->fe("password", "password2", "Enter password again");
 		$form->fep("width=15,sql=false,dataType=password");
-		$form->currentElelementObject->minChar = $this->cfg->minPassword;
 
 		if ($this->cfg->fixedIpAddress) {
 			$form->fe("text", "ip", "IP address");
@@ -239,10 +237,10 @@ abstract class UserAdminBase {
 
 		$error = false;
 		if (isset($form->elements["password"])) {
-			if ($form->getField('askUser') === '0' and strlen(trim($form->getField("password"))) < $this->cfg->minPassword) {
+			if ($form->getField('askUser') == '0' and strlen(trim($form->getField("password"))) < $this->cfg->minPassword) {
 				$form->setError("password", "Please enter a password at least {$this->cfg->minPassword} in length");
 				$error = true;
-			} elseif ($form->getField('askUser') === '0' and strcmp($form->getField("password"), $form->getField("password2")) != 0) {
+			} elseif ($form->getField('askUser') == '0' and strcmp($form->getField("password"), $form->getField("password2")) != 0) {
 				// check passwords are identical if requested
 				$form->setError("password2", "The two passwords must be identical");
 				$error = true;
@@ -317,9 +315,11 @@ abstract class UserAdminBase {
 			$form->fe('text', 'password1', 'Password');
 			$form->currentElelementObject->required = true;
 			$form->currentElelementObject->dataType = 'password';
+			$form->currentElelementObject->minChar = $this->cfg->minPassword;
 			$form->fe('text', 'password2', 'Repeat the password');
 			$form->currentElelementObject->required = true;
 			$form->currentElelementObject->dataType = 'password';
+			$form->currentElelementObject->minChar = $this->cfg->minPassword;
 			if ($form->processForm($_POST)) {
 				if (!$form->error) {
 					if (strcmp($form->getField('password1'), $form->getField('password2')) === 0) {
