@@ -79,11 +79,11 @@ w34u\ssp\Translate::addToLanguage('fr', array(
 	'Next' => 'Suivant',
 	'Save' => 'Sauvegarder',
 	// change password form
-	'Your orriginal Password' => 'Votre mot de passe original',
+	'Your original Password' => 'Votre mot de passe original',
 	'New password' => 'Nouveau mot de passe',
 	'Enter new password again' => 'Entrer nouveau mot de passe encore',
 	'Both passwords must be the same' => 'Les deux mots de passe doivent être identique',
-	'Invalid orriginal password' => 'Mot de passe original non valide',
+	'Invalid original password' => 'Mot de passe original non valide',
 	// change email form
 	'Your password' => 'Votre mot de passe',
 	'New email' => 'Nouveau mail',
