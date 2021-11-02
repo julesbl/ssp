@@ -525,7 +525,7 @@ abstract class UserAdminBase {
 	/**
 	 * Change password routine
 	 * @param string $userId - users id
-	 * @param bool $requirePassword - prompt for the orriginal password
+	 * @param bool $requirePassword - prompt for the original password
 	 * @param bool $reDisplay - re-display form on success
 	 * @return bool - true on success else returns the form
 	 */
@@ -547,8 +547,8 @@ abstract class UserAdminBase {
 		}
 		$form->userId = $id;
 		if ($requirePassword) {
-			// ask for orriginal password
-			$form->fe("password", "oldPassword", "Your orriginal Password");
+			// ask for original password
+			$form->fe("password", "oldPassword", "Your original Password");
 			$form->fep("required=true,width=30,load=false,sql=false,dataType=password");
 		}
 
@@ -609,7 +609,7 @@ abstract class UserAdminBase {
 			$passwordOK = $this->session->checkPassword($form->getField("oldPassword"), $result->UserPassword);
 			if (!$passwordOK) {
 				// no result returned for the password entered
-				$form->setError("oldPassword", "Invalid orriginal password");
+				$form->setError("oldPassword", "Invalid original password");
 				$error = true;
 			}
 		}
@@ -634,7 +634,7 @@ abstract class UserAdminBase {
 		}
 		$form->userId = $this->id;
 		if ($requirePassword) {
-			// ask for orriginal password
+			// ask for original password
 			$form->fe("password", "password", "Your password");
 			$form->fep("required=true,width=15,load=false,sql=false,dataType=password");
 		}
