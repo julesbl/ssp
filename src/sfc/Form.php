@@ -62,7 +62,7 @@ class Form {
 
 	/**
 	 * array of form elements of Fe defining the form.
-	 * @var array
+	 * @var Fe[]
 	 */
 	public $elements = array();
 	/**

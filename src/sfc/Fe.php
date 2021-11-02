@@ -77,6 +77,11 @@ class Fe {
 	 * valid results for a selection or radio button, particularly useful for ajax loading of the element
 	 * @var array  */
 	public $validResults = array();
+	/**
+	 * Don't check for the valid result from a selection
+	 * @var bool
+	 */
+	public $dont_check_valid_results = false;
 
 	/** 
 	 * default value for elements.
@@ -316,7 +321,7 @@ class Fe {
 			// rounds field to correct precision
 			$this->field = round($this->field, $this->precision);
 		}
-		if ($this->type == 'select' or $this->type == 'radio' and trim($this->field) !== "") {
+		if ($this->dont_check_valid_results === false and ($this->type == 'select' or $this->type == 'radio') and trim($this->field) !== "") {
 			// get valid results if not already supplied
 			if (count($this->validResults) == 0) {
 				$this->getValidResults($this->data);
