@@ -62,7 +62,7 @@ class Form {
 
 	/**
 	 * array of form elements of Fe defining the form.
-	 * @var array
+	 * @var Fe[]
 	 */
 	public $elements = array();
 	/**
@@ -413,7 +413,7 @@ class Form {
 	 * array of form fields data for the template routine
 	 * @var array
 	 */
-	public $tData;
+	public $tData = [];
 	/**
 	 * General template enclosing the form, if not defined the form xhtml is returned
 	 * @var w34u\ssp\Template
@@ -2121,6 +2121,10 @@ class Form {
 	 * @return \stdClass
 	 */
 	public function getTemplateValues() {
+		if(count($this->tData) === 0){
+			// do form creation if has not been done, assumes no data
+			$this->create();
+		}
 		$tplData = new \stdClass();
 		foreach ($this->tData as $key => $field) {
 			$tplData->$key = $field;
