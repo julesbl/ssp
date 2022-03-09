@@ -302,27 +302,26 @@ function SSP_Token($id){
  * @return bool - true on match
  */
 function SSP_TokenCheck($token, $id){
-    $SSP_Config = Configuration::getConfiguration();
+	$SSP_Config = Configuration::getConfiguration();
 	$SSP_DB = SspDb::getConnection();;
-
-    $tokenOk = false;
 
 	// check is hex token
 	$check = new \w34u\ssp\CheckData();
 	if($check->check('hex', $token) !== 0){
 		return false;
 	}
-	
-    SSP_CleanToken();
 
-    // Form token field exists
-    $where = array("token" => $token, "id" => $id);
-    $SSP_DB->delete($SSP_Config->tokenTable, $where, "SSP Functions: Deleting token");
-    if($SSP_DB->affectedRows()){
-        // token found and deleted
-        $tokenOk = true;
-    }
-    return($tokenOk);
+	SSP_CleanToken();
+
+	// Form token field exists
+	$where = array("token" => $token, "id" => $id);
+	$token = $SSP_DB->get($SSP_Config->tokenTable, $where, "SSP Functions: finding token");
+	if($token !== false){
+		$SSP_DB->delete($SSP_Config->tokenTable, $where, "SSP Functions: Deleting token");
+		// token found and deleted
+		return true;
+	}
+	return false;
 }
 
 /**
