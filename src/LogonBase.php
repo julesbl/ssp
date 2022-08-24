@@ -352,7 +352,7 @@ abstract class LogonBase {
 		}
 		if($this->cfg->loginType === 0){
 			// email used to get user data
-			$userEmail = SSP_encrypt(trim(strtolower($formData->email)), $this->cfg->useEncryption);
+			$userEmail = trim(strtolower($formData->email));
 			$userInfo = $this->db->get($this->cfg->userTable, ['UserEmail' => $userEmail], "SSP Logon: Getting user login data using email");
 			if(empty($userInfo)){
 				$this->errorDesc = "Email not found";

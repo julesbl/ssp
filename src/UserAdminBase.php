@@ -248,7 +248,7 @@ abstract class UserAdminBase {
 		}
 
 		// encrypt email
-		$email = SSP_encrypt($form->getField("email"), $this->cfg->useEncryption);
+		$email = trim($form->getField("email"));
 		// check email is unique
 		$values["UserEmail"] = $form->getField("email");
 		if ($this->db->get($this->cfg->userTable, $values, "SSP User Creation: Checking user email unique")) {
@@ -652,7 +652,6 @@ abstract class UserAdminBase {
 				} else {
 					// update database
 					$this->userChangeEmail($form->elements["email"]->field);
-					$form->elements["email"]->field = SSP_Encrypt($form->elements["email"]->field, $this->cfg->useEncryption);
 					$form->querySave();
 					$this->updateUser($form->saveFields, "SSP Admin: Saving new email");
 					if ($reDisplay) {
@@ -690,7 +689,7 @@ abstract class UserAdminBase {
 
 		// check for duplicate emails
 		if (!$this->cfg->allowDuplicateEmails) {
-			$values = array("UserEmail" => SSP_Encrypt($form->getField("email"), $this->cfg->useEncryption));
+			$values = array("UserEmail" => $form->getField("email"));
 			$this->db->get($this->cfg->userTable, $values, "SSP Admin, change email: checking for duplicate email");
 			if ($this->db->numRows()) {
 				$form->setError("email", "Email is already in use.");
@@ -861,7 +860,7 @@ abstract class UserAdminBase {
 			if (!$form->error) {
 				// check for the email
 				$fields = array("UserId", "UserEmail", "UserName", "UserPassword");
-				$where["UserEmail"] = SSP_encrypt(trim($form->getField("email")), $this->cfg->useEncryption);
+				$where["UserEmail"] = trim($form->getField("email"));
 				$row = $this->db->getf($this->cfg->userTable, $fields, $where, "SSP user admin: getting user info for password recovery");
 				if ($this->db->numRows()) {
 					// found the email

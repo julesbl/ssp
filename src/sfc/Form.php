@@ -2446,6 +2446,9 @@ class Form {
 	 * @return array
 	 */
 	private function rems($post) {
+		if(!function_exists('get_magic_quotes_gpc')){
+			return $post;
+		}
 		if (!((PHP_MAJOR_VERSION == 7 and PHP_MINOR_VERSION >= 4) or PHP_MAJOR_VERSION > 7) and get_magic_quotes_gpc()) {
 			foreach ($post as $keyPost => $valuePost) {
 				if (!is_array($valuePost)) {
@@ -2455,7 +2458,7 @@ class Form {
 				}
 			}
 		}
-		return($post);
+		return $post;
 	}
 
 	private function encode($string, $style = ENT_QUOTES, $charset = "") {
