@@ -46,4 +46,5 @@ attack. </p>
   <li>Extend the login for other user inputs.</li>
   <li>Error output either to screen or log file for live sites.</li>
 </ul>
-<p>Full source code available on <a href="http://ssprotection.sourceforge.net/">source forge</a>.</p>
+<p>Full source code available on <a href="https://github.com/julesbl/ssp" target="_blank">Github</a>.</p>
+<p>Install via <a href="https://packagist.org/packages/w34u/ssp" target="_blank">Pakagist</a></p>

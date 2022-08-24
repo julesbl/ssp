@@ -259,6 +259,10 @@ abstract class ProtectBase
 	 */
 	private function startSession()
 	{
+		// Check if session is already started
+		if(session_status() === PHP_SESSION_ACTIVE){
+			return;
+		}
 		$handler = new SessionHandler();
 
 		session_set_save_handler(

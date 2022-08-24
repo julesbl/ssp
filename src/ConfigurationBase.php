@@ -848,7 +848,16 @@ abstract class ConfigurationBase
 		
 		// set mutibyte encoding
 		mb_internal_encoding($this->siteEncoding);
-		
+
+		// set up pages not to be included in the history
+		ProtectBase::addNoHistoryPage($this->logonScript);
+		ProtectBase::addNoHistoryPage($this->logoffScript);
+		ProtectBase::addNoHistoryPage($this->loginByEmailUrl);
+		ProtectBase::addNoHistoryPage($this->passwordRecover);
+		ProtectBase::addNoHistoryPage($this->userConfirm);
+		ProtectBase::addNoHistoryPage($this->newPassword);
+		ProtectBase::addNoHistoryPage($this->userCreation);
+
 		if($this->useSSL){
 			// absolute path for ssl
 			$this->adminDir = $this->pathSiteHttps. $this->adminDir;
@@ -904,15 +913,6 @@ abstract class ConfigurationBase
 			sfc\Form::addTranslation($SSP_lang);
 			Protect::addTranslation($SSP_lang);
 		}
-
-		// set up pages not to be included in the history
-		ProtectBase::addNoHistoryPage($this->logonScript);
-		ProtectBase::addNoHistoryPage($this->logoffScript);
-		ProtectBase::addNoHistoryPage($this->loginByEmailUrl);
-		ProtectBase::addNoHistoryPage($this->passwordRecover);
-		ProtectBase::addNoHistoryPage($this->userConfirm);
-		ProtectBase::addNoHistoryPage($this->newPassword);
-		ProtectBase::addNoHistoryPage($this->userCreation);
 
 		/**
 		* Set up PHP initialisation parameters
