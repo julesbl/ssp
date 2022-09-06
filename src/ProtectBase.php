@@ -431,7 +431,14 @@ abstract class ProtectBase
 				// Numbers match, generate next number and set cookie and session table.
 
 				$randomCookie = mt_rand(0, 100000);
-				setcookie($this->cfg->randomCookie, $randomCookie, 0, $this->cfg->cookiePath, $this->cfg->cookieDomain, $this->cfg->useSSL);
+				$options = [
+					'expires' => 0,
+					'path' => $this->cfg->cookiePath,
+					'domain' => $this->cfg->cookieDomain,
+					'secure' => $this->cfg->useSSL,
+					'samesite' => 'Strict'
+				];
+				setcookie($this->cfg->randomCookie, $randomCookie, $options);
 
 				$randomsStored[] = $randomCookie;
 				if (count($randomsStored) > $this->cfg->randomCookieChecks) {
@@ -773,9 +780,15 @@ abstract class ProtectBase
 
 		if ($this->cfg->loginRememberMe and isset($_COOKIE[$this->cfg->loginRememberMeCookie])) {
 			$id = $_COOKIE[$this->cfg->loginRememberMeCookie];
-			// delete remeber me cookie if it exists
-			setcookie($this->cfg->loginRememberMeCookie,
-				"", time() - 172800, "/", $this->cfg->cookieDomain, $this->cfg->useSSL);
+			// delete remember me cookie if it exists
+			$options = [
+				'expires' => time() - 172800,
+				'path' => $this->cfg->cookiePath,
+				'domain' => $this->cfg->cookieDomain,
+				'secure' => $this->cfg->useSSL,
+				'samesite' => 'Strict'
+			];
+			setcookie($this->cfg->loginRememberMeCookie, "", $options);
 			$values = array("id" => $id);
 			$this->db->delete($this->cfg->tableRememberMe, $values, "SSP Logoff: removing remember me entry");
 		}
