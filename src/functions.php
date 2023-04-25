@@ -52,7 +52,7 @@ function SSP_encode_email($email){
  * @return string - unique id
  */
 function SSP_uniqueId(){
-    return(md5(uniqid(rand(),true)));
+    return bin2hex(random_bytes(16));
 }
 
 /**
@@ -281,7 +281,7 @@ function SSP_Token($id){
 	$SSP_DB = SspDb::getConnection();;
 
     // generate the token
-    $token = md5(uniqid($SSP_Config->magicToken,true));
+    $token = bin2hex(random_bytes(16));
 
     // insert token into database
     $values = array(
@@ -430,7 +430,7 @@ function SSP_ResponseToken($userId, $time){
 	$SSP_DB = SspDb::getConnection();;
 
     // generate the token
-    $token = md5(uniqid($SSP_Config->magicToken,true));
+    $token = bin2hex(random_bytes(16));
 
     // insert token into database
 	$fields = array(
