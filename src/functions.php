@@ -406,7 +406,7 @@ function SSP_SendMail($fromName, $fromAddress, $toName, $toAddress, $subject, $p
 		$boundary = uniqid('np');
 		$headers .= "Content-Type: multipart/alternative;boundary=" . $boundary . "\r\n";
 		$message = "\r\n\r\n--" . $boundary . "\r\n";
-		$message .= "Content-type: text/plain;charset=". $charset. "\n";
+		$message .= "Content-type: text/plain;charset=". $charset. "\r\n\r\n";
 		$message .= $plainMessage;
 		$message .= "\r\n\r\n--" . $boundary . "\r\n";
 		$message .= "Content-type: text/html;charset=". $charset. "\r\n\r\n";
