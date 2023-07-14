@@ -485,7 +485,14 @@ abstract class LogonBase {
 	    if($this->cfg->randomCheck){
 		    // set up random check cookie and entry
 		    $randomCookie = mt_rand(0,100000);
-		    setcookie($this->cfg->randomCookie, $randomCookie, 0, $this->cfg->cookiePath, $this->cfg->cookieDomain, $this->cfg->useSSL);
+		    $options = [
+			    'expires' => 0,
+			    'path' => $this->cfg->cookiePath,
+			    'domain' => $this->cfg->cookieDomain,
+			    'secure' => $this->cfg->useSSL,
+			    'samesite' => 'Strict'
+		    ];
+		    setcookie($this->cfg->randomCookie, $randomCookie, $options);
 		    $querySet["SessionRandom"] = $randomCookie;
 	    }
 	    if($this->rememberMe and !$this->rememberMeLogin and $this->rememberMeSave){
@@ -499,8 +506,14 @@ abstract class LogonBase {
 			    "date_expires" => $timeSet,
 		    );
 		    $this->db->insert($this->cfg->tableRememberMe, $rememberMeSet, "SSP Logon: creating remember me entry");
-		    setcookie($this->cfg->loginRememberMeCookie,
-			    $idSet, $timeSet, "/", $this->cfg->cookieDomain, $this->cfg->useSSL, $this->cfg->useSSL);
+		    $options = [
+			    'expires' => $timeSet,
+			    'path' => $this->cfg->cookiePath,
+			    'domain' => $this->cfg->cookieDomain,
+			    'secure' => $this->cfg->useSSL,
+			    'samesite' => 'Strict'
+		    ];
+		    setcookie($this->cfg->loginRememberMeCookie, "$idSet", $options);
 	    }
 
 	    // update session table
@@ -561,8 +574,14 @@ abstract class LogonBase {
 	 * Remove remember me cookie
 	 */
 	private function removeRmCookie(){
-		setcookie($this->cfg->loginRememberMeCookie,
-			"", time()-172800, "/", $this->cfg->cookieDomain, $this->cfg->useSSL);
+		$options = [
+			'expires' => time()-172800,
+			'path' => $this->cfg->cookiePath,
+			'domain' => $this->cfg->cookieDomain,
+			'secure' => $this->cfg->useSSL,
+			'samesite' => 'Strict'
+		];
+		setcookie($this->cfg->loginRememberMeCookie, "", $options);
 	}
 }
 /* End of file LogonBase.php */

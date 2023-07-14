@@ -365,7 +365,7 @@ class Template {
 				// used for programs that generate html for section insertion.
 				$this->contentPosition++;
 				$this->exitLoop = true;
-			} elseif ($tag{0} == ":") {
+			} elseif ($tag[0] == ":") {
 				// process command, starts with {:
 				$this->processCommand($tag, $braceClose);
 			} elseif (array_key_exists($tag, $this->replaces)) {

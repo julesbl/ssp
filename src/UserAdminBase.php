@@ -323,7 +323,7 @@ abstract class UserAdminBase {
 			if ($form->processForm($_POST)) {
 				if (!$form->error) {
 					if (strcmp($form->getField('password1'), $form->getField('password2')) === 0) {
-						$userId = md5(uniqid($this->cfg->magicUser, true));
+						$userId = bin2hex(random_bytes(16));
 						$userPassword = $this->session->cryptPassword($form->getField('password1'));
 						$userDate = time();
 						$fields = array(
