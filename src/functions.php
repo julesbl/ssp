@@ -399,17 +399,19 @@ function SSP_SendMail($fromName, $fromAddress, $toName, $toAddress, $subject, $p
 	$headers .= 'Reply-To: ' .strip_tags($fromAddress) . "\r\n";
 	$toAddressExtended = '"'. strip_tags($toName). '" <'. strip_tags($toAddress). '>';
 	if($htmlMessage === null){
-		$headers .= "Content-type: text/plain; charset=". strip_tags($charset). "\r\n";
+		$headers .= "Content-type: text/plain; charset=". $charset. "\r\n";
 		$message = $plainMessage;
 	}
 	else{
 		$boundary = uniqid('np');
 		$headers .= "Content-Type: multipart/alternative;boundary=" . $boundary . "\r\n";
-		$message = $plainMessage;
+		$message = "\r\n\r\n--" . $boundary . "\r\n";
+		$message .= "Content-type: text/plain;charset=". $charset. "\n";
+		$message .= $plainMessage;
 		$message .= "\r\n\r\n--" . $boundary . "\r\n";
-		$message .= "Content-type: text/html;charset=utf-8\r\n\r\n";
+		$message .= "Content-type: text/html;charset=". $charset. "\r\n\r\n";
 		$message .= $htmlMessage;
-		$message .= "\r\n\r\n--" . $boundary . "\r\n";
+		$message .= "\r\n\r\n--" . $boundary . "--". "\r\n";
 	}
 	// check for spam
 	if (stristr($plainMessage,'Content-Type:') or stristr($plainMessage,'bcc:') or stristr($htmlMessage,'Content-Type:') or stristr($htmlMessage,'bcc:')) {
