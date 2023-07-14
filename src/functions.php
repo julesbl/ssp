@@ -69,7 +69,7 @@ function SSP_rndPassword($len, $chars = ""){
     $charLength = strlen($chars)-1;
     for ($i = 0; $i < $len; $i++){
         $pos = rand(0, $charLength);
-        $string .= $chars{$pos};
+        $string .= $chars[$pos];
     }
     return $string;
 }
@@ -793,7 +793,7 @@ function &SSP_attachToSeshVar($sessionVarName, $default){
 		$_SESSION[$sessionVarName] = $default;
 	}
 	$refVar =& $_SESSION[$sessionVarName];
-	return($refVar);
+	return $refVar;
 }
 
 /**
