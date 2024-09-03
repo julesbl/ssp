@@ -1003,7 +1003,7 @@ abstract class UserAdminBase {
 		} else {
 			$where["UserId"] = $id;
 		}
-		$useDb->update($this->cfg->userMiscTable, $fields, $where, $errorString);
+		$this->db->update($this->cfg->userMiscTable, $fields, $where, $errorString);
 		return(true);
 	}
 
