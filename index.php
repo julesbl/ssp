@@ -1,8 +1,8 @@
-<?php 
-namespace w34u\ssp;
+<?php namespace w34u\ssp;
+require 'sspadmin/includeheader.php';
+
 error_reporting(E_ALL);
 
-require 'sspadmin/includeheader.php';
 $SSP_Config = Configuration::getConfiguration();
 $session= new Protect();
 $content = [];

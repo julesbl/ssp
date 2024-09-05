@@ -49,11 +49,11 @@ class Configuration extends ConfigurationBase
 	/** 
 	 * database user
 	 * @var string  */
-	public $dsnUser = 'ssptest';
+	public $dsnUser = 'ssp';
 	/** 
 	 * password for the database
 	 * @var string  */
-	public $dsnPassword = 'ssptest';
+	public $dsnPassword = '92mgzjGOvfzMQl5E';
 	/** 
 	 * host name
 	 * @var string  */
@@ -61,7 +61,7 @@ class Configuration extends ConfigurationBase
 	/** 
 	 * database name
 	 * @var string  */
-	public $dsnDatabaseName = 'ssptest';
+	public $dsnDatabaseName = 'ssp';
 	/** 
 	 * options for the dsn
 	 * @var array of string  */
@@ -77,7 +77,7 @@ class Configuration extends ConfigurationBase
 	/** 
 	 * Email used by the administrator
 	 * @var string  */
-	public $adminEmail = "info@w34u.com";
+	public $adminEmail = "j.blundell@w34u.com";
 	/** 
 	 * name shown on no reply emails
 	 * @var string  */
@@ -85,11 +85,13 @@ class Configuration extends ConfigurationBase
 	
 	public $noReplyEmail = 'no-reply@w34u.com';
 	
-	public $url = 'localhost:8080';
+	public $url = 'ssp.w34u.com';
 	
-	public $cookieDomain = ".localhost";
+	public $cookieDomain = "ssp.w34u.com";
 	
-	public $siteRoot = "http://localhost:8080/";
+	public $siteRoot = "https://ssp.w34u.com/";
+
+	public $useSSL = true;
 	
 	public $sessVarName = "ssptesting";
 	

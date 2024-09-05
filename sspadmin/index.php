@@ -45,40 +45,52 @@
 */
 namespace w34u\ssp;
 
-use Slim\Http\Response as Response;
-use Slim\Http\Request as Request;
+use DI\Container;
+use Slim\Factory\AppFactory;
+use Psr\Http\Message\ResponseInterface as Response;
+use Psr\Http\Message\ServerRequestInterface as Request;
+use Slim\Routing\RouteCollectorProxy;
 
 require 'includeheader.php';
-$setup = [
-	'settings' => [
-		'displayErrorDetails' => true,
-		],
-];
-$container = new \Slim\Container($setup);
+
+$container = new Container();
 // load protected session as service
-$container['session'] = function($container) {
+$container->set('session', function() {
 	return new Protect();
-};
+});
 // load ssp admin setup as a service
-$container['ssp'] = function($container){
-	return new Setup($container['session'], true);
-};
-$app = new \Slim\App($container);
+$container->set('ssp', function() {
+	global $container;
+	return new Setup($container->get('session'), true);
+});
+AppFactory::setContainer($container);
+$app = AppFactory::create();
+$app->setBasePath('/sspadmin');
+
+$app->addErrorMiddleware(true, false, false);
+
 // home page
 $app->any('/', function (Request $request, Response $response) {
 	/* @var $session Protect */
-	$session = $this->session;
+	$session = $this->get('session');
 	$session->requireAdmin();
-	$ssp = $this->ssp;
+	$ssp = $this->get('ssp');
 	$lister = new UserLister($ssp);
-	return $response->getBody()->write($lister->lister());
+	$body = $response->getBody();
+	$body->write($lister->lister());
+	return $response->withBody($body);
+});
+$app->get('/test', function (Request $request, Response $response) {
+	$body = $response->getBody();
+	$body->write('Hello World!');
+	return $response->withBody($body);
 });
 // delete a user
 $app->any('/delete/{userId}', function (Request $request, Response $response) {
 	/* @var $session Protect */
-	$session = $this->session;
+	$session = $this->get('session');
 	$session->requireAdmin();
-	$ssp = $this->ssp;
+	$ssp = $this->get('ssp');
 	$userId = $request->getAttribute('userId', '');
 	$lister = new UserLister($ssp);
 	return $response->getBody()->write($lister->deleteUser($userId));
@@ -86,18 +98,18 @@ $app->any('/delete/{userId}', function (Request $request, Response $response) {
 // change filter
 $app->any('/filterChange', function (Request $request, Response $response) {
 	/* @var $session Protect */
-	$session = $this->session;
+	$session = $this->get('session');
 	$session->requireAdmin();
-	$ssp = $this->ssp;
+	$ssp = $this->get('ssp');
 	$lister = new UserLister($ssp);
 	return $response->getBody()->write($lister->displayFilterForm());
 });
 // Change filter to admin pending
 $app->any('/filterAdminPending', function (Request $request, Response $response) {
 	/* @var $session Protect */
-	$session = $this->session;
+	$session = $this->get('session');
 	$session->requireAdmin();
-	$ssp = $this->ssp;
+	$ssp = $this->get('ssp');
 	$lister = new UserLister($ssp);
 	$lister->filter->displayAdminPending();
 	return $response->getBody()->write($lister->lister());
@@ -105,9 +117,9 @@ $app->any('/filterAdminPending', function (Request $request, Response $response)
 // Change filter to default listing
 $app->any('/filterNormal', function (Request $request, Response $response) {
 	/* @var $session Protect */
-	$session = $this->session;
+	$session = $this->get('session');
 	$session->requireAdmin();
-	$ssp = $this->ssp;
+	$ssp = $this->get('ssp');
 	$lister = new UserLister($ssp);
 	$lister->filter->newSearch();
 	return $response->getBody()->write($lister->lister());
@@ -115,9 +127,9 @@ $app->any('/filterNormal', function (Request $request, Response $response) {
 // Admin user creation
 $app->any('/adminusercreation', function (Request $request, Response $response) {
 	/* @var $session Protect */
-	$session = $this->session;
+	$session = $this->get('session');
 	$session->requireAdmin();
-	$ssp = $this->ssp;
+	$ssp = $this->get('ssp');
 	
 	$admin = new UserAdmin($session, $ssp, $session->userId);
 	$result = $admin->userCreate();
@@ -133,85 +145,89 @@ $app->any('/adminusercreation', function (Request $request, Response $response) 
 /**
  * User admin
  */
-$app->group('/useradmin', function() use ($app) {
+/**
+$app->group('/useradmin', function(RouteCollectorProxy $group) {
 	// basic user information
-	$app->any('/info/{userId}', function(Request $request, Response $response){
-		$session = $this->session;
-		$ssp = $this->ssp;
+	$group->any('/info/{userId}', function(Request $request, Response $response){
+		$session = $this->get('session');
+		$ssp = $this->get('ssp');
 		$userId = $request->getAttribute('userId');
 		$admin = new UserAdmin($session, $ssp, $userId);
 		return $response->getBody()->write($admin->displayMisc());
 	});
 	// change basic user information
-	$app->any('/chInfo', function(Request $request, Response $response){
-		$session = $this->session;
-		$ssp = $this->ssp;
+	$group->any('/chInfo', function(Request $request, Response $response){
+		$session = $this->get('session');
+		$ssp = $this->get('ssp');
 		$userId = $request->getAttribute('userId');
 		$admin = new UserAdmin($session, $ssp, $userId);
 		return $response->getBody()->write($admin->userMisc(false, true));
 	});
 	// change password
-	$app->any('/chPswd', function(Request $request, Response $response){
-		$session = $this->session;
-		$ssp = $this->ssp;
+	$group->any('/chPswd', function(Request $request, Response $response){
+		$session = $this->get('session');
+		$ssp = $this->get('ssp');
 		$userId = $request->getAttribute('userId');
 		$needPassword = $request->getAttribute('needPassword');
 		$admin = new UserAdmin($session, $ssp, $userId);
 		return $response->getBody()->write($admin->changePassword("", $needPassword, true));
 	});
 	// change email
-	$app->any('/chEmail', function(Request $request, Response $response){
-		$session = $this->session;
-		$ssp = $this->ssp;
+	$group->any('/chEmail', function(Request $request, Response $response){
+		$session = $this->get('session');
+		$ssp = $this->get('ssp');
 		$userId = $request->getAttribute('userId');
 		$needPassword = $request->getAttribute('needPassword');
 		$admin = new UserAdmin($session, $ssp, $userId);
 		return $response->getBody()->write($admin->changeEmail($needPassword, true));
 	});
 	// Admin ok of user
-	$app->any('/enableUser', function(Request $request, Response $response){
-		$session = $this->session;
-		$ssp = $this->ssp;
+	$group->any('/enableUser', function(Request $request, Response $response){
+		$session = $this->get('session');
+		$ssp = $this->get('ssp');
 		$userId = $request->getAttribute('userId');
 		$admin = new UserAdmin($session, $ssp, $userId);
 		return $response->getBody()->write($admin->userAdminOk());
 	});
 	// change advanced user information
-	$app->any('/chAdv', function(Request $request, Response $response){
-		$session = $this->session;
-		$ssp = $this->ssp;
+	$group->any('/chAdv', function(Request $request, Response $response){
+		$session = $this->get('session');
+		$ssp = $this->get('ssp');
 		$userId = $request->getAttribute('userId');
 		$admin = new UserAdmin($session, $ssp, $userId);
 		return $response->getBody()->write($admin->changeAdmin());
 	});
 	// display advanced user information
-	$app->any('/advInfo', function(Request $request, Response $response){
-		$session = $this->session;
-		$ssp = $this->ssp;
+	$group->any('/advInfo', function(Request $request, Response $response){
+		$session = $this->get('session');
+		$ssp = $this->get('ssp');
 		$userId = $request->getAttribute('userId');
 		$admin = new UserAdmin($session, $ssp, $userId);
 		return $response->getBody()->write($admin->displayAdminInfo());
 	});
 	// send a join email
-	$app->any('/joinEmail', function(Request $request, Response $response){
-		$session = $this->session;
-		$ssp = $this->ssp;
+	$group->any('/joinEmail', function(Request $request, Response $response){
+		$session = $this->get('session');
+		$ssp = $this->get('ssp');
 		$userId = $request->getAttribute('userId');
 		$admin = new UserAdmin($session, $ssp, $userId);
 		return $response->getBody()->write($admin->sendJoinupEmail());
 	});
 	// send an email to a user
-	$app->any('/email', function(Request $request, Response $response){
-		$session = $this->session;
-		$ssp = $this->ssp;
+	$group->any('/email', function(Request $request, Response $response){
+		$session = $this->get('session');
+		$ssp = $this->get('ssp');
 		$userId = $request->getAttribute('userId');
 		$admin = new UserAdmin($session, $ssp, $userId);
 		return $response->getBody()->write($admin->emailUser($userId, $session->userId));
 	});
 })->add(function(Request $request, Response $response, $next){
 	// Set up user admin for a particular user
+ */
+
 	/* @var $session Protect */
-	$session = $this->session;
+/**
+	$session = $this->get('session');
 	$session->requireAdmin();
 	if(!isset($_SESSION["adminUserId"])){
 		$_SESSION["adminUserId"] = "";
@@ -229,27 +245,28 @@ $app->group('/useradmin', function() use ($app) {
 	$response = $next($request, $response);
 	return $response;
 });
-
+*/
 /**
  * Basic user functions such as login
  */
-$app->group('/user', function() use ($app) {
+$app->group('/user', function(RouteCollectorProxy $group) {
 	// user login
-	$app->any('/logon', function(Request $request, Response $response){
-		$session = $this->session;
+	$group->any('/logon', function(Request $request, Response $response){
+		$session = $this->get('session');
 		/* @var $ssp Setup */
-		$ssp = $this->ssp;
+		$ssp = $this->get('ssp');
 		$login = new Logon($session);
 		$contentMain = ['content' => $login->do_login()];
 		$ssp->pageTitleAdd('Logon');
 		$tpl = $ssp->tpl($contentMain, "sspsmalltemplate.tpl", false);
-		$response->getBody()->write($tpl->output());
-		return $response;
+		$body = $response->getBody();
+		$body->write($tpl->output());
+		return $response->withBody($body);
 	});
 	// user logoff
-	$app->any('/logoff', function(Request $request, Response $response){
-		$session = $this->session;
-		$ssp = $this->ssp;
+	$group->any('/logoff', function(Request $request, Response $response){
+		$session = $this->get('session');
+		$ssp = $this->get('ssp');
 		
 		$contentMain = array();
 		$contentMain["title"] = "Logoff";
@@ -259,16 +276,16 @@ $app->group('/user', function() use ($app) {
 		return $response;
 	});
 	// user email login
-	$app->any('/emaillogin/{token}', function(Request $request, Response $response){
-		$session = $this->session;
+	$group->any('/emaillogin/{token}', function(Request $request, Response $response){
+		$session = $this->get('session');
 		$token = $request->getAttribute('token', '');
 		$login = new Logon($session);
 		$login->do_email_login($token);
 	});
 	// start password recovery
-	$app->any('/passwordrecover', function(Request $request, Response $response){
-		$session = $this->session;
-		$ssp = $this->ssp;
+	$group->any('/passwordrecover', function(Request $request, Response $response){
+		$session = $this->get('session');
+		$ssp = $this->get('ssp');
 		
 		$ssp->pageTitleAdd('Password recovery');
 		$admin = new UserAdmin($session, $ssp, "", "sspsmalltemplate.tpl", false);
@@ -277,9 +294,9 @@ $app->group('/user', function() use ($app) {
 		return $response;
 	});
 	// finish user password recovery by clicking on email link
-	$app->any('/newpassword/{token}', function(Request $request, Response $response){
-		$session = $this->session;
-		$ssp = $this->ssp;
+	$group->any('/newpassword/{token}', function(Request $request, Response $response){
+		$session = $this->get('session');
+		$ssp = $this->get('ssp');
 		
 		$ssp->pageTitleAdd("Password recovery, enter new password");
 		$admin = new UserAdmin($session, $ssp, "", "sspsmalltemplate.tpl", false);
@@ -289,9 +306,9 @@ $app->group('/user', function() use ($app) {
 		return $response;
 	});
 	// user confirmation on joinup
-	$app->any('/userconfirm/{confirmToken}', function(Request $request, Response $response){
-		$session = $this->session;
-		$ssp = $this->ssp;
+	$group->any('/userconfirm/{confirmToken}', function(Request $request, Response $response){
+		$session = $this->get('session');
+		$ssp = $this->get('ssp');
 		
 		$ssp->pageTitleAdd("User Confirmation of membership");
 		$token = $request->getAttribute('confirmToken', '');
@@ -301,11 +318,11 @@ $app->group('/user', function() use ($app) {
 		return $response;
 	});
 	// user joinup script
-	$app->any('/usercreation', function(Request $request, Response $response){
+	$group->any('/usercreation', function(Request $request, Response $response){
 		/* @var $session Protect */
-		$session = $this->session;
+		$session = $this->get('session');
 		/* @var $ssp Setup */
-		$ssp = $this->ssp;
+		$ssp = $this->get('ssp');
 		
 		$ssp->pageTitleAdd("Join the site");
 		$admin = new UserAdmin($session, $ssp, "", "sspsmalltemplate.tpl", false);
