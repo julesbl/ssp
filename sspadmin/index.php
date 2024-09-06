@@ -69,6 +69,18 @@ $app->setBasePath('/sspadmin');
 
 $app->addErrorMiddleware(true, false, false);
 
+/**
+ * Load body with page content and return the response
+ * @param string $content
+ * @param Response $response
+ * @return \Psr\Http\Message\MessageInterface|Response
+ */
+function ssp_display(Response $response, string $content){
+	$body = $response->getBody();
+	$body->write($content);
+	return $response->withBody($body);
+}
+
 // home page
 $app->any('/', function (Request $request, Response $response) {
 	/* @var $session Protect */
@@ -76,14 +88,10 @@ $app->any('/', function (Request $request, Response $response) {
 	$session->requireAdmin();
 	$ssp = $this->get('ssp');
 	$lister = new UserLister($ssp);
-	$body = $response->getBody();
-	$body->write($lister->lister());
-	return $response->withBody($body);
+	return ssp_display($response, $lister->lister());
 });
 $app->get('/test', function (Request $request, Response $response) {
-	$body = $response->getBody();
-	$body->write('Hello World!');
-	return $response->withBody($body);
+	return ssp_display($response, 'Hello World!');
 });
 // delete a user
 $app->any('/delete/{userId}', function (Request $request, Response $response) {
@@ -93,7 +101,7 @@ $app->any('/delete/{userId}', function (Request $request, Response $response) {
 	$ssp = $this->get('ssp');
 	$userId = $request->getAttribute('userId', '');
 	$lister = new UserLister($ssp);
-	return $response->getBody()->write($lister->deleteUser($userId));
+	return ssp_display($response, $lister->deleteUser($userId));
 });
 // change filter
 $app->any('/filterChange', function (Request $request, Response $response) {
@@ -102,7 +110,7 @@ $app->any('/filterChange', function (Request $request, Response $response) {
 	$session->requireAdmin();
 	$ssp = $this->get('ssp');
 	$lister = new UserLister($ssp);
-	return $response->getBody()->write($lister->displayFilterForm());
+	return ssp_display($response, $lister->displayFilterForm());
 });
 // Change filter to admin pending
 $app->any('/filterAdminPending', function (Request $request, Response $response) {
@@ -112,7 +120,7 @@ $app->any('/filterAdminPending', function (Request $request, Response $response)
 	$ssp = $this->get('ssp');
 	$lister = new UserLister($ssp);
 	$lister->filter->displayAdminPending();
-	return $response->getBody()->write($lister->lister());
+	return ssp_display($response, $lister->lister());
 });
 // Change filter to default listing
 $app->any('/filterNormal', function (Request $request, Response $response) {
@@ -122,7 +130,7 @@ $app->any('/filterNormal', function (Request $request, Response $response) {
 	$ssp = $this->get('ssp');
 	$lister = new UserLister($ssp);
 	$lister->filter->newSearch();
-	return $response->getBody()->write($lister->lister());
+	return ssp_display($response, $lister->lister());
 });
 // Admin user creation
 $app->any('/adminusercreation', function (Request $request, Response $response) {
@@ -135,17 +143,17 @@ $app->any('/adminusercreation', function (Request $request, Response $response) 
 	$result = $admin->userCreate();
 	if($result === true){
 		$tpl = $ssp->tpl(array('title' => 'User created', 'content' => '<h1>New user created</h1>'));
-		return $response->getBody()->write($tpl->output());
+		return ssp_display($response, $tpl->output());
 	}
 	else{
-		return $response->getBody()->write($result);
+		return ssp_display($response, $result);
 	}
 });
 
 /**
  * User admin
  */
-/**
+
 $app->group('/useradmin', function(RouteCollectorProxy $group) {
 	// basic user information
 	$group->any('/info/{userId}', function(Request $request, Response $response){
@@ -153,7 +161,7 @@ $app->group('/useradmin', function(RouteCollectorProxy $group) {
 		$ssp = $this->get('ssp');
 		$userId = $request->getAttribute('userId');
 		$admin = new UserAdmin($session, $ssp, $userId);
-		return $response->getBody()->write($admin->displayMisc());
+		return ssp_display($response, $admin->displayMisc());
 	});
 	// change basic user information
 	$group->any('/chInfo', function(Request $request, Response $response){
@@ -161,7 +169,7 @@ $app->group('/useradmin', function(RouteCollectorProxy $group) {
 		$ssp = $this->get('ssp');
 		$userId = $request->getAttribute('userId');
 		$admin = new UserAdmin($session, $ssp, $userId);
-		return $response->getBody()->write($admin->userMisc(false, true));
+		return ssp_display($response, $admin->userMisc(false, true));
 	});
 	// change password
 	$group->any('/chPswd', function(Request $request, Response $response){
@@ -170,7 +178,7 @@ $app->group('/useradmin', function(RouteCollectorProxy $group) {
 		$userId = $request->getAttribute('userId');
 		$needPassword = $request->getAttribute('needPassword');
 		$admin = new UserAdmin($session, $ssp, $userId);
-		return $response->getBody()->write($admin->changePassword("", $needPassword, true));
+		return ssp_display($response, $admin->changePassword("", $needPassword, true));
 	});
 	// change email
 	$group->any('/chEmail', function(Request $request, Response $response){
@@ -179,7 +187,7 @@ $app->group('/useradmin', function(RouteCollectorProxy $group) {
 		$userId = $request->getAttribute('userId');
 		$needPassword = $request->getAttribute('needPassword');
 		$admin = new UserAdmin($session, $ssp, $userId);
-		return $response->getBody()->write($admin->changeEmail($needPassword, true));
+		return ssp_display($response, $admin->changeEmail($needPassword, true));
 	});
 	// Admin ok of user
 	$group->any('/enableUser', function(Request $request, Response $response){
@@ -187,7 +195,7 @@ $app->group('/useradmin', function(RouteCollectorProxy $group) {
 		$ssp = $this->get('ssp');
 		$userId = $request->getAttribute('userId');
 		$admin = new UserAdmin($session, $ssp, $userId);
-		return $response->getBody()->write($admin->userAdminOk());
+		return ssp_display($response, $admin->userAdminOk());
 	});
 	// change advanced user information
 	$group->any('/chAdv', function(Request $request, Response $response){
@@ -195,7 +203,7 @@ $app->group('/useradmin', function(RouteCollectorProxy $group) {
 		$ssp = $this->get('ssp');
 		$userId = $request->getAttribute('userId');
 		$admin = new UserAdmin($session, $ssp, $userId);
-		return $response->getBody()->write($admin->changeAdmin());
+		return ssp_display($response, $admin->changeAdmin());
 	});
 	// display advanced user information
 	$group->any('/advInfo', function(Request $request, Response $response){
@@ -203,7 +211,7 @@ $app->group('/useradmin', function(RouteCollectorProxy $group) {
 		$ssp = $this->get('ssp');
 		$userId = $request->getAttribute('userId');
 		$admin = new UserAdmin($session, $ssp, $userId);
-		return $response->getBody()->write($admin->displayAdminInfo());
+		return ssp_display($response, $admin->displayAdminInfo());
 	});
 	// send a join email
 	$group->any('/joinEmail', function(Request $request, Response $response){
@@ -211,7 +219,7 @@ $app->group('/useradmin', function(RouteCollectorProxy $group) {
 		$ssp = $this->get('ssp');
 		$userId = $request->getAttribute('userId');
 		$admin = new UserAdmin($session, $ssp, $userId);
-		return $response->getBody()->write($admin->sendJoinupEmail());
+		return ssp_display($response, $admin->sendJoinupEmail());
 	});
 	// send an email to a user
 	$group->any('/email', function(Request $request, Response $response){
@@ -219,14 +227,11 @@ $app->group('/useradmin', function(RouteCollectorProxy $group) {
 		$ssp = $this->get('ssp');
 		$userId = $request->getAttribute('userId');
 		$admin = new UserAdmin($session, $ssp, $userId);
-		return $response->getBody()->write($admin->emailUser($userId, $session->userId));
+		return ssp_display($response, $admin->emailUser($userId, $session->userId));
 	});
 })->add(function(Request $request, Response $response, $next){
 	// Set up user admin for a particular user
- */
-
 	/* @var $session Protect */
-/**
 	$session = $this->get('session');
 	$session->requireAdmin();
 	if(!isset($_SESSION["adminUserId"])){
@@ -239,13 +244,13 @@ $app->group('/useradmin', function(RouteCollectorProxy $group) {
 		$userId = $arguments['userId'];
 	}
 	$needPassword = ($session->userId === $userId);
-	
+
 	$request = $request->withAttribute('userId', $userId);
 	$request = $request->withAttribute('needPassword', $needPassword);
 	$response = $next($request, $response);
 	return $response;
 });
-*/
+
 /**
  * Basic user functions such as login
  */
@@ -272,7 +277,7 @@ $app->group('/user', function(RouteCollectorProxy $group) {
 		$contentMain["title"] = "Logoff";
 		$tpl = $ssp->tpl($contentMain, "sspsmalltemplate.tpl", false);
 
-		$response->getBody()->write($session->logoff($tpl, true));
+		ssp_display($response, $session->logoff($tpl, true));
 		return $response;
 	});
 	// user email login
@@ -289,7 +294,7 @@ $app->group('/user', function(RouteCollectorProxy $group) {
 		
 		$ssp->pageTitleAdd('Password recovery');
 		$admin = new UserAdmin($session, $ssp, "", "sspsmalltemplate.tpl", false);
-		$response->getBody()->write($admin->startPasswordRecovery());
+		ssp_display($response, $admin->startPasswordRecovery());
 		
 		return $response;
 	});
@@ -301,7 +306,7 @@ $app->group('/user', function(RouteCollectorProxy $group) {
 		$ssp->pageTitleAdd("Password recovery, enter new password");
 		$admin = new UserAdmin($session, $ssp, "", "sspsmalltemplate.tpl", false);
 		$token = $request->getAttribute('token', '');
-		$response->getBody()->write($admin->finishPasswordRecovery($token));
+		ssp_display($response, $admin->finishPasswordRecovery($token));
 		
 		return $response;
 	});
@@ -313,7 +318,7 @@ $app->group('/user', function(RouteCollectorProxy $group) {
 		$ssp->pageTitleAdd("User Confirmation of membership");
 		$token = $request->getAttribute('confirmToken', '');
 		$admin = new UserAdmin($session, $ssp, "", "sspsmalltemplate.tpl", false);
-		$response->getBody()->write($admin->userConfirm($token));
+		ssp_display($response, $admin->userConfirm($token));
 		
 		return $response;
 	});
@@ -328,7 +333,7 @@ $app->group('/user', function(RouteCollectorProxy $group) {
 		$admin = new UserAdmin($session, $ssp, "", "sspsmalltemplate.tpl", false);
 		$join = $admin->userJoin();
 		if(!is_bool($join)){
-			$response->getBody()->write($join);
+			ssp_display($response, $join);
 		}
 		else{
 			SSP_Divert($session->cfg->siteRoot);
