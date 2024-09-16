@@ -488,6 +488,9 @@ class Template {
 	 */
 	private function replaceTag($value, $tag){
 		$data = $this->replaces[$tag];
+		if (empty($data)) {
+			$data = '';
+		}
 		if (is_object($data)) {
 			if (get_class($data) === "w34u\ssp\Template") {
 				// if is a template object, return with string from that
@@ -663,7 +666,7 @@ class Template {
 	/**
 	 * Do html entitles on a string
 	 * @param string $string - string to html encoded
-	 * @return encoded string
+	 * @return string
 	 */
 	private function he($string) {
 		return htmlentities($string, $this->charsetQuote, $this->charsetHtml, false);

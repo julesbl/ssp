@@ -46,9 +46,11 @@
 namespace w34u\ssp;
 
 use DI\Container;
+use Psr\Http\Message\MessageInterface;
 use Slim\Factory\AppFactory;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
+use Slim\Psr7\Factory\ResponseFactory;
 use Slim\Routing\RouteCollectorProxy;
 
 require 'includeheader.php';
@@ -73,7 +75,7 @@ $app->addErrorMiddleware(true, false, false);
  * Load body with page content and return the response
  * @param string $content
  * @param Response $response
- * @return \Psr\Http\Message\MessageInterface|Response
+ * @return MessageInterface|Response
  */
 function ssp_display(Response $response, string $content){
 	$body = $response->getBody();
@@ -229,27 +231,7 @@ $app->group('/useradmin', function(RouteCollectorProxy $group) {
 		$admin = new UserAdmin($session, $ssp, $userId);
 		return ssp_display($response, $admin->emailUser($userId, $session->userId));
 	});
-})->add(function(Request $request, Response $response, $next){
-	// Set up user admin for a particular user
-	/* @var $session Protect */
-	$session = $this->get('session');
-	$session->requireAdmin();
-	if(!isset($_SESSION["adminUserId"])){
-		$_SESSION["adminUserId"] = "";
-	}
-	$userId =& $_SESSION["adminUserId"];
-	$route = $request->getAttribute('route');
-	$arguments = $route->getArguments();
-	if(isset($arguments['userId'])){
-		$userId = $arguments['userId'];
-	}
-	$needPassword = ($session->userId === $userId);
-
-	$request = $request->withAttribute('userId', $userId);
-	$request = $request->withAttribute('needPassword', $needPassword);
-	$response = $next($request, $response);
-	return $response;
-});
+})->add(new Slim_middleware(new Protect()));
 
 /**
  * Basic user functions such as login
