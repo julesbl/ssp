@@ -50,7 +50,6 @@ use Psr\Http\Message\MessageInterface;
 use Slim\Factory\AppFactory;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
-use Slim\Psr7\Factory\ResponseFactory;
 use Slim\Routing\RouteCollectorProxy;
 
 require 'includeheader.php';
@@ -58,7 +57,8 @@ require 'includeheader.php';
 $container = new Container();
 // load protected session as service
 $container->set('session', function() {
-	return new Protect();
+	$session = new Protect();
+	return $session;
 });
 // load ssp admin setup as a service
 $container->set('ssp', function() {
@@ -162,6 +162,7 @@ $app->group('/useradmin', function(RouteCollectorProxy $group) {
 		$session = $this->get('session');
 		$ssp = $this->get('ssp');
 		$userId = $request->getAttribute('userId');
+		$_SESSION["adminUserId"] = $userId;
 		$admin = new UserAdmin($session, $ssp, $userId);
 		return ssp_display($response, $admin->displayMisc());
 	});
@@ -231,7 +232,7 @@ $app->group('/useradmin', function(RouteCollectorProxy $group) {
 		$admin = new UserAdmin($session, $ssp, $userId);
 		return ssp_display($response, $admin->emailUser($userId, $session->userId));
 	});
-})->add(new Slim_middleware(new Protect()));
+})->add(new Slim_middleware($container->get('session')));
 
 /**
  * Basic user functions such as login

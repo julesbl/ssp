@@ -545,7 +545,6 @@ abstract class UserAdminBase {
 		} else {
 			$form->tplf = "changepassword.tpl";
 		}
-		$form->userId = $id;
 		if ($requirePassword) {
 			// ask for original password
 			$form->fe("password", "oldPassword", "Your original Password");
@@ -564,7 +563,7 @@ abstract class UserAdminBase {
 		if ($form->processForm($_POST)) {
 			if (!$form->error) {
 
-				if ($this->changePasswordCheck($form)) {
+				if ($this->changePasswordCheck($form, $id)) {
 					$return = $form->create(true);
 				} else {
 					// call additional routine, may send email or whatever
@@ -595,9 +594,10 @@ abstract class UserAdminBase {
 	/**
 	 * Check both the change password form
 	 * @param sfc\Form $form - form object to check
+	 * @param string $user_id
 	 * @return bool - true on error
 	 */
-	private function changePasswordCheck(&$form) {
+	private function changePasswordCheck(&$form, $user_id) {
 		$error = false;
 		if (strcmp($form->getField("password"), $form->getField("password2")) != 0) {
 			$form->setError("password", "Both passwords must be the same");
@@ -605,7 +605,7 @@ abstract class UserAdminBase {
 		}
 		if (isset($form->elements["oldPassword"])) {
 			$fields = array("UserPassword");
-			$result = $this->getUser($fields, "Get user password failed", $form->userId);
+			$result = $this->getUser($fields, "Get user password failed", $user_id);
 			$passwordOK = $this->session->checkPassword($form->getField("oldPassword"), $result->UserPassword);
 			if (!$passwordOK) {
 				// no result returned for the password entered
@@ -632,7 +632,6 @@ abstract class UserAdminBase {
 		} else {
 			$form->tplf = "changeemail.tpl";
 		}
-		$form->userId = $this->id;
 		if ($requirePassword) {
 			// ask for original password
 			$form->fe("password", "password", "Your password");
@@ -647,7 +646,7 @@ abstract class UserAdminBase {
 		$return = '';
 		if ($form->processForm($_POST)) {
 			if (!$form->error) {
-				if ($this->changeEmailCheck($form)) {
+				if ($this->changeEmailCheck($form, $this->id)) {
 					$return = $form->create(true);
 				} else {
 					// update database
@@ -673,13 +672,14 @@ abstract class UserAdminBase {
 	/**
 	 * Check email form
 	 * @param sfc\Form $form - form object
+	 * @param string $user_id
 	 * @return bool - true on success
 	 */
-	private function changeEmailCheck(&$form) {
+	private function changeEmailCheck(&$form, $user_id) {
 		$error = false;
 		if (isset($form->elements["password"])) {
 			$fields = array("UserPassword");
-			$result = $this->getUser($fields, "SSP Admin: Get user password failed", $form->userId);
+			$result = $this->getUser($fields, "SSP Admin: Get user password failed", $user_id);
 			if (!$this->session->checkPassword($form->getField("password"), $result->UserPassword)) {
 				// no result returned for the password entered
 				$form->setError("password", "Invalid password");

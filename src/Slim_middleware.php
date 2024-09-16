@@ -52,7 +52,7 @@ class Slim_middleware implements MiddlewareInterface
 		}
 		$userId =& $_SESSION["adminUserId"];
 		$arguments = $request->getQueryParams();
-		if(isset($arguments['userId'])){
+		if(!empty($arguments['userId'])){
 			$userId = $arguments['userId'];
 		}
 		$needPassword = ($this->session->userId === $userId);
