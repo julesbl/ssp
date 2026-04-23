@@ -72,10 +72,19 @@ class SessionHandler{
 	 * @var Configuration
 	 */
 	private $cfg;
-	
-	public function __construct(){
+	/**
+	 * Session configuration
+	 * @var ProtectConfig
+	 */
+	private ProtectConfig $config;
+
+	/**
+	 * @param ProtectConfig $config
+	 */
+	public function __construct(ProtectConfig $config){
 		$this->cfg = Configuration::getConfiguration();
 		$this->db = SspDb::getConnection();
+		$this->config = $config;
 		// set session name if a site crawling bot
 		if($this->bot_detected()){
 			session_id($this->cfg->sessBotDetectionId);
@@ -103,6 +112,7 @@ class SessionHandler{
 	public function open($save_path, $session_name){
 		$this->save_path = $save_path;
 		$this->session_name = $session_name;
+		$this->log('Session opened');
 		return($this->db->connected);
 	}
 	
@@ -112,6 +122,7 @@ class SessionHandler{
 	 */
 	public function close(){
 		// close down session handling
+		$this->log('Session closed');
 		return(true);
 	}
 
@@ -128,9 +139,11 @@ class SessionHandler{
 		$row = $this->db->get($this->cfg->sessionTable, $where, "SSP Session routines: reading session data");
 
 		if($this->db->numRows() == 0){
+			$this->log('No session data found for session name: '.$this->session_name. 'and session id: '.$id);
 			$returns = "";
 		}
 		else {
+			$this->log('Session data found for session name: '.$this->session_name. 'and session id: '.$id);
 			$returns = $row->SessionData;
 		}
 		return($returns);
@@ -156,6 +169,7 @@ class SessionHandler{
 
 		if($this->db->numRows() > 0){
 			// update a current session
+			$this->log('Session data updated for session name: '.$this->session_name. 'and session id: '.$id);
 			$fields = array(
 				"SessionData" => $sess_data,
 				"SessionId" => $id,
@@ -166,6 +180,7 @@ class SessionHandler{
 		}
 		else {
 			// write a new session record
+			$this->log('Session data not found for session name: '.$this->session_name. 'and session id: '.$id. ' new record created');
 			$fields = array("SessionData" => $sess_data,
 				"SessionId" => $id,
 				"SessionName" => $this->session_name,
@@ -189,7 +204,7 @@ class SessionHandler{
 			"SessionName" => $this->session_name,
 		);
 		$this->db->delete($this->cfg->sessionTable, $where, "SSP Session: Destroying current users session data");
-
+		$this->log('Session data deleted for session name: '.$this->session_name. 'and session id: '.$id);
 		return(true);
 	}
 
@@ -209,7 +224,19 @@ class SessionHandler{
 		// clean up token table
 		SSP_CleanToken();
 		SSP_ResponseClean();
+		$this->log('Session, token and response tokens cleaned');
 		return(true);
+	}
+
+	/**
+	 * Log text to logging system
+	 * @param string $text
+	 */
+	private function log($text)
+	{
+		if ($this->config->debug) {
+			SSP_log('SSP SessionHandler debug ' . $text);
+		}
 	}
 }
 

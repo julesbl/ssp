@@ -263,7 +263,7 @@ abstract class ProtectBase
 		if(session_status() === PHP_SESSION_ACTIVE){
 			return;
 		}
-		$handler = new SessionHandler();
+		$handler = new SessionHandler($this->config);
 
 		session_set_save_handler(
 			array($handler, 'open'),
