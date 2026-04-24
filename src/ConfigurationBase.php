@@ -400,8 +400,10 @@ abstract class ConfigurationBase
 	 */
 	public $sessUseStrictMode = 1;
 	/**
-	 * Set the session cookie same site to strict to help prevent cross site attacks,
+	 * Set the session cookie same site as strict to help prevent cross site attacks,
 	 * available since 7.3 other option is Lax
+	 * If your app diverts to other sites which then divert back after some process you will need to set this to Lax
+	 * to maintain state.
 	 * @var string
 	 */
 	public $sessCookieSamesite = 'Strict';
