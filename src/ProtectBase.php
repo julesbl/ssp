@@ -436,7 +436,7 @@ abstract class ProtectBase
 					'path' => $this->cfg->cookiePath,
 					'domain' => $this->cfg->cookieDomain,
 					'secure' => $this->cfg->useSSL,
-					'samesite' => 'Strict'
+					'samesite' => $this->cfg->sessCookieSamesite
 				];
 				setcookie($this->cfg->randomCookie, $randomCookie, $options);
 
