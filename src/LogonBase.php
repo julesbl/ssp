@@ -114,11 +114,6 @@ abstract class LogonBase {
 			if ($this->loginSessionData === false) {
 				$this->loginSessionData = $this->rememberMeGet();
 			}
-			else{
-				// if the user has would up back at the login form probably needs to login with another auth
-				$this->loginSessionData = false;
-				$this->removeRmCookie();
-			}
 		}
 		if($this->loginSessionData === false){
 			$formData = $this->processAuthForm($ignoreToken);
