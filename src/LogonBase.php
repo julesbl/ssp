@@ -67,7 +67,7 @@ abstract class LogonBase {
 	 * Form output
 	 * @var string 
 	 */
-	private $output = "";
+	protected $output = "";
 	/**
 	 * Session data used during authentication
 	 * @var \stdClass
